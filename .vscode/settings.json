@@ -1,5 +1,3 @@
-{
-    "files.watcherExclude": {
-        "**/target": true
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:f2b24cf2a1145bb36232eae568e38a729fd1a74686fbac85aa96fce27a9e496c
+size 65
