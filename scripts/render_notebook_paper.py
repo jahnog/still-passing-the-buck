@@ -260,20 +260,36 @@ WIKIMEDIA_HOST_SUFFIX = "wikimedia.org"
 WIKIMEDIA_DELAY_SECONDS = 8.0
 
 
+DEFAULT_NOTEBOOKS = (
+    "Still_Passing_the_Buck.ipynb",
+    "Historical_CMPI_Extension.ipynb",
+)
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Render a notebook as a print-optimized PDF paper."
+        description=(
+            "Render one or more notebooks as print-optimized PDF papers. "
+            "With no notebook argument, renders both project papers "
+            "(Still_Passing_the_Buck and Historical_CMPI_Extension)."
+        )
     )
     parser.add_argument(
-        "notebook",
-        nargs="?",
-        default="Still_Passing_the_Buck.ipynb",
-        help="Notebook to render.",
+        "notebooks",
+        nargs="*",
+        help="Notebook(s) to render. Defaults to both project papers.",
     )
     parser.add_argument(
         "-o",
         "--output",
-        help="Destination PDF path. Defaults to <notebook>.paper.pdf.",
+        help=(
+            "Destination PDF path (single-notebook mode only). "
+            "Defaults to <notebook>.paper.pdf. Ignored when rendering several notebooks."
+        ),
+    )
+    parser.add_argument(
+        "--output-dir",
+        help="Directory for the generated PDFs in batch mode. Defaults to each notebook's directory.",
     )
     parser.add_argument(
         "--html-output",
@@ -532,21 +548,57 @@ def default_output_path(notebook_path: Path) -> Path:
     return notebook_path.with_name(f"{notebook_path.stem}.paper.pdf")
 
 
-def main() -> int:
-    args = parse_args()
-    notebook_path = Path(args.notebook).expanduser().resolve()
-    if not notebook_path.exists():
-        raise FileNotFoundError(f"Notebook not found: {notebook_path}")
+def extract_title(notebook) -> str | None:
+    """Return the text of the first level-1 markdown heading, if any."""
+    for cell in notebook.cells:
+        if cell.get("cell_type") != "markdown":
+            continue
+        for line in cell.get("source", "").splitlines():
+            stripped = line.strip()
+            if stripped.startswith("# "):
+                return re.sub(r"\s+", " ", stripped[2:].strip()) or None
+    return None
 
-    output_path = Path(args.output).expanduser().resolve() if args.output else default_output_path(notebook_path)
+
+def set_document_title(html: str, title: str | None) -> str:
+    """Replace the exported <title> so PDF metadata shows the paper title."""
+    if not title:
+        return html
+    safe = (
+        title.replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+    )
+    if "<title>" in html:
+        return re.sub(r"<title>.*?</title>", f"<title>{safe}</title>", html, count=1, flags=re.S)
+    return html.replace("</head>", f"<title>{safe}</title>\n</head>", 1)
+
+
+def resolve_output_path(notebook_path: Path, args: argparse.Namespace, batch: bool) -> Path:
+    if args.output and not batch:
+        return Path(args.output).expanduser().resolve()
+    if args.output_dir:
+        out_dir = Path(args.output_dir).expanduser().resolve()
+        return out_dir / f"{notebook_path.stem}.paper.pdf"
+    return default_output_path(notebook_path)
+
+
+def render_one(
+    notebook_path: Path,
+    output_path: Path,
+    args: argparse.Namespace,
+    browser_path: str,
+    cache_dir: Path,
+    tools,
+) -> None:
+    nbformat, html_exporter, execute_preprocessor = tools
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    browser_path = resolve_browser(args.browser)
-    nbformat, html_exporter, execute_preprocessor = load_notebook_tools()
     notebook = nbformat.read(notebook_path, as_version=4)
     kernel_name = args.kernel_name or notebook.metadata.get("kernelspec", {}).get("name")
 
     if not args.skip_execute:
+        print(f"Executing {notebook_path.name} ...", file=sys.stderr)
         execute_notebook(
             notebook,
             notebook_path,
@@ -556,13 +608,11 @@ def main() -> int:
             execute_preprocessor,
         )
 
+    title = extract_title(notebook)
     html = export_html(notebook, notebook_path, html_exporter)
-    html = inline_remote_images(
-        html,
-        timeout=DEFAULT_IMAGE_TIMEOUT,
-        cache_dir=notebook_path.parent / "tmp" / "paper-image-cache",
-    )
+    html = inline_remote_images(html, timeout=DEFAULT_IMAGE_TIMEOUT, cache_dir=cache_dir)
     html = inject_print_styles(html, args.page_size)
+    html = set_document_title(html, title)
 
     if args.html_output:
         html_path = Path(args.html_output).expanduser().resolve()
@@ -575,7 +625,49 @@ def main() -> int:
             html_path.write_text(html, encoding="utf-8")
             render_pdf(html_path, output_path, browser_path, args.virtual_time_budget_ms)
 
-    print(output_path)
+
+def main() -> int:
+    args = parse_args()
+
+    requested = args.notebooks or list(DEFAULT_NOTEBOOKS)
+    batch = len(requested) > 1
+
+    if args.output and batch:
+        print(
+            "Warning: --output is ignored when rendering multiple notebooks; "
+            "use --output-dir instead.",
+            file=sys.stderr,
+        )
+    if args.html_output and batch:
+        raise SystemExit("--html-output is only valid when rendering a single notebook.")
+
+    notebook_paths = []
+    for entry in requested:
+        path = Path(entry).expanduser()
+        if not path.is_absolute():
+            path = (Path.cwd() / path).resolve()
+        else:
+            path = path.resolve()
+        if not path.exists():
+            raise FileNotFoundError(f"Notebook not found: {path}")
+        notebook_paths.append(path)
+
+    browser_path = resolve_browser(args.browser)
+    tools = load_notebook_tools()
+
+    # A shared cache lets both papers reuse the same president/minister photos.
+    cache_dir = Path.cwd() / "tmp" / "paper-image-cache"
+
+    generated: list[Path] = []
+    for notebook_path in notebook_paths:
+        output_path = resolve_output_path(notebook_path, args, batch)
+        render_one(notebook_path, output_path, args, browser_path, cache_dir, tools)
+        generated.append(output_path)
+        print(f"  ✓ {notebook_path.name} → {output_path}", file=sys.stderr)
+
+    print("\nGenerated PDF paper(s):", file=sys.stderr)
+    for path in generated:
+        print(path)
     return 0
 
 

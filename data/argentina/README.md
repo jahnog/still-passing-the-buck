@@ -21,7 +21,7 @@ For both notebooks:
 2. Run `./.venv/bin/python scripts/refresh_argentina_interest.py` — now extends EMBIG back to **1998** (BCRP earliest available year).
 3. Run `./.venv/bin/python scripts/refresh_argentina_exchange.py`.
 4. Run `./.venv/bin/python scripts/validate_cmpi_inputs.py --target-year 2025`.
-5. Run `./.venv/bin/python scripts/_gen_paper_devaluation.py` — regenerates `paper-devaluation-1853-1999.csv` from the Excel (only needed if `Data a 2018.xlsx` changes).
+5. Run `./.venv/bin/python scripts/_gen_paper_devaluation.py` — regenerates `paper-devaluation-1853-1999.csv` from the Excel (only needed if `data_a_2018.xlsx` changes).
 6. Run `./.venv/bin/python scripts/build_fpi_data.py` — regenerates `fiscal/fpi-fiscal-1853-2025.csv` (Excel cols G–J for 1853–2018; Secretaría de Finanzas + datos.gob.ar for 2019–2025).
 
 The refresh scripts keep the local files versioned and reproducible. The indicator refresh transposes `WDIData2.csv` into the long-form schema, supplements CMPI-relevant World Bank series from the live API, and then replaces Argentina-specific gaps with official INDEC fallbacks. The interest refresh preserves the legacy historical series through 2019 and continues the EMBIG Argentina country-risk series (BCRP) from 2020 onward. The exchange refresh writes the free-market (CCL/blue) annual averages for the cepo years.
@@ -92,7 +92,7 @@ be re-run to regenerate the CSV from the hard-coded Table 3.1 values).
 ## Paper-method devaluation series (1853–1999)
 
 `data/argentina/exchange/paper-devaluation-1853-1999.csv` contains the paper authors' own
-annual devaluation log-diff series (column E of `Data a 2018.xlsx`), covering 1853–1999.
+annual devaluation log-diff series (column E of `data_a_2018.xlsx`), covering 1853–1999.
 This is used in **both notebooks** to override the WDI annual-average exchange rate for
 1964–1999, matching the paper's actual data sources.
 
@@ -139,7 +139,7 @@ the depreciation phase (1990–1991) from the stable phase (1992–1995).
 existing interest and growth series.)
 
 **Data sources by period:**
-- **1853–2018:** paper authors' original dataset `Data a 2018.xlsx`, columns G–J. The 1861–63
+- **1853–2018:** paper authors' original dataset `data_a_2018.xlsx`, columns G–J. The 1861–63
   primary-result rows (NaN in the source — the Mitre administration) are linearly interpolated,
   following the paper's Appendix A.
 - **2019–2025, debt ratios:** total **Sector Público Nacional** gross debt from the Secretaría de
