@@ -10,18 +10,17 @@ This project keeps Argentina data in repo-local files so the notebook can be rer
 - `data/argentina/inflation/alt-cpi-2007-2015.csv`: curated alternative-inflation series for the 2007–2015 INDEC intervention (see below).
 - `data/argentina/exchange/parallel-cepo.csv`: free-market (CCL/blue) exchange-rate override for the cepo years (see below).
 - `data/argentina/historical/historical-cmpi-1853-1963.csv`: historical CMPI term averages for 1852–1963 (see below).
-- `data/argentina/exchange/bcra-dec-dec-1990-1995.csv`: December-to-December ARS/USD rates for 1989–1995 (see below).
+- `data/argentina/exchange/paper-devaluation-1853-1999.csv`: paper authors' December-quotation devaluation log-diff series for 1853–1999 (see below).
+- `data/argentina/exchange/bcra-dec-dec-1990-1995.csv`: December-to-December ARS/USD rates for 1989–1995 (superseded by paper-devaluation; kept for reference).
 
 ## Refresh steps
 
-For `Still_Passing_the_Buck.ipynb` (modern, 1964–2025):
+For both notebooks:
 1. Run `./.venv/bin/python scripts/refresh_argentina_indicators.py`.
-2. Run `./.venv/bin/python scripts/refresh_argentina_interest.py`.
+2. Run `./.venv/bin/python scripts/refresh_argentina_interest.py` — now extends EMBIG back to **1998** (BCRP earliest available year).
 3. Run `./.venv/bin/python scripts/refresh_argentina_exchange.py`.
 4. Run `./.venv/bin/python scripts/validate_cmpi_inputs.py --target-year 2025`.
-
-For `Historical_CMPI_Extension.ipynb` (full 1853–2025), additionally:
-5. Run `./.venv/bin/python scripts/build_bcra_dec_dec.py` to refresh the Convertibility-era override.
+5. Run `./.venv/bin/python scripts/_gen_paper_devaluation.py` — regenerates `paper-devaluation-1853-1999.csv` from the Excel (only needed if `Data a 2018.xlsx` changes).
 
 The refresh scripts keep the local files versioned and reproducible. The indicator refresh transposes `WDIData2.csv` into the long-form schema, supplements CMPI-relevant World Bank series from the live API, and then replaces Argentina-specific gaps with official INDEC fallbacks. The interest refresh preserves the legacy historical series through 2019 and continues the EMBIG Argentina country-risk series (BCRP) from 2020 onward. The exchange refresh writes the free-market (CCL/blue) annual averages for the cepo years.
 
@@ -44,7 +43,7 @@ The refresh script currently supplements these indicator codes from the live Wor
 - `FP.WPI.TOTL`: INDEC IPIM level-general series built from `sipm-serie56-95.xls`, `sipm-dde1996.xls`, and `series_sipm_dic2015.xls`. The local refresh chains the current reference-period series onto the historical series using the last available 2015 historical average, then rebases the combined annual index to 2010 = 100 so the notebook can keep using year-over-year changes.
 - `PA.NUS.ATLS`: official BCRA `TCNPM` monthly average exchange-rate workbook from `https://www.bcra.gob.ar/archivos/Pdfs/PublicacionesEstadisticas/com3500.xls`, annualized locally for complete years.
 - `NY.GDP.PCAP.KD.ZG`: for years the World Bank API has not yet published (currently 2025 only), the refresh fills the gap with a documented official INDEC fallback. It takes INDEC's annual real GDP (PIB) growth from the `Informe de avance del nivel de actividad` press releases (2025 = +4.4%, 4° trimestre de 2025, published 2026-03-20) and converts it to a per-capita rate using INDEC's official mid-year population from the 2022-census national projections `https://www.indec.gob.ar/ftp/cuadros/poblacion/proyecciones_nacionales_2022_2040_base.csv`, as `per_capita = ((1 + gdp_growth) / (1 + population_growth) - 1) × 100`. For 2025 this yields ≈ +4.21% (PIB +4.4%, mid-year population growth +0.18%). The fallback only fills years missing from the live World Bank API, so a later World Bank release of the same year automatically supersedes it.
-- `data/argentina/interest/wb-ids-arg.csv` for 2020 onward: **EMBIG Argentina country-risk spread ("riesgo país")**, annual average, from BCRP (Banco Central de Reserva del Perú), which redistributes J.P. Morgan's EMBIG, series `PD04710XD` (`https://estadisticas.bcrp.gob.pe/estadisticas/series/api/PD04710XD/json/...`, basis points → percent). Annual averages of this series reproduce the legacy 2000–2019 values already committed in the file (e.g. 2002 ≈ 5792 bps = 57.9%, 2019 ≈ 1316 bps = 13.2%), so the whole 2000+ segment is one consistent country-risk series in the same units. This replaced an earlier BCRA nominal USD lending-rate stopgap (≈ 5–9%) whose different scale fabricated a country-risk *improvement* for 2020–2023 (real riesgo país rose to ~1500–2500 bps) and hid the 2024–2025 collapse (~1900 → ~600 bps).
+- `data/argentina/interest/wb-ids-arg.csv` for 1998 onward: **EMBIG Argentina country-risk spread ("riesgo país")**, annual average, from BCRP (Banco Central de Reserva del Perú), which redistributes J.P. Morgan's EMBIG, series `PD04710XD`. The BCRP series starts from January 1998. Annual averages for 1998 (≈ 5.98%) and 1999 (≈ 7.20%) replace the previous flat Menem II term average of 9.75%, and the 2000+ segment continues as before (e.g. 2002 ≈ 57.9%, 2019 ≈ 13.2%, 2025 ≈ 7.5%). The `LEGACY_CUTOFF_YEAR` in `refresh_argentina_interest.py` was updated from 2019 to 1997 to enable this extension.
 - `data/argentina/exchange/parallel-cepo.csv`: free-market ARS/USD annual averages for the cepo years (2012–2015, 2019–2025) from the argentinadatos.com public API — CCL (`/v1/cotizaciones/dolares/contadoconliqui`), with the blue rate (`/v1/cotizaciones/dolares/blue`) filling 2012 (CCL not quoted before 2013). There is no *official* parallel rate under the cepo (the BCRA only publishes the official A3500), so a transparent market aggregator is the most faithful reproducible source. The notebook substitutes these for the official `PA.NUS.ATLS` rate on the cepo years only; the 2016–2018 float keeps the official rate (brecha < 1%).
 
 ## Verified coverage after the current refresh
@@ -87,6 +86,27 @@ table) as `baseline_1852 = actual_1853 − innovation_1853`.
 
 **How it was generated:** `scripts/_gen_historical_cmpi.py` (a documentation script that can
 be re-run to regenerate the CSV from the hard-coded Table 3.1 values).
+
+## Paper-method devaluation series (1853–1999)
+
+`data/argentina/exchange/paper-devaluation-1853-1999.csv` contains the paper authors' own
+annual devaluation log-diff series (column E of `Data a 2018.xlsx`), covering 1853–1999.
+This is used in **both notebooks** to override the WDI annual-average exchange rate for
+1964–1999, matching the paper's actual data sources.
+
+**Why this matters:** The WDI `PA.NUS.ATLS` gives the annual period *average* exchange rate.
+When large devaluations occurred mid-year, the annual average blends pre- and post-devaluation
+months, producing wrong inherited baselines for the following administration. The most
+impactful cases: Guido Nov-1963 → Illia 1964 (innovation sign flipped), Onganía Jun-1966 coup,
+and Rodrigazo Jul-1975 → Videla 1976.
+
+**Data sources by period (from paper Appendix B):**
+- 1853–1959: Irigoin 2000a, Cortés Conde 1989, della Paolera & Ortiz 1995, Boletín Techint
+- 1960–1989: Average of December quotations from Ruíz (1990)
+- 1990–1999: Average of December quotations from DATAFIEL
+
+**Schema:** `Year, DevaluationLog` (147 rows, 1853–1999)
+**Generator:** `scripts/_gen_paper_devaluation.py`
 
 ## December-to-December Convertibility override (1989–1995)
 

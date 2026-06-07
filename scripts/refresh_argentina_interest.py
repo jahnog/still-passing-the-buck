@@ -25,12 +25,16 @@ INTEREST_PATH = Path("data/argentina/interest/wb-ids-arg.csv")
 # that stopgap fabricated a country-risk "improvement" for 2020-2023 (when real riesgo país in
 # fact rose to ~1500-2500 bps) and hid the 2024-2025 collapse (~1900 -> ~600 bps), badly
 # flattering Fernández and penalising Milei. EMBIG fixes both.
+#
+# BCRP history: the EMBIG series (PD04710XD) starts from January 1998 in the BCRP database.
+# Setting LEGACY_CUTOFF_YEAR = 1997 allows the script to replace the flat Menem II term
+# averages (9.75%) for 1998-1999 with actual annual EMBIG values (1998 ≈ 5.98%, 1999 ≈ 7.20%).
 BCRP_EMBIG_URL = (
     "https://estadisticas.bcrp.gob.pe/estadisticas/series/api/PD04710XD/json/"
     "{start}-01-01/{end}-12-31"
 )
-LEGACY_CUTOFF_YEAR = 2019
-DECEMBER_TOKEN = "Dic"  # BCRP date labels look like "02.Dic.24"; used as a year-complete marker
+LEGACY_CUTOFF_YEAR = 1997  # years ≤ 1997 preserved from file; 1998+ fetched from BCRP
+DECEMBER_TOKEN = "Dic"  # BCRP date labels look like "02.Dic.98"; used as a year-complete marker
 
 
 def format_number(value: float) -> str:
@@ -59,7 +63,7 @@ def load_legacy_rows(path: Path) -> list[dict[str, str]]:
 
     if not rows:
         raise RuntimeError(
-            "Could not find the legacy 1958-2019 interest rows required to preserve the pre-EMBIG history."
+            "Could not find the legacy 1958-1997 interest rows required to preserve the pre-EMBIG history."
         )
 
     return rows
@@ -117,7 +121,7 @@ def build_embig_rows() -> list[dict[str, str]]:
 
     if not rows:
         raise RuntimeError(
-            "No complete EMBIG Argentina years (>=2020) were found in the BCRP PD04710XD series."
+            "No complete EMBIG Argentina years (>=1998) were found in the BCRP PD04710XD series."
         )
 
     return rows
