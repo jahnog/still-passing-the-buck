@@ -12,6 +12,7 @@ This project keeps Argentina data in repo-local files so the notebook can be rer
 - `data/argentina/historical/historical-cmpi-1853-1963.csv`: historical CMPI term averages for 1852–1963 (see below).
 - `data/argentina/exchange/paper-devaluation-1853-1999.csv`: paper authors' December-quotation devaluation log-diff series for 1853–1999 (see below).
 - `data/argentina/exchange/bcra-dec-dec-1990-1995.csv`: December-to-December ARS/USD rates for 1989–1995 (superseded by paper-devaluation; kept for reference).
+- `data/argentina/fiscal/fpi-fiscal-1853-2025.csv`: Fiscal Pressure Index inputs — debt/GDP, debt/exports, primary-result/revenues, primary-result/debt-service (1852–2025; see below).
 
 ## Refresh steps
 
@@ -21,6 +22,7 @@ For both notebooks:
 3. Run `./.venv/bin/python scripts/refresh_argentina_exchange.py`.
 4. Run `./.venv/bin/python scripts/validate_cmpi_inputs.py --target-year 2025`.
 5. Run `./.venv/bin/python scripts/_gen_paper_devaluation.py` — regenerates `paper-devaluation-1853-1999.csv` from the Excel (only needed if `Data a 2018.xlsx` changes).
+6. Run `./.venv/bin/python scripts/build_fpi_data.py` — regenerates `fiscal/fpi-fiscal-1853-2025.csv` (Excel cols G–J for 1853–2018; Secretaría de Finanzas + datos.gob.ar for 2019–2025).
 
 The refresh scripts keep the local files versioned and reproducible. The indicator refresh transposes `WDIData2.csv` into the long-form schema, supplements CMPI-relevant World Bank series from the live API, and then replaces Argentina-specific gaps with official INDEC fallbacks. The interest refresh preserves the legacy historical series through 2019 and continues the EMBIG Argentina country-risk series (BCRP) from 2020 onward. The exchange refresh writes the free-market (CCL/blue) annual averages for the cepo years.
 
@@ -128,6 +130,37 @@ the depreciation phase (1990–1991) from the stable phase (1992–1995).
 - December 1992–1995: exactly 1.0000 ARS/USD (Convertibility maintained)
 
 **How to refresh:** Run `./.venv/bin/python scripts/build_bcra_dec_dec.py`.
+
+## Fiscal Pressure Index inputs (1852–2025)
+
+`data/argentina/fiscal/fpi-fiscal-1853-2025.csv` provides four of the five FPI variables used by
+`Historical_CMPI_Extension.ipynb` §6. Columns: `Debt_GDP`, `Debt_Exports`, `Result_Revenue`,
+`Result_DebtServ`. (The fifth FPI variable, `(1+r)/(1+g)`, is computed in the notebook from the
+existing interest and growth series.)
+
+**Data sources by period:**
+- **1853–2018:** paper authors' original dataset `Data a 2018.xlsx`, columns G–J. The 1861–63
+  primary-result rows (NaN in the source — the Mitre administration) are linearly interpolated,
+  following the paper's Appendix A.
+- **2019–2025, debt ratios:** total **Sector Público Nacional** gross debt from the Secretaría de
+  Finanzas annual reports (Sheet A.2.5, "Serie de Deuda del Sector Público Nacional 1992–2025",
+  `argentina.gob.ar/.../deuda_publica_31-12-{YEAR}.xlsx`), divided by World Bank nominal GDP
+  (`NY.GDP.MKTP.CD`) and exports of goods & services (`BX.GSR.TOTL.CD`). 2025 GDP/exports use
+  official estimates pending final World Bank publication.
+- **2019–2025, primary-result ratios:** datos.gob.ar budget execution
+  (`totales-de-presupuesto.csv`: revenues received, primary expenditure accrued, total
+  expenditure accrued). Primary balance = revenues − primary expenditure; interest ≈ total −
+  primary expenditure. `Result_Revenue` = primary balance / revenues; `Result_DebtServ` =
+  primary balance / interest. Both are dimensionless (ARS / ARS), so no FX conversion is needed.
+
+**Note on the debt definition seam:** the historical Excel uses a central-government debt concept;
+the 2019–2025 extension uses the broader total Sector Público Nacional. The two are close but not
+identical — see the notebook's §11 Limitations.
+
+**Verification:** the restricted 1853–1999 FPI ranking reproduces the paper's Table 3.4 fiscal
+column with Spearman ρ ≈ 0.99 (the entire top 10 matches exactly).
+
+**How to refresh:** Run `./.venv/bin/python scripts/build_fpi_data.py`.
 
 ## Current caveats
 
