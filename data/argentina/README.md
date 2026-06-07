@@ -9,13 +9,19 @@ This project keeps Argentina data in repo-local files so the notebook can be rer
 - `data/argentina/interest/wb-ids-arg.csv`: annual interest / country-risk series used by the notebook.
 - `data/argentina/inflation/alt-cpi-2007-2015.csv`: curated alternative-inflation series for the 2007–2015 INDEC intervention (see below).
 - `data/argentina/exchange/parallel-cepo.csv`: free-market (CCL/blue) exchange-rate override for the cepo years (see below).
+- `data/argentina/historical/historical-cmpi-1853-1963.csv`: historical CMPI term averages for 1852–1963 (see below).
+- `data/argentina/exchange/bcra-dec-dec-1990-1995.csv`: December-to-December ARS/USD rates for 1989–1995 (see below).
 
 ## Refresh steps
 
+For `Still_Passing_the_Buck.ipynb` (modern, 1964–2025):
 1. Run `./.venv/bin/python scripts/refresh_argentina_indicators.py`.
 2. Run `./.venv/bin/python scripts/refresh_argentina_interest.py`.
 3. Run `./.venv/bin/python scripts/refresh_argentina_exchange.py`.
 4. Run `./.venv/bin/python scripts/validate_cmpi_inputs.py --target-year 2025`.
+
+For `Historical_CMPI_Extension.ipynb` (full 1853–2025), additionally:
+5. Run `./.venv/bin/python scripts/build_bcra_dec_dec.py` to refresh the Convertibility-era override.
 
 The refresh scripts keep the local files versioned and reproducible. The indicator refresh transposes `WDIData2.csv` into the long-form schema, supplements CMPI-relevant World Bank series from the live API, and then replaces Argentina-specific gaps with official INDEC fallbacks. The interest refresh preserves the legacy historical series through 2019 and continues the EMBIG Argentina country-risk series (BCRP) from 2020 onward. The exchange refresh writes the free-market (CCL/blue) annual averages for the cepo years.
 
@@ -60,6 +66,48 @@ From January 2007 to December 2015 INDEC was politically intervened and the offi
 - **Growth is deliberately NOT overridden.** The World Bank `NY.GDP.*` series already use INDEC's 2016 GDP revision: real GDP grows ~16.0% over 2008–2015, matching Coremberg/ARKLEMS (revised "new INDEC" 15.7% ≈ ARKLEMS 15.8%), not the manipulated INDEK 30.2%. So the overstated-GDP distortion is not present in the data the notebook consumes. (Coremberg 2017 also shows the overstatement was direct volume manipulation, not deflator-driven, so recomputing growth from CPI would be the wrong fix.)
 
 These are closed historical values; the CSV is curated and committed (not refreshed from a live API). Sources: IPC Congreso / IPC San Luis (DPEC) / IPCBA (CABA DGEyC) / IPEC Santa Fe; IMF Press Release 13/33; Coremberg (2017), *International Productivity Monitor* 33.
+
+## Historical CMPI term averages (1852–1963)
+
+`data/argentina/historical/historical-cmpi-1853-1963.csv` provides all four CMPI variables
+for years 1852–1963. The file is consumed by `Historical_CMPI_Extension.ipynb`.
+
+**What's in it:** Term averages from Table 3.1 of della Paolera, Irigoin & Bózzoli (2011),
+held flat (constant) for every year within each term — the same convention the modern notebook
+uses for the interest series through 1999. The underlying annual time series from the paper's
+Appendix B sources are not publicly available; term averages are the finest resolution the
+paper publishes.
+
+**Schema:** `Year, Administration, Inflation, Devaluation, Interest, Growth` (all in raw %,
+not log-transformed; the notebook applies `ln(1+x/100)` for CMPI computation).
+
+**Coverage:** 112 rows, years 1852–1963. Year 1852 is the baseline ("inherited year") for the
+first administration (Alsina 1853); its values are derived from Table 3.2 (the innovation
+table) as `baseline_1852 = actual_1853 − innovation_1853`.
+
+**How it was generated:** `scripts/_gen_historical_cmpi.py` (a documentation script that can
+be re-run to regenerate the CSV from the hard-coded Table 3.1 values).
+
+## December-to-December Convertibility override (1989–1995)
+
+`data/argentina/exchange/bcra-dec-dec-1990-1995.csv` provides December end-of-month ARS/USD
+exchange rates for 1989–1995, used by `Historical_CMPI_Extension.ipynb` to override the World
+Bank annual-average devaluation for the Menem I term.
+
+**Why it's needed:** The World Bank PA.NUS.ATLS annual average for 1991 blends January–March
+(still depreciating Austral, ≈7000–9000 AUS/USD) with April–December (Convertibility peg at
+exactly 1 ARS = 1 USD = 10,000 AUS). This creates a spurious positive devaluation in 1992
+(as the full-year 1992 average of 1.00 compares with the blended 1991 ≈0.95). The
+December-to-December approach compares point-in-time end-of-year snapshots, cleanly separating
+the depreciation phase (1990–1991) from the stable phase (1992–1995).
+
+**Data sources:**
+- December 1989: 1,953 AUS/USD = 0.1953 ARS/USD (BCRA Memoria Anual 1989, Cuadro VIII)
+- December 1990: 5,050 AUS/USD = 0.5050 ARS/USD (BCRA Memoria Anual 1990, Cuadro VIII)
+- December 1991: 1.0000 ARS/USD (Ley de Convertibilidad 23,928; Decreto 2,128/1991)
+- December 1992–1995: exactly 1.0000 ARS/USD (Convertibility maintained)
+
+**How to refresh:** Run `./.venv/bin/python scripts/build_bcra_dec_dec.py`.
 
 ## Current caveats
 
