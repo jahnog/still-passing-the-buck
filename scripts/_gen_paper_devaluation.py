@@ -2,7 +2,7 @@
 """Generate data/argentina/exchange/paper-devaluation-1853-1999.csv
 
 Extracts the annual devaluation log-diff series (col E) from the paper authors'
-Excel dataset (Data a 2018.xlsx), covering 1853-1999.
+Excel dataset (data_a_2018.xlsx), covering 1853-1999.
 
 Data sources by period (as described in Appendix B of della Paolera, Irigoin & Bózzoli 2011):
   1822-63: Irigoin (2000a)
@@ -26,9 +26,10 @@ import pandas as pd
 from pathlib import Path
 
 OUTPUT = Path("data/argentina/exchange/paper-devaluation-1853-1999.csv")
+HIST_ORIGINAL_DATA_URL = "https://github.com/jahnog/still-passing-the-buck/raw/refs/heads/main/data/argentina/historical/data_a_2018.xlsx?download="
 
 xl = pd.read_excel(
-    "data/argentina/historical/Data a 2018.xlsx",
+    HIST_ORIGINAL_DATA_URL,
     sheet_name="Hoja1",
     header=6,
     usecols="B,E",

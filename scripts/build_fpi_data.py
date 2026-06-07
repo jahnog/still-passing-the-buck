@@ -14,7 +14,7 @@ Component 5 [(1+r)/(1+g)] is computed live in the notebook from existing series.
 
 Coverage:
   1852 — synthetic baseline row (zeroes, so Alsina 1853 innovations = 1853 levels)
-  1853–2018 — from Data a 2018.xlsx columns G–J (paper authors' original data)
+  1853–2018 — from data_a_2018.xlsx columns G–J (paper authors' original data)
   2019–2025 — sourced from official Argentine government open data
 """
 
@@ -32,7 +32,7 @@ import numpy as np
 import pandas as pd
 
 OUTPUT = Path("data/argentina/fiscal/fpi-fiscal-1853-2025.csv")
-EXCEL_PATH = Path("data/argentina/historical/Data a 2018.xlsx")
+EXCEL_PATH = Path("data/argentina/historical/data_a_2018.xlsx")
 BASE_FINANZAS = "https://www.argentina.gob.ar/sites/default/files"
 DATOS_GOB_ZIP = "https://dgsiaf-repo.mecon.gob.ar/repository/pa/datasets/totales-de-presupuesto.zip"
 MODERN_YEARS = range(2019, 2026)  # 2019-2025
