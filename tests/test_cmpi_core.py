@@ -67,6 +67,23 @@ def test_fpi_synthetic():
     assert ranking.loc["B", "FPI"] > ranking.loc["A", "FPI"]
 
 
+def test_excluded_pool_years_are_skipped_for_term_average():
+    idx = pd.Index(range(1999, 2004))
+    inf = pd.Series([0.10, 0.12, 0.11, 0.05, 0.03], index=idx)
+    dev = pd.Series([0.05, 0.06, 0.04, -0.10, -0.05], index=idx)
+    int_ = pd.Series([0.08, 0.09, 0.07, 0.02, 0.01], index=idx)
+    gr = pd.Series([0.01, 0.00, -0.01, 0.04, 0.03], index=idx)
+
+    year_fn = make_cmpi_year_value_fn(inf, dev, int_, gr)
+    innov = compute_innovations(_tiny_terms(), year_fn)
+    innov_no_crisis = innov[~innov.index.isin({2001})].copy()
+
+    ranking = cmpi_scores_from_innovations(innov_no_crisis, _tiny_terms())
+
+    assert "A" in ranking.index
+    assert ranking.loc["A", "CMPI"] >= 0.0
+
+
 def test_no_crash_on_empty_pool():
     # Edge: empty year range should not explode
     terms = [("X", 2100, 2101, "", "")]
