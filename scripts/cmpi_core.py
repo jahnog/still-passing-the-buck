@@ -124,9 +124,14 @@ def cmpi_scores_from_innovations(
     for col in variables:
         pool = _percentile_assign(pool, col, ascending=CMPI_SORT_ASCENDING[col])
 
+    pool_years = set(pool.index)
     rows: Dict[str, Dict[str, float]] = {}
     for name, first_year, last_year, *_ in terms:
-        years = [y for y in range(first_year, last_year + 1) if pool_start <= y <= pool_end]
+        years = [
+            y
+            for y in range(first_year, last_year + 1)
+            if pool_start <= y <= pool_end and y in pool_years
+        ]
         if not years:
             continue
         comp = {col: pool.loc[years, col + "Pos"].mean() for col in variables}
@@ -154,9 +159,14 @@ def fpi_scores_from_innovations(
     for col in FPI_VARIABLES:
         pool = _percentile_assign(pool, col, ascending=FPI_SORT[col])
 
+    pool_years = set(pool.index)
     rows: Dict[str, Dict[str, float]] = {}
     for name, first_year, last_year, *_ in terms:
-        years = [y for y in range(first_year, last_year + 1) if pool_start <= y <= pool_end]
+        years = [
+            y
+            for y in range(first_year, last_year + 1)
+            if pool_start <= y <= pool_end and y in pool_years
+        ]
         if not years:
             continue
         comp = {col: pool.loc[years, col + "Pos"].mean() for col in FPI_VARIABLES}
