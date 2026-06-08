@@ -29,7 +29,6 @@ import time
 from pathlib import Path
 from urllib.request import Request, urlopen
 
-import numpy as np
 import pandas as pd
 
 FPI_CSV = Path("data/argentina/fiscal/fpi-fiscal-1853-2025.csv")
