@@ -260,8 +260,8 @@ try:
 except Exception as e:
     print(f"  Hacienda verification skipped: {e}")
 
-# ── STEP 4: ASSEMBLE AND SAVE ────────────────────────────────────────────────
-print("\nStep 4: Assembling and saving combined FPI dataset...")
+# ── STEP 4: ASSEMBLE RAW (OFFICIAL-RATE, TREASURY-ONLY) ─────────────────────
+print("\nStep 4: Assembling raw (official-rate, Treasury-only) FPI dataset...")
 
 rows = []
 
@@ -292,7 +292,83 @@ for year in MODERN_YEARS:
     })
 
 result = pd.DataFrame(rows).set_index("Year")
+
+# ── STEP 5: DEBT-STOCK ADJUSTMENTS — cepo FX correction + BCRA consolidation ──
+# Two corrections applied to the two debt-stock components (Debt/GDP, Debt/Exports);
+# the primary-result ratios are left untouched (they are FX- and stock-neutral).
+#
+# (A) CEPO FX CORRECTION (mirrors the CMPI devaluation fix). During exchange-control
+#     ("cepo") years the official peso was overvalued, so GDP-in-USD was overstated and
+#     Debt/GDP understated. We re-value GDP at the free-market (CCL/blue) rate:
+#       Debt/GDP_cepo = Debt/GDP_official × (FX_parallel / FX_official)
+#     Debt/Exports needs no FX correction (exports are genuine USD receipts).
+#
+# (B) BCRA QUASI-FISCAL CONSOLIDATION (Néstor Kirchner → Milei). The central bank's
+#     remunerated ("unconvertible") peso liabilities — Lebac/Nobac → Leliq → Pases — are
+#     hidden public debt. We add them to Treasury debt to form a CONSOLIDATED public-debt
+#     ratio, so administrations that GREW this off-balance-sheet debt are penalised and an
+#     administration that MIGRATES it onto the Treasury (Milei 2024) is not double-charged
+#     for the reclassification — only genuine net change is scored.
+#       Debt/GDP_adj     = Debt/GDP_cepo + BCRA/GDP
+#       Debt/Exports_adj = Debt/Exports  + (BCRA/GDP × GDP_USD_corrected) / Exports_USD
+print("\nStep 5: Applying cepo FX correction and BCRA quasi-fiscal consolidation...")
+
+# Free-market (CCL/blue) rates for cepo years, and official annual-average rates.
+parallel = pd.read_csv("data/argentina/exchange/parallel-cepo.csv").set_index("Year")["ParallelARS"]
+official_fx = wb_series("PA.NUS.FCRF")          # official ARS/USD, annual average
+time.sleep(1)
+gdp_lcu = wb_series("NY.GDP.MKTP.CN")           # nominal GDP in pesos
+time.sleep(1)
+# gdp_usd / exports_usd already fetched in Step 2 (current USD)
+
+# BCRA remunerated-liability stock as a fraction of GDP (documented estimate series).
+bcra = pd.read_csv("data/argentina/fiscal/bcra-quasi-fiscal-2001-2025.csv").set_index("Year")["BCRA_QuasiFiscal_GDP"]
+
+result["Debt_GDP_official"] = result["Debt_GDP"]
+result["Debt_Exports_official"] = result["Debt_Exports"]
+result["Cepo_Factor"] = 1.0
+result["BCRA_QuasiFiscal_GDP"] = 0.0
+
+for year in result.index:
+    if year < 1900:
+        continue
+    # (A) cepo factor = parallel / official, only for control years with both rates known
+    factor = 1.0
+    if year in parallel.index and official_fx.get(year):
+        factor = float(parallel.loc[year]) / float(official_fx[year])
+    result.loc[year, "Cepo_Factor"] = factor
+    dg_cepo = result.loc[year, "Debt_GDP_official"] * factor
+
+    # (B) BCRA consolidation
+    bcra_gdp = float(bcra.get(year, 0.0)) if not pd.isna(bcra.get(year, np.nan)) else 0.0
+    result.loc[year, "BCRA_QuasiFiscal_GDP"] = bcra_gdp
+
+    result.loc[year, "Debt_GDP"] = dg_cepo + bcra_gdp
+
+    # Debt/Exports: add BCRA in USD (peso stock valued at the cepo-corrected USD GDP).
+    de = result.loc[year, "Debt_Exports_official"]
+    gdp_usd_corr = None
+    if year in parallel.index and gdp_lcu.get(year):
+        gdp_usd_corr = gdp_lcu[year] / float(parallel.loc[year])   # GDP at free rate
+    elif gdp_usd.get(year):
+        gdp_usd_corr = gdp_usd[year]
+    if bcra_gdp and gdp_usd_corr and exports_usd.get(year):
+        de = de + bcra_gdp * gdp_usd_corr / exports_usd[year]
+    result.loc[year, "Debt_Exports"] = de
+
+print("  Adjusted debt-stock components (term-boundary years):")
+for y in [2007, 2011, 2015, 2019, 2023, 2024, 2025]:
+    if y in result.index:
+        r = result.loc[y]
+        print(f"    {y}: Debt/GDP {r['Debt_GDP_official']:.3f} → {r['Debt_GDP']:.3f} "
+              f"(cepo×{r['Cepo_Factor']:.2f} + BCRA {r['BCRA_QuasiFiscal_GDP']*100:.1f}%), "
+              f"Debt/Exp {r['Debt_Exports_official']:.2f} → {r['Debt_Exports']:.2f}")
+
+# ── STEP 6: SAVE ─────────────────────────────────────────────────────────────
 OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+result = result[["Debt_GDP", "Debt_Exports", "Result_Revenue", "Result_DebtServ",
+                 "Debt_GDP_official", "Debt_Exports_official", "Cepo_Factor",
+                 "BCRA_QuasiFiscal_GDP"]]
 result.to_csv(OUTPUT)
 print(f"\nWrote {len(result)} rows to {OUTPUT}")
 print(f"NaN counts: {result.isna().sum().to_dict()}")
