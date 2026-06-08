@@ -18,13 +18,11 @@ Coverage:
   2019–2025 — sourced from official Argentine government open data
 """
 
-import csv
 import io
 import json
 import sys
 import time
 import zipfile
-from collections import defaultdict
 from pathlib import Path
 from urllib.request import Request, urlopen
 
@@ -112,7 +110,7 @@ for year in MODERN_YEARS:
             debt_usd[year] = found  # millions USD
             print(f"USD {found:,.0f}M ✓")
         else:
-            print(f"column not found — using most recent non-NaN")
+            print("column not found — using most recent non-NaN")
             # fallback: last non-NaN value in row 16
             for col in range(len(total_row) - 1, 0, -1):
                 v = total_row.iloc[col]
@@ -239,7 +237,7 @@ for yr, (rr, rds) in KNOWN_FISCAL.items():
 # Attempt to parse December 2024 Hacienda file for verification
 try:
     hacienda_url = f"{BASE_FINANZAS}/2025/01/sector_publico_base_caja_diciembre_2024.xlsx"
-    print(f"\n  Verifying against Secretaría de Hacienda December 2024 file...")
+    print("\n  Verifying against Secretaría de Hacienda December 2024 file...")
     raw_h = fetch_bytes(hacienda_url)
     h_xls = pd.ExcelFile(io.BytesIO(raw_h))
     print(f"  Sheets: {h_xls.sheet_names}")

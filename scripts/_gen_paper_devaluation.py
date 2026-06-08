@@ -60,7 +60,7 @@ val_1963 = xl.loc[1963, "DevaluationLog"]
 val_1964 = xl.loc[1964, "DevaluationLog"]
 illia_avg_innov = xl.loc[1964:1966, "DevaluationLog"].mean() - val_1963
 print(f"Illia (1964-66) avg devaluation innovation vs 1963 baseline: {illia_avg_innov*100:.1f}%")
-print(f"  (paper Table 3.2 shows +27.14%; close match confirms correct December methodology)")
+print("  (paper Table 3.2 shows +27.14%; close match confirms correct December methodology)")
 assert illia_avg_innov > 0, "Illia devaluation innovation must be positive (worsening)"
 print("Illia sign check ✓")
 print("All checks passed.")
