@@ -261,7 +261,6 @@ WIKIMEDIA_DELAY_SECONDS = 8.0
 
 
 DEFAULT_NOTEBOOKS = (
-    "Still_Passing_the_Buck.ipynb",
     "Historical_CMPI_Extension.ipynb",
 )
 
@@ -270,14 +269,16 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
             "Render one or more notebooks as print-optimized PDF papers. "
-            "With no notebook argument, renders both project papers "
-            "(Still_Passing_the_Buck and Historical_CMPI_Extension)."
+            "With no notebook argument, renders the current unified paper "
+            "(Historical_CMPI_Extension). The older Still_Passing_the_Buck.ipynb "
+            "is deprecated and retained only for historical reference; pass it "
+            "explicitly if you need to re-render it."
         )
     )
     parser.add_argument(
         "notebooks",
         nargs="*",
-        help="Notebook(s) to render. Defaults to both project papers.",
+        help="Notebook(s) to render. Defaults to the current unified paper.",
     )
     parser.add_argument(
         "-o",

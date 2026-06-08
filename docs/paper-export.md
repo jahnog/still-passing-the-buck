@@ -11,8 +11,8 @@ Use `scripts/render_notebook_paper.py` to turn the notebook into a print-optimiz
 
 ```bash
 python3 scripts/render_notebook_paper.py \
-  Still_Passing_the_Buck.ipynb \
-  --output docs/Still_Passing_the_Buck.pdf
+  Historical_CMPI_Extension.ipynb \
+  --output docs/Historical_CMPI_Extension.pdf
 ```
 
 The script re-executes the notebook by default so the PDF contains fresh figures and tables.
