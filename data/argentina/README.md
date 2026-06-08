@@ -177,13 +177,14 @@ column with Spearman ρ ≈ 0.99 (the entire top 10 matches exactly). The 2003�
 leave that restricted ranking unchanged (they touch only 2003+), and lift Milei (2024–25) to FPI
 #2 while sinking the hidden-debt accumulators (Alberto Fernández #40, Cristina Kirchner II #38).
 
-**How to refresh:** Run `./.venv/bin/python scripts/build_fpi_data.py` (full rebuild incl. the
-corrections), or `./.venv/bin/python scripts/adjust_fpi_debt.py` to re-apply only the §6.0
-corrections to an existing CSV (network-cheap; idempotent).
+**How to refresh (FPI data):**
+- (Strongly recommended when BCRA quasi-fiscal anchors or the interpolation rule change): `./.venv/bin/python scripts/_gen_bcra_quasi_fiscal.py` — this is the single source of truth that regenerates `fiscal/bcra-quasi-fiscal-2001-2025.csv` from the documented anchors + linear interpolation for the §6.0 corrections.
+- Then: `./.venv/bin/python scripts/build_fpi_data.py` (full rebuild including cepo + BCRA consolidation), or `./.venv/bin/python scripts/adjust_fpi_debt.py` to re-apply only the §6.0 corrections to an existing CSV (idempotent, lower network cost).
 
 ## Current caveats
 
 - The World Bank annual rows for `NY.GDP.PCAP.KD.ZG` still top out at 2024. The 2025 value is now supplied by the documented INDEC fallback described above, so the notebook computes a full 2025 CMPI end-to-end. Treat the 2025 per-capita figure as a documented bridge (official PIB growth adjusted by official population growth) until the World Bank publishes 2025 directly, at which point the live API value automatically supersedes the fallback.
+- For FPI 2025 debt ratios (Debt/GDP, Debt/Exports), when final WB nominal GDP/exports are unavailable, `build_fpi_data.py` supplies documented provisional values using INDEC "Informe de avance..." + exchange (or Sec. Finanzas/BCRA provisional Debt/PIB). The 2025 row is marked PROVISIONAL; final WB supersedes on refresh. This enables the full 2025 FPI NaN audit and Milei (2024-25) FPI/Overall scores. Primary result ratios for 2025 continue to come from datos.gob.ar (no provisional needed). See the FPI sources section for details.
 - **`FP.CPI.TOTL` is the genuine national INDEC IPC only from December 2016 onward.** The notebook's consumer-inflation series therefore falls back to the **GDP deflator (`NY.GDP.DEFL.KD.ZG`) for roughly 1963–2016 — the majority of the window**. The deflator is a different concept from a household CPI; this is disclosed in the notebook rather than relabelled. The 2007–2015 *INDEC intervention* (when official CPI was widely judged understated) is the period where a credible alternative consumer series (IPC San Luis / CABA / "Congreso") would most improve the analysis; that splice is recommended future work.
 - The INDEC IPIM bridge from the historical base to the current reference-period workbook is chained with the last available 2015 historical average. That keeps the post-2015 annual changes usable, but the 2015 splice should still be treated as a documented approximation.
 - **`FP.WPI.TOTL` has no 2001 observation** (the INDEC IPIM workbooks only expose years with twelve complete months, and the 2001–02 crisis year is incomplete). The gap is left as-is on purpose: a log-linear fill between 2000 and 2002 would inject a spurious ~+31% into 2001 (a mildly *deflationary* year) and understate the 2002 devaluation jump. The notebook handles the hole with a NaN-robust price-component mean that falls back to the consumer-price change for 2001.

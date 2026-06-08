@@ -33,6 +33,8 @@ import pandas as pd
 
 FPI_CSV = Path("data/argentina/fiscal/fpi-fiscal-1853-2025.csv")
 BCRA_CSV = Path("data/argentina/fiscal/bcra-quasi-fiscal-2001-2025.csv")
+# The canonical producer for BCRA_CSV is scripts/_gen_bcra_quasi_fiscal.py.
+# Run it whenever the documented anchors or interpolation rule change.
 PARALLEL_CSV = Path("data/argentina/exchange/parallel-cepo.csv")
 
 
