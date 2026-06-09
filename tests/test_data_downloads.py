@@ -115,7 +115,7 @@ def test_bcra_exchange_workbook_fetchable():
 def test_indec_ipc_and_population_projections_available():
     """INDEC series used for CPI fallback and the 2025 per-capita bridge."""
     _requires_network()
-    # IPC division series (used by refresh_argentina_indicators)
+    # IPC division series (used by download_indec_economia_serie-ipc-divisiones.py)
     ipc_url = "https://www.indec.gob.ar/ftp/cuadros/economia/serie_ipc_divisiones.csv"
     raw = _get(ipc_url)
     assert b"Codigo" in raw or b"Reg\u00edon" in raw or len(raw) > 5000
@@ -130,7 +130,7 @@ def test_indec_ipc_and_population_projections_available():
 def test_fpi_modern_sources_have_202x_data():
     """Secretaría de Finanzas debt files and datos.gob.ar budget zip are reachable and recent."""
     _requires_network()
-    # One recent debt file (the pattern used by build_fpi_data.py)
+    # One recent debt file (the pattern used by download_finanzas_deuda_deuda-publica.py)
     year = min(TARGET_YEAR, 2024)
     debt_url = f"https://www.argentina.gob.ar/sites/default/files/deuda_publica_31-12-{year}.xlsx"
     raw = _get(debt_url, timeout=60)

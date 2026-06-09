@@ -4,14 +4,20 @@ import argparse
 import csv
 import gzip
 import json
+import sys
 from pathlib import Path
 
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
-INDICATOR_FILE = Path("Indicators.csv.gz")
-INTEREST_FILE = Path("data/argentina/interest/wb-ids-arg.csv")
-ALT_CPI_FILE = Path("data/argentina/inflation/alt-cpi-2007-2015.csv")
+from data import paths
+
+INDICATOR_FILE = paths.INDICATORS_GZ
+INTEREST_FILE = paths.INTEREST_CSV
+ALT_CPI_FILE = paths.ALT_CPI_CSV
 ALT_CPI_YEARS = range(2007, 2016)  # 2007-2015 INDEC-intervention override window
-PARALLEL_FX_FILE = Path("data/argentina/exchange/parallel-cepo.csv")
+PARALLEL_FX_FILE = paths.PARALLEL_CEPO_CSV
 # Cepo years whose devaluation must use the free-market rate (2012-2015 and 2019 onward); the
 # 2016-2018 float is intentionally excluded (the brecha was < 1%, so the official rate is fine).
 CEPO_FX_YEARS = (2012, 2013, 2014, 2015, 2019, 2020, 2021, 2022, 2023, 2024, 2025)

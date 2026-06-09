@@ -13,6 +13,7 @@ dependencies = [
     "numpy>=2.4.6",
     "pandas>=3.0.3",
     "pip>=26.1.2",
+    "xlrd>=2.0.2",
 ]
 
 [project.optional-dependencies]
