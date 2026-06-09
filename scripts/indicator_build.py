@@ -1,32 +1,19 @@
-#!/usr/bin/env python3
+"""Build Argentina indicator rows from raw downloads and wide WDI export."""
+
+from __future__ import annotations
 
 import csv
 import gzip
 import io
 import json
 import shutil
-import sys
 from collections import defaultdict
 from pathlib import Path
-from urllib.request import Request, urlopen
 
+from scripts.data_io import RAW_ROOT, latest_raw
 
 COUNTRY_CODE = "ARG"
 COUNTRY_NAME = "Argentina"
-WIDE_SOURCE_PATH = Path("WDIData2.csv")
-LONG_FORM_PATH = Path("Indicators.csv")
-LONG_FORM_GZIP_PATH = Path("Indicators.csv.gz")
-
-INDEC_IPC_URL = "https://www.indec.gob.ar/ftp/cuadros/economia/serie_ipc_divisiones.csv"
-INDEC_SIPM_1956_1995_URL = "https://www.indec.gob.ar/ftp/cuadros/economia/sipm-serie56-95.xls"
-INDEC_SIPM_1996_ONWARD_URL = "https://www.indec.gob.ar/ftp/cuadros/economia/sipm-dde1996.xls"
-INDEC_SIPM_REFERENCE_2015_URL = "https://www.indec.gob.ar/ftp/cuadros/economia/series_sipm_dic2015.xls"
-BCRA_A3500_URL = "https://www.bcra.gob.ar/archivos/Pdfs/PublicacionesEstadisticas/com3500.xls"
-# INDEC 2022-census national population projections (2022-2040), mid-year total country,
-# semicolon-delimited CSV with columns Edad;Sexo;Poblacion;Fecha.
-INDEC_POP_PROJECTIONS_URL = (
-    "https://www.indec.gob.ar/ftp/cuadros/poblacion/proyecciones_nacionales_2022_2040_base.csv"
-)
 
 # These are the CMPI-related World Bank series we need to keep fresh, even if the
 # bulk export lags or omits them locally.
@@ -41,7 +28,7 @@ API_SUPPLEMENT_CODES = {
 # Official INDEC annual real GDP (PIB) growth, in percent, for years the World Bank API has
 # not yet published. Sourced from the INDEC "Informe de avance del nivel de actividad" press
 # releases. The notebook needs GDP *per capita* growth, so build_indec_growth_rows() converts
-# these totals using official INDEC mid-year population (INDEC_POP_PROJECTIONS_URL).
+# these totals using official INDEC mid-year population (INDEC population projections raw CSV).
 #   2025 = +4.4%: Informe de avance del nivel de actividad, 4o trimestre de 2025
 #   (published 2026-03-20, https://www.indec.gob.ar/uploads/informesdeprensa/pib_03_26D14C2E1ADC.pdf)
 INDEC_OFFICIAL_GDP_GROWTH = {
@@ -49,10 +36,11 @@ INDEC_OFFICIAL_GDP_GROWTH = {
 }
 
 
-def fetch_bytes(url: str) -> bytes:
-    request = Request(url, headers={"User-Agent": "StillPassingTheBuck/1.0"})
-    with urlopen(request, timeout=60) as response:
-        return response.read()
+def require_latest_raw(provider: str, prefix: str) -> Path:
+    path = latest_raw(provider, prefix)
+    if path is None:
+        raise RuntimeError(f"Missing raw file under {RAW_ROOT / provider} matching prefix {prefix!r}.")
+    return path
 
 
 def require_xlrd():
@@ -134,7 +122,8 @@ def find_sheet_row(sheet, code: str) -> int:
 
 
 def build_indec_ipc_rows() -> tuple[list[dict[str, str]], list[dict[str, str]]]:
-    payload = fetch_bytes(INDEC_IPC_URL).decode("latin-1")
+    source_path = require_latest_raw("indec", "economia_serie-ipc-divisiones")
+    payload = source_path.read_text(encoding="latin-1")
     reader = csv.DictReader(io.StringIO(payload), delimiter=";")
 
     monthly_values: dict[int, list[float]] = defaultdict(list)
@@ -188,7 +177,8 @@ def build_indec_ipc_rows() -> tuple[list[dict[str, str]], list[dict[str, str]]]:
 
 def parse_sipm_1956_1995_ipim() -> dict[int, float]:
     xlrd = require_xlrd()
-    workbook = xlrd.open_workbook(file_contents=fetch_bytes(INDEC_SIPM_1956_1995_URL))
+    source_path = require_latest_raw("indec", "economia_sipm-serie56-95")
+    workbook = xlrd.open_workbook(filename=str(source_path))
     sheet = workbook.sheet_by_index(0)
 
     annual_values: dict[int, float] = {}
@@ -205,7 +195,8 @@ def parse_sipm_1956_1995_ipim() -> dict[int, float]:
 
 def parse_sipm_1996_onward_ipim(*, include_partial_years: bool = False) -> dict[int, float]:
     xlrd = require_xlrd()
-    workbook = xlrd.open_workbook(file_contents=fetch_bytes(INDEC_SIPM_1996_ONWARD_URL))
+    source_path = require_latest_raw("indec", "economia_sipm-dde1996")
+    workbook = xlrd.open_workbook(filename=str(source_path))
     sheet = workbook.sheet_by_index(0)
 
     annual_values: dict[int, float] = {}
@@ -236,7 +227,8 @@ def parse_sipm_1996_onward_ipim(*, include_partial_years: bool = False) -> dict[
 
 def parse_sipm_reference_2015_ipim() -> dict[int, float]:
     xlrd = require_xlrd()
-    workbook = xlrd.open_workbook(file_contents=fetch_bytes(INDEC_SIPM_REFERENCE_2015_URL))
+    source_path = require_latest_raw("indec", "economia_series-sipm-dic2015")
+    workbook = xlrd.open_workbook(filename=str(source_path))
     sheet = workbook.sheet_by_name("IPIM")
     row_index = find_sheet_row(sheet, "NG")
 
@@ -303,7 +295,8 @@ def build_indec_wpi_rows() -> list[dict[str, str]]:
 
 def build_bcra_exchange_rows() -> list[dict[str, str]]:
     xlrd = require_xlrd()
-    workbook = xlrd.open_workbook(file_contents=fetch_bytes(BCRA_A3500_URL))
+    source_path = require_latest_raw("bcra", "publicaciones_com3500")
+    workbook = xlrd.open_workbook(filename=str(source_path))
     sheet = workbook.sheet_by_name("Serie de TCNPM")
 
     monthly_values: dict[int, list[float]] = defaultdict(list)
@@ -330,7 +323,8 @@ def build_bcra_exchange_rows() -> list[dict[str, str]]:
 
 
 def build_indec_population_totals() -> dict[int, float]:
-    payload = fetch_bytes(INDEC_POP_PROJECTIONS_URL).decode("latin-1")
+    source_path = require_latest_raw("indec", "poblacion_proyecciones-nacionales-2022-2040")
+    payload = source_path.read_text(encoding="latin-1")
     reader = csv.DictReader(io.StringIO(payload), delimiter=";")
 
     totals: dict[int, float] = defaultdict(float)
@@ -405,15 +399,16 @@ def build_rows_from_wide_export(source_path: Path) -> dict[tuple[str, int], dict
     return rows
 
 
-def fetch_world_bank_series(indicator_code: str) -> list[dict[str, str]]:
-    url = (
-        f"https://api.worldbank.org/v2/country/{COUNTRY_CODE}/indicator/"
-        f"{indicator_code}?format=json&per_page=200"
-    )
+def _indicator_code_from_api_raw_name(path: Path) -> str | None:
+    if not path.name.startswith("api_") or not path.name.endswith(".json"):
+        return None
 
-    with urlopen(url, timeout=60) as response:
-        payload = json.load(response)
+    slug = path.name.removeprefix("api_").split("_", 1)[0]
+    return slug.upper().replace("-", ".")
 
+
+def parse_world_bank_api_file(path: Path) -> list[dict[str, str]]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
     series_rows = payload[1] if isinstance(payload, list) and len(payload) > 1 else []
     collected: list[dict[str, str]] = []
 
@@ -436,7 +431,56 @@ def fetch_world_bank_series(indicator_code: str) -> list[dict[str, str]]:
     return collected
 
 
-def write_long_form(rows: dict[tuple[str, int], dict[str, str]], output_path: Path) -> None:
+def load_world_bank_api_supplement_rows() -> list[dict[str, str]]:
+    folder = RAW_ROOT / "worldbank"
+    if not folder.is_dir():
+        return []
+
+    newest_by_code: dict[str, Path] = {}
+    for path in folder.glob("api_*.json"):
+        code = _indicator_code_from_api_raw_name(path)
+        if code is None or code not in API_SUPPLEMENT_CODES:
+            continue
+
+        existing = newest_by_code.get(code)
+        if existing is None or path.stat().st_mtime > existing.stat().st_mtime:
+            newest_by_code[code] = path
+
+    rows: list[dict[str, str]] = []
+    for path in newest_by_code.values():
+        rows.extend(parse_world_bank_api_file(path))
+    return rows
+
+
+def build_indicator_rows(wide_path: Path) -> dict[tuple[str, int], dict[str, str]]:
+    rows = build_rows_from_wide_export(wide_path)
+
+    for series_row in load_world_bank_api_supplement_rows():
+        key = (series_row["IndicatorCode"], int(series_row["Year"]))
+        rows[key] = series_row
+
+    ipc_level_rows, ipc_growth_rows = build_indec_ipc_rows()
+    upsert_indicator_rows(rows, ipc_level_rows, replace_existing=True)
+    upsert_indicator_rows(rows, ipc_growth_rows, replace_existing=True)
+    upsert_indicator_rows(rows, build_indec_wpi_rows(), replace_existing=True)
+    upsert_indicator_rows(rows, build_bcra_exchange_rows())
+
+    # Only fill GDP per-capita-growth years the World Bank API has not yet published, so a
+    # later WB release of the same year transparently supersedes the INDEC fallback.
+    growth_fallback_rows = [
+        row
+        for row in build_indec_growth_rows()
+        if (row["IndicatorCode"], int(row["Year"])) not in rows
+    ]
+    upsert_indicator_rows(rows, growth_fallback_rows)
+    return rows
+
+
+def write_indicators(
+    rows: dict[tuple[str, int], dict[str, str]],
+    csv_path: Path,
+    gz_path: Path,
+) -> None:
     fieldnames = [
         "CountryName",
         "CountryCode",
@@ -451,56 +495,12 @@ def write_long_form(rows: dict[tuple[str, int], dict[str, str]], output_path: Pa
         key=lambda row: (row["CountryName"], row["IndicatorCode"], int(row["Year"])),
     )
 
-    with output_path.open("w", newline="", encoding="utf-8") as handle:
+    csv_path.parent.mkdir(parents=True, exist_ok=True)
+    with csv_path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(ordered_rows)
 
-
-def gzip_file(source_path: Path, target_path: Path) -> None:
-    with source_path.open("rb") as source_handle:
-        with gzip.open(target_path, "wb") as target_handle:
+    with csv_path.open("rb") as source_handle:
+        with gzip.open(gz_path, "wb") as target_handle:
             shutil.copyfileobj(source_handle, target_handle)
-
-
-def main() -> int:
-    if not WIDE_SOURCE_PATH.exists():
-        print(f"Missing source file: {WIDE_SOURCE_PATH}", file=sys.stderr)
-        return 1
-
-    try:
-        rows = build_rows_from_wide_export(WIDE_SOURCE_PATH)
-
-        for indicator_code in API_SUPPLEMENT_CODES:
-            for series_row in fetch_world_bank_series(indicator_code):
-                key = (series_row["IndicatorCode"], int(series_row["Year"]))
-                rows[key] = series_row
-
-        ipc_level_rows, ipc_growth_rows = build_indec_ipc_rows()
-        upsert_indicator_rows(rows, ipc_level_rows, replace_existing=True)
-        upsert_indicator_rows(rows, ipc_growth_rows, replace_existing=True)
-        upsert_indicator_rows(rows, build_indec_wpi_rows(), replace_existing=True)
-        upsert_indicator_rows(rows, build_bcra_exchange_rows())
-
-        # Only fill GDP per-capita-growth years the World Bank API has not yet published, so a
-        # later WB release of the same year transparently supersedes the INDEC fallback.
-        growth_fallback_rows = [
-            row
-            for row in build_indec_growth_rows()
-            if (row["IndicatorCode"], int(row["Year"])) not in rows
-        ]
-        upsert_indicator_rows(rows, growth_fallback_rows)
-    except RuntimeError as exc:
-        print(str(exc), file=sys.stderr)
-        return 1
-
-    write_long_form(rows, LONG_FORM_PATH)
-    gzip_file(LONG_FORM_PATH, LONG_FORM_GZIP_PATH)
-
-    print(f"Wrote {len(rows)} Argentina indicator rows to {LONG_FORM_PATH}")
-    print(f"Compressed {LONG_FORM_GZIP_PATH}")
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
