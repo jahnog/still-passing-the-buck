@@ -69,6 +69,10 @@ def _percentile_assign(
     if n == 0:
         df[col + "Pos"] = 0.0
         return df
+    if df[col].isna().any():
+        # NaN sorts last, so it would silently receive the *best* percentile.
+        bad_years = list(df.index[df[col].isna()])
+        raise ValueError(f"NaN innovations in pool column {col!r} for years {bad_years}")
     increment = 1.0 / n
     pos = 0.0
     for row in df.sort_values(by=col, ascending=ascending).itertuples():
@@ -138,7 +142,10 @@ def cmpi_scores_from_innovations(
         comp["CMPI"] = sum(comp.values()) / len(variables)
         rows[name] = comp
 
-    result = pd.DataFrame(rows).T.sort_values("CMPI", ascending=False)
+    if not rows:
+        result = pd.DataFrame(columns=[*variables, "CMPI"])
+    else:
+        result = pd.DataFrame(rows).T.sort_values("CMPI", ascending=False)
     return (result, pool) if return_pool else result
 
 
@@ -173,6 +180,8 @@ def fpi_scores_from_innovations(
         comp["FPI"] = sum(comp.values()) / len(FPI_VARIABLES)
         rows[name] = comp
 
+    if not rows:
+        return pd.DataFrame(columns=[*FPI_VARIABLES, "FPI"])
     return pd.DataFrame(rows).T.sort_values("FPI", ascending=False)
 
 

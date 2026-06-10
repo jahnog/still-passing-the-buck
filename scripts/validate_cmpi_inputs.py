@@ -18,9 +18,14 @@ INTEREST_FILE = paths.INTEREST_CSV
 ALT_CPI_FILE = paths.ALT_CPI_CSV
 ALT_CPI_YEARS = range(2007, 2016)  # 2007-2015 INDEC-intervention override window
 PARALLEL_FX_FILE = paths.PARALLEL_CEPO_CSV
+FPI_FISCAL_FILE = paths.FPI_FISCAL_CSV
 # Cepo years whose devaluation must use the free-market rate (2012-2015 and 2019 onward); the
 # 2016-2018 float is intentionally excluded (the brecha was < 1%, so the official rate is fine).
 CEPO_FX_YEARS = (2012, 2013, 2014, 2015, 2019, 2020, 2021, 2022, 2023, 2024, 2025)
+# Years the BCRA carried remunerated quasi-fiscal debt that must be consolidated into the FPI
+# debt stock (Lebac creation 2002 through the 2023 peak; 2024-2025 wind-down may reach zero).
+BCRA_QF_YEARS = range(2003, 2024)
+FPI_COLUMNS = ("Debt_GDP", "Debt_Exports", "Result_Revenue", "Result_DebtServ")
 
 SERIES = {
     "NY.GDP.DEFL.KD.ZG": "Inflation, GDP deflator (annual %)",
@@ -112,6 +117,64 @@ def audit_parallel_fx(path: Path, target_year: int) -> list[int]:
                 continue
 
     return [year for year in CEPO_FX_YEARS if year <= target_year and not present.get(year)]
+
+
+def audit_fpi_fiscal(path: Path, target_year: int) -> list[dict[str, object]]:
+    """Validate the committed FPI dataset: corrections applied, no holes.
+
+    This is the check that catches the silent-cepo-skip failure mode: if the official-FX raw
+    data is missing when the FPI CSV is regenerated, Cepo_Factor quietly stays 1.0 and the
+    debt-stock components revert to the uncorrected official series.
+    """
+    problems: list[dict[str, object]] = []
+    if not path.exists():
+        return [{"series": "fpi", "name": "FPI fiscal dataset missing", "reason": str(path)}]
+
+    rows: dict[int, dict[str, str]] = {}
+    with path.open(newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            try:
+                rows[int(float(row["Year"]))] = row
+            except (TypeError, ValueError):
+                continue
+
+    for year in range(1853, target_year + 1):
+        row = rows.get(year)
+        if row is None:
+            problems.append({"series": "fpi", "name": f"FPI row missing for {year}",
+                             "reason": "no row in FPI fiscal CSV"})
+            continue
+        missing = [col for col in FPI_COLUMNS if not (row.get(col) or "").strip()]
+        if missing:
+            problems.append({"series": "fpi", "name": f"FPI components missing for {year}",
+                             "reason": "empty columns: " + ", ".join(missing)})
+
+    for year in CEPO_FX_YEARS:
+        if year > target_year:
+            continue
+        row = rows.get(year)
+        factor = float(row["Cepo_Factor"]) if row and (row.get("Cepo_Factor") or "").strip() else None
+        if factor is None or factor <= 1.0:
+            problems.append({
+                "series": "fpi",
+                "name": f"Cepo correction not applied for {year}",
+                "reason": f"Cepo_Factor is {factor!r}; expected > 1.0 on exchange-control years "
+                          "(regenerate with generate_fiscal_fpi-fiscal.py after the WB downloads)",
+            })
+
+    for year in BCRA_QF_YEARS:
+        if year > target_year:
+            continue
+        row = rows.get(year)
+        bcra = float(row["BCRA_QuasiFiscal_GDP"]) if row and (row.get("BCRA_QuasiFiscal_GDP") or "").strip() else None
+        if not bcra or bcra <= 0:
+            problems.append({
+                "series": "fpi",
+                "name": f"BCRA quasi-fiscal consolidation missing for {year}",
+                "reason": f"BCRA_QuasiFiscal_GDP is {bcra!r}; expected > 0 for 2003-2023",
+            })
+
+    return problems
 
 
 # First administration-year the notebook ranks (Illia, 1964); 1963 is only the legacy baseline.
@@ -266,6 +329,11 @@ def main() -> int:
                 "reason": f"no usable ParallelARS for {year} in {PARALLEL_FX_FILE}",
             }
         )
+
+    # The committed FPI dataset must carry the section-6.0 corrections and have no holes.
+    fpi_problems = audit_fpi_fiscal(FPI_FISCAL_FILE, args.target_year)
+    report["fpi_fiscal_file"] = str(FPI_FISCAL_FILE)
+    report["missing_or_incomplete"].extend(fpi_problems)
 
     # Sets are not JSON-serialisable; drop them before printing the report.
     for stat in indicator_stats.values():

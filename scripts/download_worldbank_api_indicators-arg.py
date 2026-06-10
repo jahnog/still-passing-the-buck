@@ -19,7 +19,9 @@ INDICATOR_CODES = [
     "NY.GDP.DEFL.KD.ZG",
     "NY.GDP.PCAP.KD.ZG",
     "PA.NUS.ATLS",
+    "PA.NUS.FCRF",
     "NY.GDP.MKTP.CD",
+    "NY.GDP.MKTP.CN",
     "BX.GSR.TOTL.CD",
 ]
 DATE_FROM = "1960-01"

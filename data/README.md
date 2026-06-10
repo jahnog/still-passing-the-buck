@@ -35,14 +35,14 @@ One script per provider-external-file combination. Each writes to `data/raw/` us
 | Script | Output |
 |--------|--------|
 | `generate_indicators_wdi-argentina.py` | `provided/Indicators.csv` + `.gz` |
-| `generate_interest_wb-ids-arg.py` | `processed/interest/converted_interest_wb-ids-arg_*.csv` |
+| `generate_interest_wb-ids-arg.py` | `processed/interest/converted_interest_wb-ids-arg_*.csv` — **reads its own output** for the 1958–1997 legacy rows (paper term averages; primary data, not regenerable from any download — never delete the committed CSV) |
 | `generate_exchange_parallel-cepo.py` | `processed/exchange/converted_exchange_parallel-cepo_*.csv` |
 | `generate_exchange_paper-devaluation.py` | `processed/exchange/converted_exchange_paper-devaluation_*.csv` |
 | `generate_exchange_bcra-dec-dec.py` | `processed/exchange/converted_exchange_bcra-dec-dec_*.csv` |
 | `generate_historical_historical-cmpi.py` | `processed/historical/converted_historical_historical-cmpi_*.csv` |
 | `generate_historical_data-a-2018-excel.py` | `processed/historical/converted_historical_data-a-2018-excel_*.csv` (from `provided/data_a_2018.xlsx`) |
 | `generate_fiscal_bcra-quasi-fiscal.py` | `processed/fiscal/converted_fiscal_bcra-quasi-fiscal_*.csv` |
-| `generate_fiscal_fpi-fiscal.py` | `processed/fiscal/converted_fiscal_fpi-fiscal_*.csv` |
+| `generate_fiscal_fpi-fiscal.py` | `processed/fiscal/converted_fiscal_fpi-fiscal_*.csv` — 2019–2025 primary-result ratios are manually transcribed from datos.gob.ar budget execution (documented in the script). The §6.0 cepo factor needs the official FX rate (raw `PA.NUS.FCRF` + BCRA-supplemented `PA.NUS.ATLS`) and **fails loudly** if a cepo year lacks one |
 | `generate_fiscal_fpi-debt-adjustments.py` | Re-applies debt corrections to FPI CSV |
 
 ## Refresh order

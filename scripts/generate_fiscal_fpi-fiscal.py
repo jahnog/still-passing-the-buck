@@ -17,10 +17,14 @@ if str(ROOT) not in sys.path:
 
 from data import paths
 from scripts.data_io import RAW_ROOT, latest_raw
-from scripts.wb_raw import wb_series_from_raw
+from scripts.wb_raw import official_fx_series, wb_series_from_raw
 
 MODERN_YEARS = range(2019, 2026)
 
+# Primary result / total revenues and primary result / interest payments, manually transcribed
+# from the datos.gob.ar "Totales de Presupuesto" annual budget-execution dataset (the raw zip is
+# kept under data/raw/mecon/). Transcribed 2025-06; parsing the zip programmatically is future
+# work — if these ratios are revised upstream, update them here.
 KNOWN_FISCAL = {
     2019: (-0.046, -0.427),
     2020: (-0.296, -3.285),
@@ -101,8 +105,15 @@ def main() -> int:
         gdp = gdp_usd.get(year)
         exp = exports_usd.get(year)
         if year == 2025 and (gdp is None or exp is None):
-            gdp = 620_000_000_000
-            exp = 92_000_000_000
+            # World Bank has not published 2025 yet. Official INDEC balance-of-payments figures
+            # (Cuentas internacionales 4T-2025, publ. 2026-03-27):
+            #   exports of goods FOB 87,152 + services 18,039 + primary-income credits 6,402
+            #   = 111,593 MUSD — the same goods+services+primary-income concept as
+            #   BX.GSR.TOTL.CD (check: 2024 = 79,760+17,167+6,293 = 103,220 = WB value).
+            # GDP: exports of goods & services (105,191 MUSD) were 15.6% of current-price GDP
+            # (INDEC Informe de avance del nivel de actividad 4T-2025) -> GDP ~ 674,300 MUSD.
+            gdp = 674_300_000_000
+            exp = 111_593_000_000
         modern_debt[year] = {
             "Debt_GDP": debt / gdp if gdp else np.nan,
             "Debt_Exports": debt / exp if exp else np.nan,
@@ -136,7 +147,7 @@ def main() -> int:
 
     print("Step 3: cepo + BCRA debt-stock adjustments...")
     parallel = pd.read_csv(paths.PARALLEL_CEPO_CSV).set_index("Year")["ParallelARS"]
-    official_fx = wb_series_from_raw("PA.NUS.FCRF")
+    official_fx = official_fx_series()
     gdp_lcu = wb_series_from_raw("NY.GDP.MKTP.CN")
     bcra = pd.read_csv(paths.BCRA_QUASI_FISCAL_CSV).set_index("Year")["BCRA_QuasiFiscal_GDP"]
 
@@ -149,7 +160,13 @@ def main() -> int:
         if year < 1900:
             continue
         factor = 1.0
-        if year in parallel.index and official_fx.get(year):
+        if year in parallel.index:
+            if not official_fx.get(year):
+                raise RuntimeError(
+                    f"Cepo year {year} has a parallel rate but no official rate (PA.NUS.ATLS / "
+                    f"PA.NUS.FCRF); refusing to silently skip the cepo correction. "
+                    f"Run download_worldbank_api_indicators-arg.py and generate_indicators_wdi-argentina.py."
+                )
             factor = float(parallel.loc[year]) / float(official_fx[year])
         result.loc[year, "Cepo_Factor"] = factor
         dg_cepo = result.loc[year, "Debt_GDP_official"] * factor
