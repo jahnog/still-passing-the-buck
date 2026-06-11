@@ -161,6 +161,14 @@ tax, the intertemporal budget constraint, and currency-crisis contagion --- is
 the classical one [@sargent1986rational; @defiore2000; @ennis2007;
 @eichengreen1996contagious].
 
+The political-economy mechanism behind the *passing-the-buck* dynamic ---
+incumbents selecting policies that condition their successors over the
+electoral cycle --- has an Argentine-specific treatment in @giacominimilei2006,
+who read the early Kirchner-era fiscal and exchange-rate stance through
+opportunistic political-cycle models; the same authors' monetary essays
+[@mileigiacomini2017] cover the 2012--15 exchange-control episode. One of
+them, Javier Milei, heads the 2024--25 administration that closes our sample.
+
 <!-- TODO: consider adding recent rankings/state-capacity literature, and any
      post-2003 work that has extended or criticized the CMPI/FPI. -->
 
@@ -341,8 +349,9 @@ the four terms affected by mid-year devaluations.
 
 **Exchange-control wedges.** During the *cepo* years (2012--15, 2019--25) the
 official rate was administratively pinned with a free-market premium that
-reached 100 percent. Devaluation uses free-market December averages (Figure
-4); the fiscal corrections below remove the parallel distortion of the
+reached 100 percent. Measuring the regime by its deeds rather than its words
+[@levyyeyatisturzenegger2005], devaluation uses free-market December averages
+(Figure 4); the fiscal corrections below remove the parallel distortion of the
 dollar-valued GDP in the debt ratios.
 
 ![Official versus free-market (CCL/blue) exchange rate during the exchange-control years; the premium ("brecha") reached 100 percent.](generated/fig_cepo.png){width=100%}
@@ -417,9 +426,11 @@ record primary surplus register as a sharp *reduction* in fiscal pressure ---
 rather than the spurious debt increase shown by the raw Treasury series ---
 while the administrations that grew the quasi-fiscal stock (2020--23 and
 2012--15) fall to the bottom of the table. Néstor Kirchner (2004--07)
-remains high on the FPI because the 2005 restructuring cut the far larger
-Treasury debt even as sterilization began: the consolidation captures the
-build-up without letting it overwhelm a genuine deleveraging.
+remains high on the FPI because the 2005 restructuring --- among the deepest
+haircuts in the modern sovereign-debt record [@sturzeneggerzettelmeyer2008]
+--- cut the far larger Treasury debt even as sterilization began: the
+consolidation captures the build-up without letting it overwhelm a genuine
+deleveraging.
 
 {{table:fpi}}
 : The Fiscal Pressure Index, all 41 administrations. Components are innovation percentiles of debt/GDP, debt/exports, primary result/revenues, primary result/debt service, and $(1+r)/(1+g)$.
@@ -523,7 +534,9 @@ Fernández (2020--23) versus Macri (2016--19) inversion: Macri had lower
 absolute inflation, devaluation, and country risk, yet ranks just below
 Fernández, because Macri inherited the calm, exchange-control-pinned 2015
 economy and bequeathed the 2019 crisis against which Fernández is then scored
-each year. COVID amplifies the inversion through the V-shaped 2020--21 pair.
+each year [for an insider account of the 2016--19 program and its collapse,
+see @sturzenegger2019macri]. COVID amplifies the inversion through the
+V-shaped 2020--21 pair.
 This is an artefact of the single-year inherited baseline --- a design
 feature, disclosed and bounded in Section 7 --- and the ranking should be
 read alongside the contemporaneous record (Appendix C).
