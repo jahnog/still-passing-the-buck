@@ -8,12 +8,13 @@
 #   make download   - refresh the raw files from their primary sources (network required)
 #   make reproduce  - downloads -> generators -> validator -> notebook execution
 #   make verify     - offline end-to-end check: tests + validator + execution
+#   make paper      - build the manuscript PDF from paper/paper.md (needs pandoc + xelatex)
 
 UV := uv
 RUN := $(UV) run
 NOTEBOOK := Historical_CMPI_Extension.ipynb
 
-.PHONY: test validate execute generate download reproduce verify
+.PHONY: test validate execute generate download reproduce verify paper
 
 test:
 	$(RUN) pytest -m "not network" -q
@@ -43,3 +44,6 @@ generate:
 reproduce: download generate validate test execute
 
 verify: test validate execute
+
+paper:
+	$(RUN) python scripts/build_paper.py

@@ -1,0 +1,13 @@
+% Typography tweaks for the manuscript PDF (loaded by scripts/build_paper.py).
+\usepackage{microtype}
+\usepackage{etoolbox}
+
+% The 41-row ranking tables need a smaller type size and tighter rows.
+\AtBeginEnvironment{longtable}{\footnotesize\renewcommand{\arraystretch}{1.15}}
+
+% Keep figures close to their call-out and never before it.
+\usepackage{float}
+\usepackage{flafter}
+
+% Caption style: bold "Table 1:" label, slightly smaller text.
+\usepackage[font=small,labelfont=bf]{caption}
