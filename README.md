@@ -1,5 +1,7 @@
 # Still Passing the Buck
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jahnog/still-passing-the-buck/blob/main/Historical_CMPI_Extension.ipynb)
+
 A data-driven comparison of how successive Argentine administrations actually
 performed economically — ranking them on long-run macroeconomic indicators
 (inflation, GDP, public debt, exchange-rate and fiscal pressure) instead of
@@ -54,6 +56,13 @@ frozen data state.
 Export the notebook to a print-optimized PDF with
 `scripts/render_notebook_paper.py` (see [`docs/paper-export.md`](docs/paper-export.md)).
 
+## Manuscript
+
+The standalone paper lives in [`paper/`](paper/) (pandoc Markdown source,
+BibTeX bibliography). `make paper` extracts every figure and ranking table
+from the executed notebook and builds the publication PDF with
+pandoc + XeLaTeX — see [`paper/README.md`](paper/README.md).
+
 ## Tests
 
 ```bash
@@ -74,5 +83,9 @@ purpose, **provided you explicitly credit the author and reference this work**.
 
 Suggested citation:
 
-> Javier (jahnog), *Still Passing the Buck — Historical CMPI & FPI Extension:
-> Argentina 1853–2025*, 2026. https://github.com/jahnog
+> Javier Hernan Nogueira (ORCID: [0009-0006-1945-7870](https://orcid.org/0009-0006-1945-7870)),
+> *Still Passing the Buck — Historical CMPI & FPI Extension: Argentina 1853–2025*, 2026.
+> https://github.com/jahnog/still-passing-the-buck
+
+A machine-readable version is in [`CITATION.cff`](CITATION.cff) (GitHub's
+"Cite this repository" button).
