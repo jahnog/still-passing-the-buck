@@ -12,10 +12,33 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from data import paths
+from scripts.wb_raw import wb_series_from_raw
 
 INDICATOR_FILE = paths.INDICATORS_GZ
 INTEREST_FILE = paths.INTEREST_CSV
 ALT_CPI_FILE = paths.ALT_CPI_CSV
+QUALITY_FLAGS_FILE = paths.DATA_QUALITY_FLAGS_CSV
+# Every CMPI/FPI input variable must carry a quality grade for every ranked year; the BCRA
+# quasi-fiscal series is only required from the Lebac era onward.
+FLAG_VARIABLES = (
+    "Inflation",
+    "Devaluation",
+    "Interest",
+    "Growth",
+    "Debt_GDP",
+    "Debt_Exports",
+    "Result_Revenue",
+    "Result_DebtServ",
+)
+FLAG_FIRST_YEAR = 1853
+BCRA_FLAG_VARIABLE = "BCRA_QuasiFiscal"
+BCRA_FLAG_FIRST_YEAR = 2001
+# Grade-D (provisional) cells that can be superseded once the World Bank publishes the year.
+PROVISIONAL_SUPERSEDE_CODES = {
+    "Growth": "NY.GDP.PCAP.KD.ZG",
+    "Debt_GDP": "NY.GDP.MKTP.CD",
+    "Debt_Exports": "BX.GSR.TOTL.CD",
+}
 ALT_CPI_YEARS = range(2007, 2016)  # 2007-2015 INDEC-intervention override window
 PARALLEL_FX_FILE = paths.PARALLEL_CEPO_CSV
 FPI_FISCAL_FILE = paths.FPI_FISCAL_CSV
@@ -26,6 +49,10 @@ CEPO_FX_YEARS = (2012, 2013, 2014, 2015, 2019, 2020, 2021, 2022, 2023, 2024, 202
 # debt stock (Lebac creation 2002 through the 2023 peak; 2024-2025 wind-down may reach zero).
 BCRA_QF_YEARS = range(2003, 2024)
 FPI_COLUMNS = ("Debt_GDP", "Debt_Exports", "Result_Revenue", "Result_DebtServ")
+# Sensitivity memo columns (section 6.0 C): present for every year, equal to the baseline
+# outside their adjustment windows. Their absence means the FPI CSV predates the
+# default-integrity machinery and must be regenerated.
+FPI_MEMO_COLUMNS = ("Debt_GDP_holdouts", "Result_DebtServ_accrual", "Result_Revenue_structural")
 
 SERIES = {
     "NY.GDP.DEFL.KD.ZG": "Inflation, GDP deflator (annual %)",
@@ -138,6 +165,14 @@ def audit_fpi_fiscal(path: Path, target_year: int) -> list[dict[str, object]]:
             except (TypeError, ValueError):
                 continue
 
+    header = next(iter(rows.values()), {})
+    memo_missing = [col for col in FPI_MEMO_COLUMNS if col not in header]
+    if memo_missing:
+        problems.append({"series": "fpi",
+                         "name": "FPI default-integrity memo columns missing",
+                         "reason": "regenerate with generate_fiscal_fpi-fiscal.py: "
+                                   + ", ".join(memo_missing)})
+
     for year in range(1853, target_year + 1):
         row = rows.get(year)
         if row is None:
@@ -145,6 +180,7 @@ def audit_fpi_fiscal(path: Path, target_year: int) -> list[dict[str, object]]:
                              "reason": "no row in FPI fiscal CSV"})
             continue
         missing = [col for col in FPI_COLUMNS if not (row.get(col) or "").strip()]
+        missing += [col for col in FPI_MEMO_COLUMNS if col in header and not (row.get(col) or "").strip()]
         if missing:
             problems.append({"series": "fpi", "name": f"FPI components missing for {year}",
                              "reason": "empty columns: " + ", ".join(missing)})
@@ -175,6 +211,90 @@ def audit_fpi_fiscal(path: Path, target_year: int) -> list[dict[str, object]]:
             })
 
     return problems
+
+
+def audit_quality_flags(
+    path: Path, target_year: int
+) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
+    """Audit the data-quality flag file.
+
+    Returns (problems, provisional): `problems` are fatal coverage holes (every ranked year of
+    every CMPI/FPI variable must carry a grade); `provisional` lists the grade-D cells so the
+    caller can check whether an official source has since published them.
+    """
+    if not path.exists():
+        return (
+            [{"series": "quality_flags", "name": "Quality-flag file missing", "reason": str(path)}],
+            [],
+        )
+
+    coverage: dict[str, set[int]] = {var: set() for var in FLAG_VARIABLES + (BCRA_FLAG_VARIABLE,)}
+    provisional: list[dict[str, object]] = []
+    problems: list[dict[str, object]] = []
+
+    with path.open(newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            var = (row.get("Variable") or "").strip()
+            if var not in coverage:
+                problems.append({"series": "quality_flags", "name": f"Unknown variable {var!r}",
+                                 "reason": "not one of the CMPI/FPI input variables"})
+                continue
+            grade = (row.get("Grade") or "").strip()
+            note = (row.get("Note") or "").strip()
+            try:
+                y0, y1 = int(row["YearStart"]), int(row["YearEnd"])
+            except (KeyError, TypeError, ValueError):
+                problems.append({"series": "quality_flags", "name": f"Bad year range for {var}",
+                                 "reason": repr(row)})
+                continue
+            if grade not in {"A", "B", "C", "D"}:
+                problems.append({"series": "quality_flags", "name": f"Bad grade {grade!r} for {var}",
+                                 "reason": f"rows {y0}-{y1}"})
+                continue
+            if not note:
+                problems.append({"series": "quality_flags", "name": f"Empty note for {var}",
+                                 "reason": f"rows {y0}-{y1}: every grade needs a sourced note"})
+            overlap = coverage[var].intersection(range(y0, y1 + 1))
+            if overlap:
+                problems.append({"series": "quality_flags", "name": f"Overlapping ranges for {var}",
+                                 "reason": f"years {min(overlap)}-{max(overlap)} graded twice"})
+            coverage[var].update(range(y0, y1 + 1))
+            if grade == "D":
+                provisional.append({"variable": var, "year_start": y0, "year_end": y1, "note": note})
+
+    for var in FLAG_VARIABLES:
+        missing = [y for y in range(FLAG_FIRST_YEAR, target_year + 1) if y not in coverage[var]]
+        if missing:
+            problems.append({"series": "quality_flags", "name": f"Ungraded years for {var}",
+                             "reason": f"{missing[0]}-{missing[-1]} ({len(missing)} years)"})
+    bcra_missing = [
+        y for y in range(BCRA_FLAG_FIRST_YEAR, target_year + 1) if y not in coverage[BCRA_FLAG_VARIABLE]
+    ]
+    if bcra_missing:
+        problems.append({"series": "quality_flags", "name": f"Ungraded years for {BCRA_FLAG_VARIABLE}",
+                         "reason": f"{bcra_missing[0]}-{bcra_missing[-1]}"})
+
+    return problems, provisional
+
+
+def provisional_supersession_warnings(provisional: list[dict[str, object]]) -> list[str]:
+    """Warn when an official source has published a year still graded D (provisional)."""
+    warnings: list[str] = []
+    for entry in provisional:
+        code = PROVISIONAL_SUPERSEDE_CODES.get(str(entry["variable"]))
+        if not code:
+            continue
+        published = wb_series_from_raw(code)
+        years = [
+            y for y in range(int(entry["year_start"]), int(entry["year_end"]) + 1) if y in published
+        ]
+        if years:
+            warnings.append(
+                f"{entry['variable']} {years[0]}-{years[-1]} is graded D (provisional) but the World "
+                f"Bank raw snapshot now carries {code} for those years; rerun the download/generate "
+                f"scripts and upgrade the flag in {QUALITY_FLAGS_FILE.name}."
+            )
+    return warnings
 
 
 # First administration-year the notebook ranks (Illia, 1964); 1963 is only the legacy baseline.
@@ -334,6 +454,14 @@ def main() -> int:
     fpi_problems = audit_fpi_fiscal(FPI_FISCAL_FILE, args.target_year)
     report["fpi_fiscal_file"] = str(FPI_FISCAL_FILE)
     report["missing_or_incomplete"].extend(fpi_problems)
+
+    # Every ranked year of every input variable must carry a data-quality grade, and grade-D
+    # (provisional) cells are warned about once an official source has published the year.
+    flag_problems, provisional = audit_quality_flags(QUALITY_FLAGS_FILE, args.target_year)
+    report["quality_flags_file"] = str(QUALITY_FLAGS_FILE)
+    report["provisional_cells"] = provisional
+    report["missing_or_incomplete"].extend(flag_problems)
+    report["warnings"] = provisional_supersession_warnings(provisional)
 
     # Sets are not JSON-serialisable; drop them before printing the report.
     for stat in indicator_stats.values():

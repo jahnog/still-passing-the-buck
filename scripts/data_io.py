@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import sys
 import tempfile
+from datetime import datetime, timezone
 from pathlib import Path
 from urllib.request import Request, urlopen
 
@@ -85,6 +87,24 @@ def atomic_download(url: str, dest: Path, *, timeout: int = 120, min_size: int =
     """Download URL to dest using temp-then-move semantics."""
     content = fetch_bytes(url, timeout=timeout)
     atomic_write_bytes(content, dest, min_size=min_size)
+
+
+def write_meta_sidecar(dest: Path, *, script: str, sources: list[str], notes: str = "") -> None:
+    """Write `<dest>.meta.json` recording who generated the file, from what, and when.
+
+    The sidecar makes data revisions auditable: when an upstream source revises a series, the
+    regenerated CSV gets a fresh timestamp and source list, and `data/REVISIONS.md` should be
+    updated with what changed and why.
+    """
+    meta = {
+        "file": dest.name,
+        "generated_by": script,
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "sources": sources,
+        "notes": notes,
+    }
+    sidecar = dest.parent / (dest.name + ".meta.json")
+    sidecar.write_text(json.dumps(meta, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def latest_raw(provider: str, prefix: str) -> Path | None:

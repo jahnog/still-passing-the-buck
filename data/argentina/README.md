@@ -70,7 +70,7 @@ The refresh script currently supplements these indicator codes from the live Wor
 
 From January 2007 to December 2015 INDEC was politically intervened and the official CPI/IPIM were suppressed (the IMF censured Argentina in Feb 2013; ex-Secretary Guillermo Moreno was criminally convicted for falsifying the data). The notebook corrects **inflation only** for this window:
 
-- `data/argentina/inflation/alt-cpi-2007-2015.csv` holds the per-year average (`AltAvg`) of the credible alternative indices available each year — **IPC Congreso** (2008–2014), **IPC San Luis** (across the window), **CABA/IPCBA** (2013+) and **IPEC Santa Fe** (2014+). 2007 has no Congreso/CABA coverage and uses a single private-consultancy estimate (the weakest year, flagged in the CSV). The notebook overrides `InflationAvg` for 2007–2015 with this column, superseding both the GDP-deflator-CPI proxy and the (still-manipulated) IPIM.
+- `data/provided/alt-cpi-2007-2015.csv` holds the per-year average (`AltAvg`) of the credible alternative indices available each year — **IPC Congreso** (2008–2014), **IPC San Luis** (2011+ in this file), **CABA/IPCBA** (2013+) and **IPEC Santa Fe** (2014+) — plus the official INDEC value (`Official`) and the cross-source `AltMin`/`AltMax` band used by the §3.1 chart and the §9 inflation-uncertainty re-ranking. **2007** (no Congreso/CABA coverage) uses the **midpoint (24.3%) of the dismissed INDEC technicians' own estimate range, 22.3–26.2%** (Ámbito Financiero, Jan-2008; re-sourced 2026-06, replacing an unattributed 26.0% — see `data/REVISIONS.md`). The notebook overrides `InflationAvg` for 2007–2015 with `AltAvg`, superseding both the GDP-deflator-CPI proxy and the (still-manipulated) IPIM.
 - **Growth is deliberately NOT overridden.** The World Bank `NY.GDP.*` series already use INDEC's 2016 GDP revision: real GDP grows ~16.0% over 2008–2015, matching Coremberg/ARKLEMS (revised "new INDEC" 15.7% ≈ ARKLEMS 15.8%), not the manipulated INDEK 30.2%. So the overstated-GDP distortion is not present in the data the notebook consumes. (Coremberg 2017 also shows the overstatement was direct volume manipulation, not deflator-driven, so recomputing growth from CPI would be the wrong fix.)
 
 These are closed historical values; the CSV is curated and committed (not refreshed from a live API). Sources: IPC Congreso / IPC San Luis (DPEC) / IPCBA (CABA DGEyC) / IPEC Santa Fe; IMF Press Release 13/33; Coremberg (2017), *International Productivity Monitor* 33.
@@ -153,11 +153,23 @@ existing interest and growth series.)
   `argentina.gob.ar/.../deuda_publica_31-12-{YEAR}.xlsx`), divided by World Bank nominal GDP
   (`NY.GDP.MKTP.CD`) and exports of goods & services (`BX.GSR.TOTL.CD`). 2025 GDP/exports use
   official estimates pending final World Bank publication.
-- **2019–2025, primary-result ratios:** datos.gob.ar budget execution
-  (`totales-de-presupuesto.csv`: revenues received, primary expenditure accrued, total
-  expenditure accrued). Primary balance = revenues − primary expenditure; interest ≈ total −
-  primary expenditure. `Result_Revenue` = primary balance / revenues; `Result_DebtServ` =
-  primary balance / interest. Both are dimensionless (ARS / ARS), so no FX conversion is needed.
+- **2019–2025, primary-result ratios:** the **Sector Público Nacional cash-basis ("base caja")
+  primary result** as published by the Secretaría de Hacienda / OPC (curated `KNOWN_FISCAL` in
+  `generate_fiscal_fpi-fiscal.py`). **Provenance corrected 2026-06:** these ratios are *not*
+  derivable from the datos.gob.ar `totales-de-presupuesto` zip — that dataset is the narrower
+  Administración Nacional on an accrued basis, and its "recursos percibidos" include BCRA profit
+  transfers and FGS rents (its naive 2020 ratio is −0.007 vs the −0.296 cash-basis reality). The
+  zip is parsed at generation time as a cross-reference and upstream-revision tripwire only.
+  `Result_Revenue` = primary balance / revenues; `Result_DebtServ` = primary balance / interest
+  (dimensionless, so no FX conversion is needed).
+- **Sensitivity memo columns (notebook §6.0 C–E):** the generator also emits
+  `Debt_GDP_holdouts` and `Result_DebtServ_accrual` (from
+  `data/provided/fiscal-default-adjustments.csv`: untendered holdout debt 2005–2015; accrued
+  unpaid interest during the 2002–2005 default), `Result_Revenue_structural` (from
+  `data/provided/fiscal-one-offs.csv`: FGS/BCRA rentas 2009–2015, the 2021 SDR booking,
+  dólar-soja advances, tax amnesties, the 2024 REIBP advance) and `Debt_GDP_arrears` (the paired
+  importer-arrears/BOPREAL add-back from the quasi-fiscal CSV). They equal the baseline outside
+  their adjustment windows and feed Tables 6b–6d; the headline FPI never uses them.
 
 **Two debt-stock corrections (2003–2025), notebook §6.0.** The output CSV carries adjusted
 `Debt_GDP`/`Debt_Exports` plus the raw decomposition columns `Debt_GDP_official`,
@@ -190,9 +202,18 @@ leave that restricted ranking unchanged (they touch only 2003+), and lift Milei 
 
 - The World Bank annual rows for `NY.GDP.PCAP.KD.ZG` still top out at 2024. The 2025 value is now supplied by the documented INDEC fallback described above, so the notebook computes a full 2025 CMPI end-to-end. Treat the 2025 per-capita figure as a documented bridge (official PIB growth adjusted by official population growth) until the World Bank publishes 2025 directly, at which point the live API value automatically supersedes the fallback.
 - For FPI 2025 debt ratios (Debt/GDP, Debt/Exports), when final WB nominal GDP/exports are unavailable, `generate_fiscal_fpi-fiscal.py` supplies documented provisional values using INDEC "Informe de avance..." + exchange (or Sec. Finanzas/BCRA provisional Debt/PIB). The 2025 row is marked PROVISIONAL; final WB supersedes on refresh. This enables the full 2025 FPI NaN audit and Milei (2024-25) FPI/Overall scores. Primary result ratios for 2025 continue to come from datos.gob.ar (no provisional needed). See the FPI sources section for details.
-- **`FP.CPI.TOTL` is the genuine national INDEC IPC only from December 2016 onward.** The notebook's consumer-inflation series therefore falls back to the **GDP deflator (`NY.GDP.DEFL.KD.ZG`) for roughly 1963–2016 — the majority of the window**. The deflator is a different concept from a household CPI; this is disclosed in the notebook rather than relabelled. The 2007–2015 *INDEC intervention* (when official CPI was widely judged understated) is the period where a credible alternative consumer series (IPC San Luis / CABA / "Congreso") would most improve the analysis; that splice is recommended future work.
+- **`FP.CPI.TOTL` is the genuine national INDEC IPC only from December 2016 onward.** The notebook's consumer-inflation series therefore falls back to the **GDP deflator (`NY.GDP.DEFL.KD.ZG`) for roughly 1963–2016 — the majority of the window** (the 2007–2015 stretch is overridden by the alternative indices). The deflator is a different concept from a household CPI; this is disclosed in the notebook rather than relabelled. A genuine-CPI splice for 1964–2006 was investigated in 2026-06 and **deferred for lack of a reproducible source**: INDEC's legacy historical IPC-GBA workbooks return soft-404 HTML and the datos.gob.ar series API carries no CPI before Dec-2006 (see `data/REVISIONS.md`). It remains the highest-value future data improvement.
 - The INDEC IPIM bridge from the historical base to the current reference-period workbook is chained with the last available 2015 historical average. That keeps the post-2015 annual changes usable, but the 2015 splice should still be treated as a documented approximation.
 - **`FP.WPI.TOTL` has no 2001 observation** (the INDEC IPIM workbooks only expose years with twelve complete months, and the 2001–02 crisis year is incomplete). The gap is left as-is on purpose: a log-linear fill between 2000 and 2002 would inject a spurious ~+31% into 2001 (a mildly *deflationary* year) and understate the 2002 devaluation jump. The notebook handles the hole with a NaN-robust price-component mean that falls back to the consumer-price change for 2001.
 - **The interest series now stitches two constructs**: the paper's real hard-currency term averages through 1999 (held constant within each term) and the EMBIG Argentina country-risk series ("riesgo país") from 2000 onward (e.g. 2002 ≈ 58%, 2023 ≈ 22%, 2025 ≈ 7.5%). The earlier non-like-for-like BCRA lending-rate splice for 2020+ has been replaced by the EMBIG continuation, so the modern period is consistent in units. A minor conceptual seam remains at the 1999/2000 join (term-average real rate → market country-risk spread).
-- **Devaluation under the cepo now uses the free-market rate.** For 2012–2015 and 2019–2025 the official `PA.NUS.ATLS` rate was administratively suppressed (brecha up to ~+100% in 2022–23), so the notebook substitutes the annual-average CCL/blue rate from `parallel-cepo.csv`; the 2016–2018 float keeps the official rate. Two residual points remain: the non-cepo years use the official period-average rate (vs the paper's December paper-to-gold/USD quotation), and pre-2012 multiple-rate episodes (e.g. Perón III's 1975 *Rodrigazo*) still use the official rate for lack of a daily parallel series.
+- **Devaluation now uses December quotations for the whole sample (2026-06 revision).** For
+  2000–2025 the notebook scores the log-difference of *December* quotations
+  (`converted_exchange_dec-dec_1999-01_2025-12.csv`: December TCNPM from the BCRA com3500 raw on
+  free years; December CCL/blue daily averages on the cepo years 2012–2015 and 2019–2025;
+  Convertibility 1:1 for 1999–2001), matching the paper's 1853–1999 December convention. The
+  previous annual-average construction (official `PA.NUS.ATLS` with the CCL/blue annual-average
+  cepo override from `parallel-cepo.csv`) is retained as the §9 robustness variant and for the
+  §3.2 comparison. One residual point remains: pre-2012 multiple-rate episodes (e.g. Perón III's
+  1975 *Rodrigazo*, the 1946–55 and 1982–89 exchange controls) still use the paper's quotations,
+  whose coverage of parallel premia varies by era (notebook §3.0 row 5).
 - The validation script is intentionally strict: it exits non-zero when the local files cannot satisfy the requested target year.
