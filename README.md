@@ -15,7 +15,7 @@ historical series reaching back to 1853.
 
 | Notebook | Purpose |
 |----------|---------|
-| `Historical_CMPI_Extension.ipynb` | Main analysis — extends the Cumulative Monetary Pressure Index with historical and fiscal series. |
+| `Historical_CMPI_Extension.ipynb` | Main analysis — extends the Classical Macroeconomic Pressure Index (CMPI) and Fiscal Pressure Index (FPI) with historical and fiscal series. |
 | `Still_Passing_the_Buck.ipynb` | Original administration-by-administration comparison. |
 | `Transpose_Dataset.ipynb` | Reshapes the wide World Bank export (`WDIData2.csv`) into the long form the notebooks consume. |
 

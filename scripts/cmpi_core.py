@@ -44,11 +44,16 @@ FPI_SORT: Dict[str, bool] = {
 
 
 def splice_series(hist_part: pd.Series, modern_part: pd.Series) -> pd.Series:
-    """Splice historical and modern series (priority to non-NaN modern values)."""
-    result = hist_part.copy()
-    result = result.reindex(result.index.union(modern_part.index))
-    modern_valid = modern_part.dropna()
-    result[modern_valid.index] = modern_valid
+    """Splice historical and modern series (priority to non-NaN historical values).
+
+    The historical (paper-authors') value is used wherever it exists; the modern
+    series fills all other years. This mirrors the notebook's `_splice`, keeping a
+    single, well-defined data regime per year.
+    """
+    result = modern_part.copy()
+    result = result.reindex(result.index.union(hist_part.index))
+    hist_valid = hist_part.dropna()
+    result[hist_valid.index] = hist_valid
     return result.sort_index()
 
 
