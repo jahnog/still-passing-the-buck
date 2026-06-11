@@ -11,6 +11,113 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.request import Request, urlopen
 
+# --- Secret retrieval (keyring first, .env / environment fallback) ---
+# This gives the desired precedence for generic secrets (S3 keys, API tokens, etc.):
+# 1. keyring (encrypted via system keychain / Seahorse / Secret Service) — preferred
+# 2. os.environ (populated by .env file, `uv run --env-file .env`, shell exports, CI secrets, etc.)
+
+try:
+    import keyring as _keyring
+    _HAS_KEYRING = True
+except ImportError:  # pragma: no cover
+    _HAS_KEYRING = False
+
+try:
+    from dotenv import find_dotenv as _find_dotenv, load_dotenv as _load_dotenv
+    _HAS_DOTENV = True
+except ImportError:  # pragma: no cover
+    _HAS_DOTENV = False
+
+DEFAULT_SECRET_SERVICE = "stillpassingthebuck"
+
+if _HAS_DOTENV:
+    # Auto-load a .env file if present when the module is imported.
+    # This makes the fallback convenient even when running scripts directly
+    # (e.g. `python scripts/my_upload.py`). find_dotenv walks upward.
+    # When using `uv run --env-file .env ...` the values are already in the environment,
+    # so this is harmless (dotenv won't override real env vars by default).
+    _load_dotenv(_find_dotenv(usecwd=True))
+
+
+def get_secret(
+    name: str,
+    *,
+    service: str = DEFAULT_SECRET_SERVICE,
+    fallback_to_env: bool = True,
+    set_env: bool = False,
+) -> str:
+    """
+    Return a secret, trying the encrypted keyring first, then the process environment.
+
+    Precedence (exactly as requested):
+      1. keyring (service + name) — the secure/encrypted path using your OS keychain
+         (Seahorse on GNOME, etc.). This is what the script will use on machines
+         where you have stored the value with `keyring set ...`.
+      2. os.environ[name] — the convenient fallback. Values here can come from:
+         - A .env file (loaded automatically if python-dotenv is installed, or
+           injected by `uv run --env-file .env`, direnv, shell sourcing, etc.)
+         - Real environment variables
+         - CI / container secrets
+
+    Recommended naming: use the same name you would use as an environment variable
+    (e.g. "AWS_ACCESS_KEY_ID"). This makes the two stores interchangeable.
+
+    Args:
+        name: Secret identifier (e.g. "AWS_ACCESS_KEY_ID", "GITHUB_TOKEN").
+        service: Keyring namespace (default "stillpassingthebuck" keeps everything
+                 for this project grouped together).
+        fallback_to_env: Allow falling back to os.environ.
+        set_env: If True and a value is found, also do os.environ[name] = value.
+                 Very handy so that boto3, the AWS CLI inside the same process,
+                 or other libraries that read standard env vars "just work".
+
+    Raises:
+        KeyError: if the secret is not present in either store.
+    """
+    if not name:
+        raise ValueError("Secret name must be non-empty")
+
+    # 1. Keyring (encrypted) — tried first
+    if _HAS_KEYRING:
+        try:
+            value = _keyring.get_password(service, name)
+            if value:
+                if set_env:
+                    os.environ[name] = value
+                return value
+        except Exception:
+            # Backend unavailable (no dbus / keyring daemon, locked, headless, etc.)
+            # Gracefully fall through to the environment fallback.
+            pass
+
+    # 2. Environment fallback (the ".env / .venv context" path)
+    if fallback_to_env:
+        value = os.environ.get(name)
+        if value is not None:  # allow empty string if someone really sets it
+            if set_env:
+                os.environ[name] = value
+            return value
+
+    raise KeyError(
+        f"Secret '{name}' not found in keyring (service={service}) "
+        f"or environment.\n"
+        f"  Store in keyring (recommended):  keyring set {service} {name}\n"
+        f"  Or put in .env (fallback):       {name}=your-value-here\n"
+        f"  Then run with:                   uv run --env-file .env python ..."
+    )
+
+
+def ensure_secrets_in_env(names: list[str], *, service: str = DEFAULT_SECRET_SERVICE) -> None:
+    """
+    Fetch the given secret names (keyring first) and ensure they are present in
+    os.environ. Useful right before calling libraries that expect classic env vars
+    (boto3 for AWS, etc.).
+    """
+    for name in names:
+        # get_secret will raise if truly missing; set_env=True populates os.environ
+        get_secret(name, service=service, set_env=True)
+
+
 ROOT = Path(__file__).resolve().parents[1]
 RAW_ROOT = ROOT / "data" / "raw"
 PROCESSED_ROOT = ROOT / "data" / "processed"
