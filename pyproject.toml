@@ -13,6 +13,7 @@ dependencies = [
     "nbformat>=5.10.4",
     "numpy>=2.4.6",
     "openpyxl>=3.1.5",
+    "pillow>=11.0",
     "pandas>=3.0.3",
     "pip>=26.1.2",
     "xlrd>=2.0.2",
