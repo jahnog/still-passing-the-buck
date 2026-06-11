@@ -34,5 +34,5 @@ HIST_EXCEL_ANNUAL_CSV = (
 BCRA_QUASI_FISCAL_CSV = PROCESSED / "fiscal" / "converted_fiscal_bcra-quasi-fiscal_2001-01_2025-12.csv"
 FPI_FISCAL_CSV = PROCESSED / "fiscal" / "converted_fiscal_fpi-fiscal_1853-01_2025-12.csv"
 
-# Legacy wide WDI Argentina extract (generated from raw WDI zip until fully migrated)
-WIDE_WDI_CSV = ROOT / "WDIData2.csv"
+# Argentina-only wide World Bank export (source for generate_indicators_wdi-argentina.py)
+WIDE_WDI_CSV = PROVIDED / "WDIData2.csv"

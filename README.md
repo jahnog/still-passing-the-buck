@@ -15,7 +15,7 @@ historical series reaching back to 1853.
 |----------|---------|
 | `Historical_CMPI_Extension.ipynb` | The complete analysis — the Classical Macroeconomic Performance Index (CMPI), the Fiscal Pressure Index (FPI), and their combined Overall Index for all 41 Argentine administrations, 1853–2025, with documented corrections for every known statistical manipulation. |
 
-The wide World Bank export (`WDIData2.csv`) is reshaped into the long form the
+The wide World Bank export (`data/provided/WDIData2.csv`) is reshaped into the long form the
 notebook consumes by `scripts/generate_indicators_wdi-argentina.py`.
 
 A prioritized roadmap of planned improvements is in

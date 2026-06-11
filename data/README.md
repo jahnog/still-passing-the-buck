@@ -6,7 +6,7 @@
 |--------|---------|
 | `data/raw/<provider>/` | Downloaded source files (`<source>_<file>_<from>_<to>.<ext>`) |
 | `data/processed/<purpose>/` | Generated notebook inputs (`converted_<purpose>_<input>_<from>_<to>.csv`) |
-| `data/provided/` | Curated exceptions: `Indicators.csv*`, `data_a_2018.xlsx`, `alt-cpi-2007-2015.csv`, `data-quality-flags.csv`, `fiscal-default-adjustments.csv`, `fiscal-one-offs.csv`, `official-vs-revised-gdp-2005-2015.csv` |
+| `data/provided/` | Curated exceptions: `Indicators.csv*`, `WDIData2.csv`, `data_a_2018.xlsx`, `alt-cpi-2007-2015.csv`, `data-quality-flags.csv`, `fiscal-default-adjustments.csv`, `fiscal-one-offs.csv`, `official-vs-revised-gdp-2005-2015.csv` |
 
 Curated CSVs carry per-row `Source`/`Note` provenance; generated CSVs get a `.meta.json`
 sidecar (generator, sources, timestamp — `scripts/data_io.write_meta_sidecar`). Data revisions
@@ -53,7 +53,7 @@ One script per provider-external-file combination. Each writes to `data/raw/` us
 ## Refresh order
 
 1. Run all `download_*.py` scripts (network required).
-2. `generate_indicators_wdi-argentina.py` (needs `WDIData2.csv` at repo root + raw INDEC/BCRA/WB files).
+2. `generate_indicators_wdi-argentina.py` (needs `data/provided/WDIData2.csv` + raw INDEC/BCRA/WB files).
 3. `generate_interest_wb-ids-arg.py`, `generate_exchange_parallel-cepo.py`.
 4. `generate_fiscal_bcra-quasi-fiscal.py`, `generate_fiscal_fpi-fiscal.py` (or `generate_fiscal_fpi-debt-adjustments.py` for corrections only).
 5. `generate_exchange_paper-devaluation.py`, `generate_historical_historical-cmpi.py`, `generate_exchange_bcra-dec-dec.py`, `generate_exchange_dec-dec-modern.py`.
