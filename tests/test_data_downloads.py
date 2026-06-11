@@ -76,6 +76,22 @@ def _requires_network() -> None:
 
 
 @pytest.mark.network
+def test_github_data_a_2018_workbook_fetchable():
+    """Paper authors' data_a_2018.xlsx URL used by download_github_still-passing-the-buck_data-a-2018.py."""
+    _requires_network()
+    import importlib.util
+
+    script = ROOT / "scripts/download_github_still-passing-the-buck_data-a-2018.py"
+    spec = importlib.util.spec_from_file_location("download_data_a_2018", script)
+    mod = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(mod)
+
+    raw = _get(mod.URL)
+    assert len(raw) >= 10_000, "data_a_2018.xlsx suspiciously small"
+
+
+@pytest.mark.network
 def test_world_bank_api_reachable_and_has_required_codes():
     """World Bank API must return the indicator codes the refresh cares about."""
     _requires_network()
@@ -118,7 +134,9 @@ def test_indec_ipc_and_population_projections_available():
     # IPC division series (used by download_indec_economia_serie-ipc-divisiones.py)
     ipc_url = "https://www.indec.gob.ar/ftp/cuadros/economia/serie_ipc_divisiones.csv"
     raw = _get(ipc_url)
-    assert b"Codigo" in raw or b"Reg\u00edon" in raw or len(raw) > 5000
+    # Use ASCII "Region" (what the file actually contains) to avoid invalid escape in byte literal.
+    # The len() fallback covers any future header changes or non-ASCII variants.
+    assert b"Codigo" in raw or b"Region" in raw or len(raw) > 5000
 
     # Population projections (for 2025 per-capita fallback)
     pop_url = "https://www.indec.gob.ar/ftp/cuadros/poblacion/proyecciones_nacionales_2022_2040_base.csv"

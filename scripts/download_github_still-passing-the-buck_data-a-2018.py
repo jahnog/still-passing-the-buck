@@ -14,7 +14,7 @@ from scripts.data_io import PROVIDED_ROOT, atomic_download
 
 URL = (
     "https://github.com/jahnog/still-passing-the-buck/raw/refs/heads/main/"
-    "data/argentina/historical/data_a_2018.xlsx?download="
+    "data/provided/data_a_2018.xlsx?download="
 )
 DEST = PROVIDED_ROOT / "data_a_2018.xlsx"
 

@@ -9,35 +9,36 @@
 #   make reproduce  - downloads -> generators -> validator -> notebook execution
 #   make verify     - offline end-to-end check: tests + validator + execution
 
-PY := ./.venv/bin/python
+UV := uv
+RUN := $(UV) run
 NOTEBOOK := Historical_CMPI_Extension.ipynb
 
 .PHONY: test validate execute generate download reproduce verify
 
 test:
-	$(PY) -m pytest -m "not network" -q
+	$(RUN) pytest -m "not network" -q
 
 validate:
-	$(PY) scripts/validate_cmpi_inputs.py --target-year 2025
+	$(RUN) python scripts/validate_cmpi_inputs.py --target-year 2025
 
 execute:
-	$(PY) -m jupyter nbconvert --to notebook --execute --inplace $(NOTEBOOK) \
+	$(RUN) jupyter nbconvert --to notebook --execute --inplace $(NOTEBOOK) \
 		--ExecutePreprocessor.timeout=900
 
 download:
-	for s in scripts/download_*.py; do echo "== $$s"; $(PY) "$$s" || exit 1; done
+	for s in scripts/download_*.py; do echo "== $$s"; $(RUN) python "$$s" || exit 1; done
 
 generate:
-	$(PY) scripts/generate_indicators_wdi-argentina.py
-	$(PY) scripts/generate_interest_wb-ids-arg.py
-	$(PY) scripts/generate_exchange_parallel-cepo.py
-	$(PY) scripts/generate_fiscal_bcra-quasi-fiscal.py
-	$(PY) scripts/generate_fiscal_fpi-fiscal.py
-	$(PY) scripts/generate_exchange_paper-devaluation.py
-	$(PY) scripts/generate_historical_historical-cmpi.py
-	$(PY) scripts/generate_historical_data-a-2018-excel.py
-	$(PY) scripts/generate_exchange_bcra-dec-dec.py
-	$(PY) scripts/generate_exchange_dec-dec-modern.py
+	$(RUN) python scripts/generate_indicators_wdi-argentina.py
+	$(RUN) python scripts/generate_interest_wb-ids-arg.py
+	$(RUN) python scripts/generate_exchange_parallel-cepo.py
+	$(RUN) python scripts/generate_fiscal_bcra-quasi-fiscal.py
+	$(RUN) python scripts/generate_fiscal_fpi-fiscal.py
+	$(RUN) python scripts/generate_exchange_paper-devaluation.py
+	$(RUN) python scripts/generate_historical_historical-cmpi.py
+	$(RUN) python scripts/generate_historical_data-a-2018-excel.py
+	$(RUN) python scripts/generate_exchange_bcra-dec-dec.py
+	$(RUN) python scripts/generate_exchange_dec-dec-modern.py
 
 reproduce: download generate validate test execute
 

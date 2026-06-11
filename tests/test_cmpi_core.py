@@ -4,8 +4,16 @@ Run with: pytest -q tests/test_cmpi_core.py
 These tests are intentionally lightweight and do not require the full notebook data.
 """
 
+import sys
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
+
+# Make project imports (scripts.*, data.*) work when running tests directly or via uv run / make.
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from scripts.cmpi_core import (
     compute_innovations,
