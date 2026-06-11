@@ -337,6 +337,41 @@ def main() -> int:
                 result.loc[year, "Debt_GDP"] + float(usd_m) * 1e6 / gdp_usd_corr
             )
 
+    print("Step 5b: measured-FX-share cepo memo column (Table 6a; sensitivity-only)...")
+    # The baseline cepo correction re-values the WHOLE debt stock at the parallel rate (exact
+    # only if all debt is USD-denominated). This memo column uses the measured foreign-currency
+    # share s of SPN gross debt (data/provided/cepo-fx-shares.csv, Sec. Finanzas composition):
+    #   Debt/GDP = official x (s x factor + (1 - s)) + BCRA
+    # sitting between the 100% baseline and the 50% lower bound of Table 6a.
+    fx_shares = pd.read_csv(paths.CEPO_FX_SHARES_CSV).set_index("Year")["FX_Share"]
+    result["Debt_GDP_fxshare"] = result["Debt_GDP"]
+    for year, share in fx_shares.items():
+        if year not in result.index or year not in parallel.index:
+            continue
+        factor = result.loc[year, "Cepo_Factor"]
+        result.loc[year, "Debt_GDP_fxshare"] = (
+            result.loc[year, "Debt_GDP_official"] * (share * factor + (1.0 - share))
+            + result.loc[year, "BCRA_QuasiFiscal_GDP"]
+        )
+
+    print("Step 5c: contingent-liability memo column (section 6.0 F; sensitivity-only)...")
+    # Litigated/contingent claims in no official debt stock (data/provided/
+    # contingent-liabilities.csv): the YPF expropriation judgment and the Paris Club arrears
+    # accrued beyond the recognized stock, valued against the same (parallel-corrected) USD GDP
+    # as the other section-6.0 add-backs. Sensitivity-only (Table 6e), never the headline FPI.
+    contingent = pd.read_csv(paths.CONTINGENT_LIABILITIES_CSV)
+    cont_by_year = contingent.groupby("Year")["Amount_USD_M"].sum()
+    result["Debt_GDP_contingent"] = result["Debt_GDP"]
+    for year, usd_m in cont_by_year.items():
+        if year not in result.index or pd.isna(usd_m) or not usd_m:
+            continue
+        gdp_usd_corr = gdp_usd_for_addons(year)
+        if not gdp_usd_corr:
+            raise RuntimeError(f"No USD GDP available to value contingent liabilities for {year}")
+        result.loc[year, "Debt_GDP_contingent"] = (
+            result.loc[year, "Debt_GDP"] + float(usd_m) * 1e6 / gdp_usd_corr
+        )
+
     print("Step 6: structural primary balance memo column (section 6.0 D; sensitivity-only)...")
     # One-off / accounting-driven revenues (data/provided/fiscal-one-offs.csv, Type == "one-off")
     # are removed from both the primary result and the revenue base:
@@ -369,6 +404,8 @@ def main() -> int:
             "Result_DebtServ_accrual",
             "Result_Revenue_structural",
             "Debt_GDP_arrears",
+            "Debt_GDP_fxshare",
+            "Debt_GDP_contingent",
             "DefaultFlag",
         ]
     ]
@@ -383,6 +420,8 @@ def main() -> int:
             "KNOWN_FISCAL: SPN base-caja primary-result ratios (Hacienda/OPC; see provenance note)",
             str(paths.PARALLEL_CEPO_CSV.relative_to(ROOT)),
             str(paths.BCRA_QUASI_FISCAL_CSV.relative_to(ROOT)),
+            str(paths.CEPO_FX_SHARES_CSV.relative_to(ROOT)),
+            str(paths.CONTINGENT_LIABILITIES_CSV.relative_to(ROOT)),
         ],
         notes="Debt_GDP/Debt_Exports carry the section-6.0 cepo and BCRA corrections; "
               "official raw columns retained for audit.",

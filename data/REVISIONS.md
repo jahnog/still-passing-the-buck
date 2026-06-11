@@ -5,6 +5,50 @@ to the committed datasets. Newest first. Generated CSVs carry a `.meta.json` sid
 (written by `scripts/data_io.write_meta_sidecar`) recording generator, sources, and timestamp;
 when an upstream source revises a series, regenerate, then record **what changed and why** here.
 
+## 2026-06 (improvement-plan implementation — all baseline-neutral)
+
+Implementation of `docs/IMPROVEMENT_PLAN.md` P0–P4. **No headline change**: the baseline FPI
+columns of the regenerated fiscal CSV are byte-identical to the previous revision, and the
+CMPI/FPI/Overall podiums are unchanged. Everything below feeds sensitivity tables, the Figure 0
+reliability map, or presentation.
+
+- **§8.4 narrative de-staled and made stale-proof**: the prose cell described the pre-revision
+  *annual-average* CCL devaluations ("~99% 2024 / ~131% inherited / ~11% 2025") and older data
+  vintages (EMBIG "~10.6%" vs 13.7; growth "−4.2%" vs −1.7) while the tables showed current
+  values. The cell is now **code** that renders the narrative from the live series via
+  f-strings, so prose can no longer drift from data. The §8.4 intro ("ranks 3rd of 41") was
+  likewise corrected to the current CMPI #2 / Overall #3.
+- **2024–25 capitalizing-interest sensitivity implemented** (`fiscal-default-adjustments.csv`
+  rows 2024/2025, ESTIMATE, OPC accrual basis; flag `capitalizing`): Table 6b gains variant (g)
+  rescaling Result/DebtServ by interest *due* incl. LECAP/BONCAP capitalization — the §3.0
+  row-16 treatment previously claimed but not implemented. Result: Milei's FPI rank is
+  unchanged (#2) under (g).
+- **New curated sensitivity inputs** (per-row sources, ESTIMATE-flagged; sensitivity tables
+  only): `cepo-fx-shares.csv` (measured FX composition → Table 6a column; generator memo column
+  `Debt_GDP_fxshare`), `contingent-liabilities.csv` (YPF judgment + Paris Club accrual →
+  Table 6e; memo column `Debt_GDP_contingent`), `bcra-quasi-fiscal-historical.csv` (1977–90
+  CRM/seguro-de-cambio stock → Table 6f), `parallel-fx-historical.csv` (1946–59 brecha factors
+  → Table 9b), `us-real-yield-10y.csv` (interest-seam variant → Table 9c),
+  `ipcba-vs-indec.csv` (paired basket-vintage chart, display-only).
+- **`alt-cpi-2007-2015.csv`: PriceStats corroboration column added (display-only)** — Cavallo
+  & Rigobon (2016) online-price index, approximate annual averages; deliberately NOT included
+  in `AltAvg`/`AltMin`/`AltMax`, so the 2007–2015 correction baseline is unchanged.
+- **`fiscal-one-offs.csv`: FGS rentas made year-specific** (0.5→0.9% of GDP, replacing the flat
+  0.7; ASAP/OPC approximate) — affects only the Table 6c structural column (2009–2015 rows).
+- **`data-quality-flags.csv` re-grades**: Inflation 1853–1865 → C (devaluation used as price
+  proxy, paper Appendix B), Growth 1853–1875 → C (trade-flow proxy); stale devaluation notes
+  fixed (2000–2011 = December TCNPM, grade A; cepo notes now say December CCL/blue averages;
+  2025 partial-cepo note). Figure 0 only — no score impact.
+- **Validator/tests extended**: `FPI_MEMO_COLUMNS` now requires all six memo columns; tests
+  cover the two accrual windows, the fxshare bounds, and the contingent add-back window.
+- **IMF IFS CPI splice for 1964–2006 investigated and deferred** (improvement-plan item 13):
+  the legacy `dataservices.imf.org` SDMX host no longer resolves and the new `api.imf.org`
+  SDMX 2.1 path returns 404 for IFS `PCPI_IX` — same situation as the INDEC IPC-GBA workbooks
+  (below). The GDP-deflator proxy stays (grade B); the splice remains recommended future work.
+- **Infrastructure**: `Makefile` (`make reproduce` / `make verify`) and CI
+  (`.github/workflows/ci.yml`: offline tests + validator + headless notebook execution with an
+  error-output gate on every push).
+
 ## 2026-06
 
 - **Modern devaluation switched to December quotations, 2000–2025 (baseline change)**:

@@ -52,7 +52,14 @@ FPI_COLUMNS = ("Debt_GDP", "Debt_Exports", "Result_Revenue", "Result_DebtServ")
 # Sensitivity memo columns (section 6.0 C): present for every year, equal to the baseline
 # outside their adjustment windows. Their absence means the FPI CSV predates the
 # default-integrity machinery and must be regenerated.
-FPI_MEMO_COLUMNS = ("Debt_GDP_holdouts", "Result_DebtServ_accrual", "Result_Revenue_structural")
+FPI_MEMO_COLUMNS = (
+    "Debt_GDP_holdouts",
+    "Result_DebtServ_accrual",
+    "Result_Revenue_structural",
+    "Debt_GDP_arrears",
+    "Debt_GDP_fxshare",
+    "Debt_GDP_contingent",
+)
 
 SERIES = {
     "NY.GDP.DEFL.KD.ZG": "Inflation, GDP deflator (annual %)",

@@ -9,19 +9,21 @@ historical series reaching back to 1853.
 
 📊 **Write-up:** <https://jahnog.github.io/Argentine-monetary-and-fiscal-policies-analyzed/>
 
-![Top-5 ranking](ranking_top5.png)
-
-## Notebooks
+## Notebook
 
 | Notebook | Purpose |
 |----------|---------|
-| `Historical_CMPI_Extension.ipynb` | Main analysis — extends the Classical Macroeconomic Pressure Index (CMPI) and Fiscal Pressure Index (FPI) with historical and fiscal series. |
-| `Still_Passing_the_Buck.ipynb` | Original administration-by-administration comparison. |
-| `Transpose_Dataset.ipynb` | Reshapes the wide World Bank export (`WDIData2.csv`) into the long form the notebooks consume. |
+| `Historical_CMPI_Extension.ipynb` | The complete analysis — the Classical Macroeconomic Performance Index (CMPI), the Fiscal Pressure Index (FPI), and their combined Overall Index for all 41 Argentine administrations, 1853–2025, with documented corrections for every known statistical manipulation. |
+
+The wide World Bank export (`WDIData2.csv`) is reshaped into the long form the
+notebook consumes by `scripts/generate_indicators_wdi-argentina.py`.
+
+A prioritized roadmap of planned improvements is in
+[`docs/IMPROVEMENT_PLAN.md`](docs/IMPROVEMENT_PLAN.md).
 
 ## Data
 
-All inputs are kept repo-local (via Git LFS) so the notebooks rerun without live
+All inputs are kept repo-local (via Git LFS) so the notebook reruns without live
 network access. The folder layout and the full inventory of download/generate
 scripts are documented in [`data/README.md`](data/README.md); the methodological
 lineage of each Argentine series is in
@@ -34,16 +36,20 @@ lineage of each Argentine series is in
 ## Reproduce
 
 ```bash
-uv sync                                    # create the environment from pyproject.toml / uv.lock
+uv sync             # create the environment from pyproject.toml / uv.lock
 
-# refresh data (network required) — one download script per external source,
-# then the generators that build the notebook inputs:
-python scripts/download_*.py
-python scripts/generate_*.py
-python scripts/validate_cmpi_inputs.py --target-year 2025
-
-jupyter notebook Historical_CMPI_Extension.ipynb
+make verify         # offline end-to-end: unit tests + input validator + headless execution
+make reproduce      # full refresh: downloads -> generators -> validator -> tests -> execution
 ```
+
+(The Makefile targets wrap the per-source `scripts/download_*.py` and `scripts/generate_*.py`
+scripts documented in `data/README.md`.) CI runs `make verify`'s steps on every push
+(`.github/workflows/ci.yml`); because every table and the §8.4 narrative are rendered from the
+live pipeline, a green execution is also a prose-vs-output consistency check. Data vintages are
+stamped under the notebook's Figure 0 from the `.meta.json` sidecars; baseline-affecting data
+changes are logged in [`data/REVISIONS.md`](data/REVISIONS.md). For citable analysis snapshots,
+tag a release and archive it (e.g. on Zenodo for a DOI) so results can be referenced against a
+frozen data state.
 
 Export the notebook to a print-optimized PDF with
 `scripts/render_notebook_paper.py` (see [`docs/paper-export.md`](docs/paper-export.md)).
@@ -58,3 +64,15 @@ pytest -m network            # tests that hit live data sources
 ## Stack
 
 Python · pandas · NumPy · matplotlib · Jupyter · uv · Git LFS
+
+## License & citation
+
+This work is licensed under the
+[Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)
+— see [`LICENSE`](LICENSE). You are free to use, share, and adapt it for any
+purpose, **provided you explicitly credit the author and reference this work**.
+
+Suggested citation:
+
+> Javier (jahnog), *Still Passing the Buck — Historical CMPI & FPI Extension:
+> Argentina 1853–2025*, 2026. https://github.com/jahnog

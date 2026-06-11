@@ -25,7 +25,7 @@ python3 scripts/render_notebook_paper.py --skip-execute
 
 # Keep the intermediate print HTML for inspection or manual tweaks.
 python3 scripts/render_notebook_paper.py \
-  --html-output tmp/Still_Passing_the_Buck.print.html
+  --html-output tmp/Historical_CMPI_Extension.print.html
 
 # Use a specific browser binary.
 python3 scripts/render_notebook_paper.py \

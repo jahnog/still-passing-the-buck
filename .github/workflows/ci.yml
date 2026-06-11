@@ -1,0 +1,51 @@
+# CI as credibility infrastructure (docs/IMPROVEMENT_PLAN.md item 22): every push must keep
+# (a) the offline unit tests green, (b) every notebook input validated, and (c) the notebook
+# executable end-to-end from the committed data. Because the §8.4 narrative and all tables are
+# rendered from the live pipeline, a successful headless execution IS the prose-vs-output
+# consistency check — stale text can no longer ship.
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Sync environment (pyproject.toml / uv.lock)
+        run: uv sync --extra test
+
+      - name: Offline unit tests
+        run: uv run pytest -m "not network" -q
+
+      - name: Validate every notebook input
+        run: uv run python scripts/validate_cmpi_inputs.py --target-year 2025
+
+      - name: Execute the notebook headlessly (tables re-render from committed data)
+        run: |
+          uv run jupyter nbconvert --to notebook --execute \
+            Historical_CMPI_Extension.ipynb \
+            --output /tmp/executed.ipynb \
+            --ExecutePreprocessor.timeout=1200
+
+      - name: Fail on any error output in the executed notebook
+        run: |
+          uv run python - <<'EOF'
+          import json
+          nb = json.load(open('/tmp/executed.ipynb'))
+          errs = [(i, o.get('ename'), o.get('evalue'))
+                  for i, c in enumerate(nb['cells'])
+                  for o in c.get('outputs', [])
+                  if o.get('output_type') == 'error']
+          assert not errs, errs
+          print(f"{len(nb['cells'])} cells executed, no errors")
+          EOF
