@@ -86,8 +86,8 @@ first declaration of censure in the history of the International Monetary Fund
 [@imf2013censure; @cavallo2013; @coremberg2017]. Exchange controls in 2012--15
 and 2019--25 pinned the official exchange rate far below the free-market rate.
 Successive governments accumulated remunerated central-bank liabilities --- a
-quasi-fiscal debt reaching roughly ten percent of GDP --- that appears in no
-Treasury debt statistic. Any ranking that ingests official series uncritically
+quasi-fiscal debt exceeding ten percent of GDP at its peaks --- that appears
+in no Treasury debt statistic. Any ranking that ingests official series uncritically
 reproduces these distortions. A second, subtler problem is internal to the
 methodology: annual-average exchange rates produce wrong-signed devaluation
 innovations around mid-year devaluations, an artefact that affects the
@@ -378,9 +378,10 @@ measured currency composition of the debt (Section 7).
 
 Second, the **consolidation of quasi-fiscal debt**: from 2002 the central
 bank sterilized monetary emission with remunerated liabilities (Lebac/Nobac,
-then Leliq, then Pases) that peaked near ten percent of GDP --- economically
-public debt, but absent from every Treasury statistic. The correction adds
-the documented year-end stock to the public debt of 2003--2025. Figure 5
+then Leliq, then Pases) that repeatedly exceeded ten percent of GDP ---
+economically public debt, but absent from every Treasury statistic. The
+correction adds the measured year-end stock (BCRA statistical-API series,
+December observations) to the public debt of 2003--2025. Figure 5
 shows the layered debt stock; Figure 6 shows the associated quasi-fiscal
 interest flow, which never enters the Treasury's primary result.
 
@@ -392,13 +393,13 @@ falls on.
 
 | Administration | Years | Debt/GDP off. | Cepo x | BCRA % GDP | Debt/GDP adj. |
 |:-----------------------|-----------:|------------:|--------:|--------:|------------:|
-| Duhalde | 2002-2003 | 1.630 | 1.000 | 1.450 | 1.644 |
-| N.Kirchner | 2004-2007 | 0.843 | 1.000 | 4.150 | 0.885 |
-| C.Kirchner | 2008-2011 | 0.454 | 1.000 | 4.563 | 0.500 |
-| C.Kirchner II | 2012-2015 | 0.453 | 1.397 | 5.250 | 0.687 |
-| Macri | 2016-2019 | 0.670 | 1.025 | 9.312 | 0.781 |
-| Fernandez | 2020-2023 | 0.703 | 1.857 | 10.075 | 1.390 |
-| Milei | 2024-2025 | 0.703 | 1.184 | 0.500 | 0.841 |
+| Duhalde | 2002-2003 | 1.630 | 1.000 | 1.712 | 1.647 |
+| N.Kirchner | 2004-2007 | 0.843 | 1.000 | 5.404 | 0.897 |
+| C.Kirchner | 2008-2011 | 0.454 | 1.000 | 4.270 | 0.497 |
+| C.Kirchner II | 2012-2015 | 0.453 | 1.397 | 4.563 | 0.680 |
+| Macri | 2016-2019 | 0.670 | 1.025 | 7.217 | 0.760 |
+| Fernandez | 2020-2023 | 0.703 | 1.857 | 11.387 | 1.403 |
+| Milei | 2024-2025 | 0.703 | 1.184 | 0.013 | 0.836 |
 : Exchange-control factor and central-bank quasi-fiscal debt by administration (term means). "Cepo x" is the free-market/official revaluation factor applied to dollar GDP; "BCRA % GDP" is the remunerated-liability stock consolidated into public debt.
 
 ![Public debt layers, 2001--2025: official Treasury stock, exchange-control revaluation, and consolidated central-bank remunerated liabilities.](generated/fig_debt-layers.png){width=100%}
@@ -476,8 +477,9 @@ Kirchner term (2012--15), with the hyperinflation endgame of Alfonsín
 Table 3 reports the FPI. Obligado (1854--56) leads, with the 2024--25 term
 second and Roca II (1899--1904) third. The two debt-stock corrections of
 Section 4.3 drive the modern reordering: the 2023 inherited baseline carries
-both the peso overvaluation (a factor near two) and roughly ten percent of
-GDP in central-bank debt, against which the 2024--25 consolidation and
+both the peso overvaluation (a factor near two) and some thirteen percent of
+GDP in central-bank debt at the December 2023 year-end, against which the
+2024--25 consolidation and
 record primary surplus register as a sharp *reduction* in fiscal pressure ---
 rather than the spurious debt increase shown by the raw Treasury series ---
 while the administrations that grew the quasi-fiscal stock (2020--23 and
@@ -490,46 +492,46 @@ deleveraging.
 
 | Administration | Rank | Years | Debt / GDP | Debt / Exp | Res / Rev | Res / DebtSv | (1+r) / (1+g) | FPI |
 |:----------------------------------------|--------:|-----------:|--------:|--------:|-------:|----------:|---------:|-------:|
-| Obligado | 1 | 1854–1856 | 0.697 | 0.692 | 0.967 | 0.936 | 0.929 | 0.844 |
-| Milei | 2 | 2024–2025 | 0.936 | 0.636 | 0.740 | 0.838 | 0.818 | 0.794 |
-| Roca II | 3 | 1899–1904 | 0.718 | 0.897 | 0.962 | 0.888 | 0.417 | 0.776 |
-| N.Kirchner | 4 | 2004–2007 | 0.942 | 0.970 | 0.480 | 0.500 | 0.877 | 0.754 |
-| Menem | 5 | 1990–1995 | 0.969 | 0.564 | 0.629 | 0.609 | 0.838 | 0.722 |
-| Perón I | 6 | 1946–1951 | 0.796 | 0.961 | 0.740 | 0.297 | 0.685 | 0.696 |
-| Avellaneda | 7 | 1875–1880 | 0.821 | 0.548 | 0.515 | 0.501 | 0.952 | 0.667 |
-| Mitre | 8 | 1860–1868 | 0.326 | 0.388 | 0.905 | 0.969 | 0.695 | 0.657 |
+| Obligado | 1 | 1854–1856 | 0.696 | 0.696 | 0.967 | 0.936 | 0.929 | 0.845 |
+| Milei | 2 | 2024–2025 | 0.945 | 0.737 | 0.740 | 0.838 | 0.818 | 0.816 |
+| Roca II | 3 | 1899–1904 | 0.716 | 0.895 | 0.962 | 0.888 | 0.417 | 0.776 |
+| N.Kirchner | 4 | 2004–2007 | 0.941 | 0.970 | 0.480 | 0.500 | 0.877 | 0.753 |
+| Menem | 5 | 1990–1995 | 0.968 | 0.561 | 0.629 | 0.609 | 0.838 | 0.721 |
+| Perón I | 6 | 1946–1951 | 0.795 | 0.961 | 0.740 | 0.297 | 0.685 | 0.695 |
+| Avellaneda | 7 | 1875–1880 | 0.819 | 0.549 | 0.515 | 0.501 | 0.952 | 0.667 |
+| Mitre | 8 | 1860–1868 | 0.324 | 0.389 | 0.905 | 0.969 | 0.695 | 0.656 |
 | Yrigoyen | 9 | 1917–1922 | 0.601 | 0.773 | 0.636 | 0.611 | 0.618 | 0.648 |
 | Uriburu JF | 10 | 1931–1931 | 0.630 | 0.780 | 0.751 | 0.682 | 0.347 | 0.638 |
 | Ongania | 11 | 1967–1969 | 0.480 | 0.403 | 0.663 | 0.848 | 0.561 | 0.591 |
-| Videla/Viola/Galtieri/Bignone | 12 | 1976–1983 | 0.417 | 0.230 | 0.879 | 0.876 | 0.405 | 0.561 |
-| Sarmiento | 13 | 1869–1874 | 0.267 | 0.402 | 0.559 | 0.693 | 0.697 | 0.523 |
-| Illia | 14 | 1964–1966 | 0.491 | 0.484 | 0.445 | 0.435 | 0.647 | 0.501 |
-| Menem II | 15 | 1996–1999 | 0.400 | 0.630 | 0.363 | 0.322 | 0.772 | 0.497 |
-| Frondizi | 16 | 1958–1961 | 0.676 | 0.597 | 0.428 | 0.328 | 0.400 | 0.486 |
+| Videla/Viola/Galtieri/Bignone | 12 | 1976–1983 | 0.416 | 0.232 | 0.879 | 0.876 | 0.405 | 0.562 |
+| Sarmiento | 13 | 1869–1874 | 0.266 | 0.401 | 0.559 | 0.693 | 0.697 | 0.523 |
+| Illia | 14 | 1964–1966 | 0.491 | 0.486 | 0.445 | 0.435 | 0.647 | 0.501 |
+| Menem II | 15 | 1996–1999 | 0.399 | 0.630 | 0.363 | 0.322 | 0.772 | 0.497 |
+| Frondizi | 16 | 1958–1961 | 0.676 | 0.595 | 0.428 | 0.328 | 0.400 | 0.486 |
 | Sáenz Peña L./Uriburu JE | 17 | 1893–1898 | 0.803 | 0.528 | 0.357 | 0.350 | 0.352 | 0.478 |
-| Aramburu | 18 | 1956–1957 | 0.598 | 0.572 | 0.460 | 0.422 | 0.335 | 0.477 |
-| C.Kirchner | 19 | 2008–2011 | 0.782 | 0.746 | 0.269 | 0.360 | 0.198 | 0.471 |
-| Quintana/Figueroa | 20 | 1905–1910 | 0.804 | 0.804 | 0.159 | 0.226 | 0.320 | 0.463 |
-| Pellegrini | 21 | 1891–1892 | 0.127 | 0.422 | 0.552 | 0.656 | 0.465 | 0.445 |
-| De Alvear | 22 | 1923–1928 | 0.306 | 0.495 | 0.562 | 0.582 | 0.275 | 0.444 |
+| Aramburu | 18 | 1956–1957 | 0.595 | 0.572 | 0.460 | 0.422 | 0.335 | 0.477 |
+| C.Kirchner | 19 | 2008–2011 | 0.795 | 0.757 | 0.269 | 0.360 | 0.198 | 0.476 |
+| Quintana/Figueroa | 20 | 1905–1910 | 0.804 | 0.802 | 0.159 | 0.226 | 0.320 | 0.462 |
+| Pellegrini | 21 | 1891–1892 | 0.127 | 0.419 | 0.552 | 0.656 | 0.465 | 0.444 |
+| De Alvear | 22 | 1923–1928 | 0.304 | 0.497 | 0.562 | 0.582 | 0.275 | 0.444 |
 | Levingston/Lanusse | 23 | 1970–1972 | 0.426 | 0.659 | 0.326 | 0.455 | 0.316 | 0.436 |
-| Perón II | 24 | 1952–1955 | 0.384 | 0.155 | 0.422 | 0.697 | 0.471 | 0.426 |
-| Justo | 25 | 1932–1937 | 0.256 | 0.104 | 0.467 | 0.466 | 0.814 | 0.422 |
-| Sáenz Peña R./de la Plaza | 26 | 1911–1916 | 0.293 | 0.546 | 0.405 | 0.477 | 0.311 | 0.406 |
-| Alfonsin | 27 | 1984–1989 | 0.288 | 0.190 | 0.843 | 0.633 | 0.066 | 0.404 |
-| De la Rua | 28 | 2000–2001 | 0.298 | 0.558 | 0.355 | 0.376 | 0.361 | 0.390 |
-| Macri | 29 | 2016–2019 | 0.486 | 0.361 | 0.389 | 0.402 | 0.306 | 0.389 |
+| Perón II | 24 | 1952–1955 | 0.384 | 0.158 | 0.422 | 0.697 | 0.471 | 0.426 |
+| Justo | 25 | 1932–1937 | 0.253 | 0.104 | 0.467 | 0.466 | 0.814 | 0.421 |
+| Sáenz Peña R./de la Plaza | 26 | 1911–1916 | 0.290 | 0.549 | 0.405 | 0.477 | 0.311 | 0.406 |
+| Alfonsin | 27 | 1984–1989 | 0.286 | 0.189 | 0.843 | 0.633 | 0.066 | 0.403 |
+| Macri | 28 | 2016–2019 | 0.514 | 0.377 | 0.389 | 0.402 | 0.306 | 0.398 |
+| De la Rua | 29 | 2000–2001 | 0.298 | 0.564 | 0.355 | 0.376 | 0.361 | 0.391 |
 | Peron III | 30 | 1973–1975 | 0.451 | 0.638 | 0.067 | 0.110 | 0.582 | 0.370 |
-| Roca | 31 | 1881–1886 | 0.550 | 0.362 | 0.132 | 0.182 | 0.559 | 0.357 |
-| Ortiz/Castillo | 32 | 1938–1942 | 0.609 | 0.114 | 0.280 | 0.298 | 0.434 | 0.347 |
-| Ramírez/Farrell | 33 | 1943–1945 | 0.366 | 0.582 | 0.116 | 0.148 | 0.522 | 0.347 |
-| Yrigoyen II | 34 | 1929–1930 | 0.633 | 0.350 | 0.199 | 0.228 | 0.257 | 0.334 |
-| Guido | 35 | 1962–1963 | 0.434 | 0.899 | 0.133 | 0.092 | 0.104 | 0.332 |
-| Juárez Celman | 36 | 1887–1890 | 0.121 | 0.208 | 0.312 | 0.279 | 0.620 | 0.308 |
-| Alsina II | 37 | 1857–1859 | 0.214 | 0.518 | 0.195 | 0.177 | 0.083 | 0.237 |
-| C.Kirchner II | 38 | 2012–2015 | 0.114 | 0.214 | 0.288 | 0.347 | 0.221 | 0.237 |
-| Fernandez | 39 | 2020–2023 | 0.036 | 0.397 | 0.214 | 0.133 | 0.368 | 0.230 |
-| Duhalde | 40 | 2002–2003 | 0.003 | 0.127 | 0.503 | 0.486 | 0.017 | 0.227 |
+| Roca | 31 | 1881–1886 | 0.549 | 0.366 | 0.132 | 0.182 | 0.559 | 0.358 |
+| Ortiz/Castillo | 32 | 1938–1942 | 0.607 | 0.117 | 0.280 | 0.298 | 0.434 | 0.347 |
+| Ramírez/Farrell | 33 | 1943–1945 | 0.364 | 0.584 | 0.116 | 0.148 | 0.522 | 0.347 |
+| Guido | 34 | 1962–1963 | 0.434 | 0.896 | 0.133 | 0.092 | 0.104 | 0.332 |
+| Yrigoyen II | 35 | 1929–1930 | 0.630 | 0.344 | 0.199 | 0.228 | 0.257 | 0.332 |
+| Juárez Celman | 36 | 1887–1890 | 0.124 | 0.210 | 0.312 | 0.279 | 0.620 | 0.309 |
+| C.Kirchner II | 37 | 2012–2015 | 0.116 | 0.223 | 0.288 | 0.347 | 0.221 | 0.239 |
+| Alsina II | 38 | 1857–1859 | 0.210 | 0.514 | 0.195 | 0.177 | 0.083 | 0.236 |
+| Duhalde | 39 | 2002–2003 | 0.003 | 0.127 | 0.503 | 0.486 | 0.017 | 0.227 |
+| Fernandez | 40 | 2020–2023 | 0.032 | 0.301 | 0.214 | 0.133 | 0.368 | 0.210 |
 | Alsina | 41 | 1853–1853 | 0.017 | 0.110 | 0.000 | 0.017 | 0.006 | 0.030 |
 : The Fiscal Pressure Index, all 41 administrations. Components are innovation percentiles of debt/GDP, debt/exports, primary result/revenues, primary result/debt service, and $(1+r)/(1+g)$.
 
@@ -547,26 +549,26 @@ symmetrically with the Kirchner-era corrections.
 
 | Administration | Rank | Years | CMPI Rank | FPI Rank | CMPI | FPI | Overall | Borda Rank |
 |:----------------------------------------|--------:|-----------:|--------:|--------:|--------:|-------:|-----------:|---------:|
-| Menem | 1 | 1990–1995 | 1 | 5 | 0.906 | 0.722 | 0.814 | 3 |
-| Obligado | 2 | 1854–1856 | 3 | 1 | 0.750 | 0.844 | 0.797 | 1 |
-| Milei | 3 | 2024–2025 | 2 | 2 | 0.754 | 0.794 | 0.774 | 2 |
-| N.Kirchner | 4 | 2004–2007 | 17 | 4 | 0.531 | 0.754 | 0.642 | 7 |
-| Mitre | 5 | 1860–1868 | 9 | 8 | 0.575 | 0.657 | 0.616 | 4 |
-| Menem II | 6 | 1996–1999 | 4 | 15 | 0.730 | 0.497 | 0.614 | 5 |
+| Menem | 1 | 1990–1995 | 1 | 5 | 0.906 | 0.721 | 0.814 | 3 |
+| Obligado | 2 | 1854–1856 | 3 | 1 | 0.750 | 0.845 | 0.797 | 1 |
+| Milei | 3 | 2024–2025 | 2 | 2 | 0.754 | 0.816 | 0.785 | 2 |
+| N.Kirchner | 4 | 2004–2007 | 17 | 4 | 0.531 | 0.753 | 0.642 | 7 |
+| Mitre | 5 | 1860–1868 | 9 | 8 | 0.575 | 0.656 | 0.616 | 4 |
+| Menem II | 6 | 1996–1999 | 4 | 15 | 0.730 | 0.497 | 0.613 | 5 |
 | Avellaneda | 7 | 1875–1880 | 15 | 7 | 0.540 | 0.667 | 0.604 | 8 |
 | Roca II | 8 | 1899–1904 | 25 | 3 | 0.422 | 0.776 | 0.599 | 11 |
 | Yrigoyen | 9 | 1917–1922 | 13 | 9 | 0.546 | 0.648 | 0.597 | 9 |
-| Sarmiento | 10 | 1869–1874 | 7 | 13 | 0.644 | 0.523 | 0.584 | 6 |
+| Sarmiento | 10 | 1869–1874 | 7 | 13 | 0.644 | 0.523 | 0.583 | 6 |
 | Ongania | 11 | 1967–1969 | 11 | 11 | 0.548 | 0.591 | 0.569 | 10 |
-| Perón I | 12 | 1946–1951 | 23 | 6 | 0.427 | 0.696 | 0.561 | 13 |
+| Perón I | 12 | 1946–1951 | 23 | 6 | 0.427 | 0.695 | 0.561 | 13 |
 | Perón II | 13 | 1952–1955 | 5 | 24 | 0.684 | 0.426 | 0.555 | 14 |
-| Justo | 14 | 1932–1937 | 6 | 25 | 0.675 | 0.422 | 0.548 | 15 |
-| Videla/Viola/Galtieri/Bignone | 15 | 1976–1983 | 16 | 12 | 0.533 | 0.561 | 0.547 | 12 |
+| Justo | 14 | 1932–1937 | 6 | 25 | 0.675 | 0.421 | 0.548 | 15 |
+| Videla/Viola/Galtieri/Bignone | 15 | 1976–1983 | 16 | 12 | 0.533 | 0.562 | 0.547 | 12 |
 | Uriburu JF | 16 | 1931–1931 | 30 | 10 | 0.399 | 0.638 | 0.518 | 19 |
-| Pellegrini | 17 | 1891–1892 | 12 | 21 | 0.546 | 0.445 | 0.495 | 16 |
-| Roca | 18 | 1881–1886 | 8 | 31 | 0.621 | 0.357 | 0.489 | 17 |
+| Pellegrini | 17 | 1891–1892 | 12 | 21 | 0.546 | 0.444 | 0.495 | 16 |
+| Roca | 18 | 1881–1886 | 8 | 31 | 0.621 | 0.358 | 0.489 | 17 |
 | Aramburu | 19 | 1956–1957 | 21 | 18 | 0.462 | 0.477 | 0.470 | 18 |
-| Quintana/Figueroa | 20 | 1905–1910 | 20 | 20 | 0.467 | 0.463 | 0.465 | 20 |
+| Quintana/Figueroa | 20 | 1905–1910 | 20 | 20 | 0.467 | 0.462 | 0.465 | 20 |
 | Sáenz Peña R./de la Plaza | 21 | 1911–1916 | 19 | 26 | 0.515 | 0.406 | 0.461 | 25 |
 | Peron III | 22 | 1973–1975 | 14 | 30 | 0.545 | 0.370 | 0.457 | 24 |
 | Illia | 23 | 1964–1966 | 29 | 14 | 0.404 | 0.501 | 0.452 | 21 |
@@ -574,19 +576,19 @@ symmetrically with the Kirchner-era corrections.
 | Frondizi | 25 | 1958–1961 | 27 | 16 | 0.407 | 0.486 | 0.446 | 23 |
 | Ortiz/Castillo | 26 | 1938–1942 | 18 | 32 | 0.530 | 0.347 | 0.439 | 26 |
 | Sáenz Peña L./Uriburu JE | 27 | 1893–1898 | 33 | 17 | 0.349 | 0.478 | 0.413 | 27 |
-| De la Rua | 28 | 2000–2001 | 24 | 28 | 0.424 | 0.390 | 0.407 | 28 |
-| C.Kirchner | 29 | 2008–2011 | 34 | 19 | 0.339 | 0.471 | 0.405 | 29 |
-| Macri | 30 | 2016–2019 | 31 | 29 | 0.389 | 0.389 | 0.389 | 32 |
-| Yrigoyen II | 31 | 1929–1930 | 28 | 34 | 0.406 | 0.334 | 0.370 | 34 |
+| De la Rua | 28 | 2000–2001 | 24 | 29 | 0.424 | 0.391 | 0.407 | 28 |
+| C.Kirchner | 29 | 2008–2011 | 34 | 19 | 0.339 | 0.476 | 0.407 | 29 |
+| Macri | 30 | 2016–2019 | 31 | 28 | 0.389 | 0.398 | 0.393 | 31 |
+| Yrigoyen II | 31 | 1929–1930 | 28 | 35 | 0.406 | 0.332 | 0.369 | 35 |
 | Levingston/Lanusse | 32 | 1970–1972 | 35 | 23 | 0.296 | 0.436 | 0.366 | 30 |
-| De Alvear | 33 | 1923–1928 | 37 | 22 | 0.283 | 0.444 | 0.363 | 31 |
-| Juárez Celman | 34 | 1887–1890 | 26 | 36 | 0.417 | 0.308 | 0.363 | 35 |
-| Alfonsin | 35 | 1984–1989 | 36 | 27 | 0.286 | 0.404 | 0.345 | 36 |
-| Fernandez | 36 | 2020–2023 | 22 | 39 | 0.427 | 0.230 | 0.328 | 33 |
-| Alsina II | 37 | 1857–1859 | 32 | 37 | 0.364 | 0.237 | 0.301 | 37 |
-| Guido | 38 | 1962–1963 | 40 | 35 | 0.230 | 0.332 | 0.281 | 38 |
-| C.Kirchner II | 39 | 2012–2015 | 39 | 38 | 0.254 | 0.237 | 0.245 | 39 |
-| Duhalde | 40 | 2002–2003 | 38 | 40 | 0.263 | 0.227 | 0.245 | 40 |
+| De Alvear | 33 | 1923–1928 | 37 | 22 | 0.283 | 0.444 | 0.363 | 32 |
+| Juárez Celman | 34 | 1887–1890 | 26 | 36 | 0.417 | 0.309 | 0.363 | 33 |
+| Alfonsin | 35 | 1984–1989 | 36 | 27 | 0.286 | 0.403 | 0.345 | 36 |
+| Fernandez | 36 | 2020–2023 | 22 | 40 | 0.427 | 0.210 | 0.318 | 34 |
+| Alsina II | 37 | 1857–1859 | 32 | 38 | 0.364 | 0.236 | 0.300 | 37 |
+| Guido | 38 | 1962–1963 | 40 | 34 | 0.230 | 0.332 | 0.281 | 38 |
+| C.Kirchner II | 39 | 2012–2015 | 39 | 37 | 0.254 | 0.239 | 0.246 | 39 |
+| Duhalde | 40 | 2002–2003 | 38 | 39 | 0.263 | 0.227 | 0.245 | 40 |
 | Alsina | 41 | 1853–1853 | 41 | 41 | 0.166 | 0.030 | 0.098 | 41 |
 : The Overall Index: average of CMPI and FPI scores, with component ranks and a Borda-count cross-check.
 
@@ -654,14 +656,14 @@ case in the replication package.
 | Administration | Baseline | Measured FX share | 50% FX share | Total-growth r/g |
 |:-----------------------|------------:|------------:|---------:|----------------:|
 | Obligado | 1 | 1 | 1 | 1 |
-| Milei | 2 | 2 | 3 | 2 |
-| Roca II | 3 | 3 | 2 | 3 |
+| Milei | 2 | 2 | 2 | 2 |
+| Roca II | 3 | 3 | 3 | 3 |
 | N.Kirchner | 4 | 4 | 4 | 4 |
 | Menem | 5 | 5 | 5 | 5 |
-| Macri | 29 | 29 | 30 | 29 |
-| C.Kirchner II | 38 | 37 | 37 | 38 |
-| Fernandez | 39 | 39 | 38 | 40 |
-| Duhalde | 40 | 40 | 40 | 39 |
+| Macri | 28 | 29 | 30 | 28 |
+| C.Kirchner II | 37 | 37 | 37 | 37 |
+| Fernandez | 40 | 40 | 40 | 40 |
+| Duhalde | 39 | 39 | 39 | 39 |
 : FPI rank sensitivity for the focus administrations under the exchange-control and growth-definition variants.
 
 **Component weights.** The equal weighting of components is the original
@@ -771,10 +773,11 @@ bounded by a sensitivity variant where feasible:
 - **The exchange-control revaluation assumes a foreign-currency-linked debt
   stock**; the measured-composition and 50-percent variants bound the
   correction from both sides.
-- **The quasi-fiscal series is anchored, not continuous**: year-end stocks
-  are documented anchors with interpolation between them, and the
-  consolidation starts in 2003; the 1977--90 stock enters only as a
-  sensitivity variant.
+- **The quasi-fiscal consolidation starts in 2003** and uses measured
+  December year-end stocks from the central bank's statistical API for
+  2002--2024 (the curated anchors that previously carried the series are
+  retained as cross-checks); 2025 and the 1977--90 extension rest on
+  documented estimates, the latter entering only as a sensitivity variant.
 - **A debt-definition seam at 2018/19**: the historical ratios use the
   original central-government concept, the 2019--25 extension uses total
   Sector Público Nacional gross debt.

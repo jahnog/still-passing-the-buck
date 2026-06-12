@@ -1,8 +1,19 @@
 #!/usr/bin/env python3
-"""Generate BCRA quasi-fiscal series from documented anchors."""
+"""Generate BCRA quasi-fiscal series: measured API year-end stocks where available,
+documented anchors as fallback and cross-check.
+
+The stock baseline uses the BCRA Estadísticas Monetarias v4 API snapshots downloaded by
+`download_bcra_api-monetarias.py` (series 1258 Lebac/Nobac ARS, 1259 Lebac FX, 1260
+Leliq/Notaliq, 1262 pases pasivos), valued at the last December observation of each year
+against WDI nominal ARS GDP (NY.GDP.MKTP.CN). Series 1259 enters only through 2017: from
+2018 the FX-letter line is LEDIV/BOPREAL, which this pipeline tracks separately in the
+paired arrears/BOPREAL sensitivity (adding it here would double-count). Years without
+API or GDP coverage keep the curated anchors; the anchors are always printed as a
+cross-check against the measured ratios."""
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -13,6 +24,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from data import paths
+from scripts.data_io import latest_raw
 
 ANCHORS = [
     (2001, 0.000, "measured", "No central-bank remunerated debt before Lebac (created Mar 2002)"),
@@ -68,6 +80,68 @@ TRADE_ARREARS_USD_M = [
 ]
 
 
+# Remunerated-liability stock series in the BCRA v4 API (raw-file slug -> last year included).
+# 1259 stops in 2017: see module docstring (LEDIV/BOPREAL era handled by the paired sensitivity).
+STOCK_SERIES = {
+    "api_monetarias-1258-lebac-nobac-ars": 2025,
+    "api_monetarias-1259-lebac-nobac-fx": 2017,
+    "api_monetarias-1260-leliq-notaliq": 2025,
+    "api_monetarias-1262-pases-pasivos": 2025,
+}
+MEASURED_SOURCE = (
+    "BCRA API v4 (Estadisticas Monetarias) series 1258+1260+1262 (+1259 through 2017), "
+    "last December observation / WDI NY.GDP.MKTP.CN"
+)
+CROSS_CHECK_TOLERANCE = 0.02  # warn when |measured - anchor| exceeds 2 pp of GDP
+
+
+def december_year_end(observations: list[dict]) -> dict[int, float]:
+    """Last December observation per year from [{fecha: YYYY-MM-DD, valor: float}, ...]."""
+    best: dict[int, tuple[str, float]] = {}
+    for obs in observations:
+        fecha = obs["fecha"]
+        if fecha[5:7] != "12":
+            continue
+        year = int(fecha[:4])
+        if year not in best or fecha > best[year][0]:
+            best[year] = (fecha, float(obs["valor"]))
+    return {year: value for year, (_, value) in best.items()}
+
+
+def _latest_data_file(provider: str, prefix: str) -> Path | None:
+    """Newest raw file for a prefix, skipping .meta.json sidecars."""
+    candidate = latest_raw(provider, prefix)
+    while candidate is not None and candidate.name.endswith(".meta.json"):
+        data_file = candidate.parent / candidate.name[: -len(".meta.json")]
+        candidate = data_file if data_file.exists() else None
+    return candidate
+
+
+def load_measured_stock_ratios() -> dict[int, float]:
+    """Year-end remunerated stock / nominal GDP from raw API snapshots; {} when offline."""
+    totals: dict[int, float] = {}
+    for slug, last_year in STOCK_SERIES.items():
+        raw = _latest_data_file("bcra", slug)
+        if raw is None:
+            return {}
+        document = json.loads(raw.read_text())
+        for year, value in december_year_end(document["results"]).items():
+            if year <= last_year:
+                totals[year] = totals.get(year, 0.0) + value  # millones de ARS
+
+    gdp_raw = _latest_data_file("worldbank", "api_ny-gdp-mktp-cn")
+    if gdp_raw is None:
+        return {}
+    gdp_rows = json.loads(gdp_raw.read_text())[1]
+    gdp = {int(r["date"]): float(r["value"]) for r in gdp_rows if r["value"] is not None}
+
+    return {
+        year: (stock_m * 1e6) / gdp[year]
+        for year, stock_m in sorted(totals.items())
+        if year in gdp
+    }
+
+
 def interpolate_anchors(
     years: list[int], points: list[tuple[int, float, str, str]]
 ) -> dict[int, tuple[float, str, str]]:
@@ -95,6 +169,23 @@ def main() -> int:
     years = list(range(2001, 2026))
 
     stock = interpolate_anchors(years, ANCHORS + EXTRA_KNOWN)
+
+    measured = load_measured_stock_ratios()
+    if measured:
+        anchor_values = {y: v for y, v, _, _ in ANCHORS + EXTRA_KNOWN}
+        print("Measured API year-end stocks vs curated anchors (% of GDP):")
+        for year in sorted(measured):
+            if year not in stock:
+                continue
+            ratio = measured[year]
+            anchor = anchor_values.get(year)
+            note = ""
+            if anchor is not None and abs(ratio - anchor) > CROSS_CHECK_TOLERANCE:
+                note = f"  WARNING: deviates from anchor {anchor:.3f} by >2 pp"
+            print(f"  {year}: measured {ratio:.3f}" + (f" (anchor {anchor:.3f})" if anchor is not None else "") + note)
+            stock[year] = (ratio, "measured-api", MEASURED_SOURCE)
+    else:
+        print("BCRA API raw snapshots not found; keeping curated anchors (offline mode)")
     interest = interpolate_anchors(years, INTEREST_ANCHORS)
     # Arrears/BOPREAL is a sparse sensitivity series: no interpolation outside its listed
     # years (it is zero before 2022 by construction, not by extrapolation).

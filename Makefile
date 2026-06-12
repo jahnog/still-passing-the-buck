@@ -33,6 +33,7 @@ generate:
 	$(RUN) python scripts/generate_indicators_wdi-argentina.py
 	$(RUN) python scripts/generate_interest_wb-ids-arg.py
 	$(RUN) python scripts/generate_exchange_parallel-cepo.py
+	$(RUN) python scripts/generate_inflation_bcra-monthly.py
 	$(RUN) python scripts/generate_fiscal_bcra-quasi-fiscal.py
 	$(RUN) python scripts/generate_fiscal_fpi-fiscal.py
 	$(RUN) python scripts/generate_exchange_paper-devaluation.py

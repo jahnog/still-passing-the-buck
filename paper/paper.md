@@ -86,8 +86,8 @@ first declaration of censure in the history of the International Monetary Fund
 [@imf2013censure; @cavallo2013; @coremberg2017]. Exchange controls in 2012--15
 and 2019--25 pinned the official exchange rate far below the free-market rate.
 Successive governments accumulated remunerated central-bank liabilities --- a
-quasi-fiscal debt reaching roughly ten percent of GDP --- that appears in no
-Treasury debt statistic. Any ranking that ingests official series uncritically
+quasi-fiscal debt exceeding ten percent of GDP at its peaks --- that appears
+in no Treasury debt statistic. Any ranking that ingests official series uncritically
 reproduces these distortions. A second, subtler problem is internal to the
 methodology: annual-average exchange rates produce wrong-signed devaluation
 innovations around mid-year devaluations, an artefact that affects the
@@ -378,9 +378,10 @@ measured currency composition of the debt (Section 7).
 
 Second, the **consolidation of quasi-fiscal debt**: from 2002 the central
 bank sterilized monetary emission with remunerated liabilities (Lebac/Nobac,
-then Leliq, then Pases) that peaked near ten percent of GDP --- economically
-public debt, but absent from every Treasury statistic. The correction adds
-the documented year-end stock to the public debt of 2003--2025. Figure 5
+then Leliq, then Pases) that repeatedly exceeded ten percent of GDP ---
+economically public debt, but absent from every Treasury statistic. The
+correction adds the measured year-end stock (BCRA statistical-API series,
+December observations) to the public debt of 2003--2025. Figure 5
 shows the layered debt stock; Figure 6 shows the associated quasi-fiscal
 interest flow, which never enters the Treasury's primary result.
 
@@ -426,8 +427,9 @@ Kirchner term (2012--15), with the hyperinflation endgame of Alfonsín
 Table 3 reports the FPI. Obligado (1854--56) leads, with the 2024--25 term
 second and Roca II (1899--1904) third. The two debt-stock corrections of
 Section 4.3 drive the modern reordering: the 2023 inherited baseline carries
-both the peso overvaluation (a factor near two) and roughly ten percent of
-GDP in central-bank debt, against which the 2024--25 consolidation and
+both the peso overvaluation (a factor near two) and some thirteen percent of
+GDP in central-bank debt at the December 2023 year-end, against which the
+2024--25 consolidation and
 record primary surplus register as a sharp *reduction* in fiscal pressure ---
 rather than the spurious debt increase shown by the raw Treasury series ---
 while the administrations that grew the quasi-fiscal stock (2020--23 and
@@ -609,10 +611,11 @@ bounded by a sensitivity variant where feasible:
 - **The exchange-control revaluation assumes a foreign-currency-linked debt
   stock**; the measured-composition and 50-percent variants bound the
   correction from both sides.
-- **The quasi-fiscal series is anchored, not continuous**: year-end stocks
-  are documented anchors with interpolation between them, and the
-  consolidation starts in 2003; the 1977--90 stock enters only as a
-  sensitivity variant.
+- **The quasi-fiscal consolidation starts in 2003** and uses measured
+  December year-end stocks from the central bank's statistical API for
+  2002--2024 (the curated anchors that previously carried the series are
+  retained as cross-checks); 2025 and the 1977--90 extension rest on
+  documented estimates, the latter entering only as a sensitivity variant.
 - **A debt-definition seam at 2018/19**: the historical ratios use the
   original central-government concept, the 2019--25 extension uses total
   Sector Público Nacional gross debt.

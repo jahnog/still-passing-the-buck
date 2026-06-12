@@ -5,6 +5,53 @@ to the committed datasets. Newest first. Generated CSVs carry a `.meta.json` sid
 (written by `scripts/data_io.write_meta_sidecar`) recording generator, sources, and timestamp;
 when an upstream source revises a series, regenerate, then record **what changed and why** here.
 
+## 2026-06-12 (BCRA-API upgrade of the deferred items — FPI mid-table ±1; podiums unchanged)
+
+The two items deferred as "blocked on external sources" are closed via the BCRA Estadísticas
+Monetarias **v4** API (the v3 endpoint is deprecated; new `download_bcra_api-monetarias.py`).
+**Baseline-affecting but podium-neutral**: the CMPI and Overall tables are rank-identical;
+the FPI shows four adjacent-pair swaps (Macri 29→28 / De la Rúa 28→29, Guido 35→34 /
+Yrigoyen II 34→35, C.Kirchner II 38→37 / Alsina II 37→38, Duhalde 40→39 / Fernández 39→40),
+all in the direction the measured data implies. Milei's FPI #2 is unchanged (score 0.794→0.816).
+
+- **Quasi-fiscal stock upgraded from curated anchors to measured December year-end stocks,
+  2002–2024** (`generate_fiscal_bcra-quasi-fiscal.py`; API series 1258 Lebac/Nobac ARS + 1260
+  Leliq/Notaliq + 1262 pases pasivos, plus 1259 FX letters through 2017 only — the later
+  LEDIV/BOPREAL line stays in the §6.0 E paired sensitivity — over WDI `NY.GDP.MKTP.CN`).
+  The anchors remain as offline fallback and printed cross-checks: agreement within 2 pp of
+  GDP everywhere except **2018–19** (anchors 9.5%/9.0% vs measured 4.9%/5.5% — the mid-2018
+  Lebac peak had largely unwound by December; flatters-Macri direction, now corrected in his
+  favour) and **Dec-2023** (anchor 10% vs measured 13.4% — the post-devaluation nominal
+  explosion of pases; Fernández drops to FPI #40). 2025 keeps the anchor (WB nominal GDP not
+  yet published). Quality-flag notes updated from "estimated anchors" to measured-API.
+- **Reproducible CPI–WPI variant for 1964–2006 implemented (Table 8b)** — closes the deferred
+  IFS item: the IMF routes remain dead (new SDMX 3.0 CPI starts 2017 for ARG; the DBnomics
+  archived IFS mirror holds a single ARG observation), but BCRA API series 27 ("Inflación
+  mensual", continuous from 1943-03) provides the CPI and the in-repo INDEC SIPM workbooks
+  (serie empalmada 1956–95 + 1996+, both base-1993) provide the IPIM; their Dec/Dec log-rates
+  are blended (`generate_inflation_bcra-monthly.py`) to mirror the chapter's CPI–WPI average.
+  Result: podium unchanged; **Videla/junta 16→9** and Levingston/Lanusse are the only >2 moves
+  — the deflator-vs-CPI gap explains most of the documented junta-era coherence gap vs the
+  paper's Table 3.4. Baseline untouched (sensitivity-only).
+- **US real yields measured**: `us-real-yield-10y.csv` 2003–2025 replaced with the Fed H.15
+  annual 10y TIPS constant-maturity series (RIFLGFCY10_XII_N.A via DBnomics; new
+  `download_fed_h15-tips10y.py` — FRED's keyless endpoint was gateway-timing-out). Curated
+  estimates confirmed within 0.35 pp; pre-2003 rows remain ESTIMATE.
+- **Cepo FX shares measured for 2019–2025** from the Sec. Finanzas annual debt workbooks
+  (sheet A.1.4, FX share of AC gross debt incl. deuda elegible pendiente): 2019–22 and 2025
+  confirm the curated values within 1.5 pp; **Dec-2023 0.68→0.72** and **Dec-2024 0.69→0.552**
+  (the LECAP peso-debt expansion diluted the FX share). 2012–15 remain rounded estimates
+  (pre-2016 workbooks not in the lineage).
+- **OPC verification of the 2024–25 capitalizing-interest magnitudes**: 2024 upgraded to
+  VERIFIED (ARS 14.1tn capitalized = 2.4% of WDI nominal GDP, matching the curated 0.024);
+  2025 corroborated (~ARS 17.3tn through Aug-2025 ≈ 2% of provisional GDP) and stays ESTIMATE
+  pending the full-year OPC report.
+- **Dead ends re-checked and recorded**: no reproducible December parallel-FX series for
+  1931–45 (BCRA historical FX on datos.gob.ar starts 1970); World Bank 2025
+  (`NY.GDP.MKTP.CD`) still null as of 2026-06-11 — the supersession watch stays armed.
+- New tests: `tests/test_bcra_series.py` (year-end aggregation, CPI compounding, measured-year
+  coverage, blend-span invariants).
+
 ## 2026-06 (improvement-plan implementation — all baseline-neutral)
 
 Implementation of `docs/IMPROVEMENT_PLAN.md` P0–P4. **No headline change**: the baseline FPI
