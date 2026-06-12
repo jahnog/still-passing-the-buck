@@ -30,6 +30,14 @@ jobs:
       - name: Validate every notebook input
         run: uv run python scripts/validate_cmpi_inputs.py --target-year 2025
 
+      - name: Validate notebook schema (nbformat)
+        run: |
+          uv run python - <<'EOF'
+          import nbformat
+          nbformat.validate(nbformat.read("Historical_CMPI_Extension.ipynb", as_version=4))
+          print("notebook schema OK")
+          EOF
+
       - name: Execute the notebook headlessly (tables re-render from committed data)
         run: |
           uv run jupyter nbconvert --to notebook --execute \

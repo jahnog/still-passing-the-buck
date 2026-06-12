@@ -23,3 +23,10 @@ paper/output/
 .cursor/
 .gemini/
 .opencode/
+
+# Secrets (plaintext fallback only — prefer keyring)
+.env
+.env.local
+.env.*.local
+*.env
+!.env.example

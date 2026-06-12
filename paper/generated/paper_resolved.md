@@ -1,6 +1,7 @@
 ---
 title: "Still Passing the Buck: Macroeconomic and Fiscal Performance of Argentine Administrations, 1853--2025"
-author: "Javier Hernan Nogueira^[Independent researcher. Contact: <jahnog@gmail.com>. ORCID: [0009-0006-1945-7870](https://orcid.org/0009-0006-1945-7870). Replication package: <https://github.com/jahnog/still-passing-the-buck>. I thank Gerardo della Paolera, María Alejandra Irigoin, and Carlos G. Bózzoli, the authors of the original *Passing the buck* chapter, for generously sharing the dataset underlying their study, updated through 2018. All errors are my own.]"
+# TODO: pick the email you want on the published paper before submitting anywhere.
+author: "Javier Hernan Nogueira^[Independent researcher. ORCID: [0009-0006-1945-7870](https://orcid.org/0009-0006-1945-7870). Replication package: <https://github.com/jahnog/still-passing-the-buck>. I thank — TODO: acknowledgements after circulating the draft.]"
 date: "June 2026 --- Working paper draft"
 abstract: |
   We rank all 41 Argentine national administrations that governed between 1853
@@ -54,7 +55,9 @@ link-citations: true
   - Figures are PNGs extracted from the notebook into paper/generated/.
   - Citations use [@key] / @key with paper/references.bib (Chicago author-date).
   - Table/figure numbers in the prose are written manually ("Table 3"): if you
-    reorder floats, update the references.
+    reorder floats, update the references. TODO markers flag editorial work.
+  - NOTE: the notebook cites the source chapter as 2011 (Cambridge online
+    edition); this manuscript uses the 2003 print edition year. Keep one.
 -->
 
 # Introduction
@@ -158,25 +161,16 @@ tax, the intertemporal budget constraint, and currency-crisis contagion --- is
 the classical one [@sargent1986rational; @defiore2000; @ennis2007;
 @eichengreen1996contagious].
 
-Two further strands frame the interpretation. The fiscal-dominance tradition
-descending from @sargentwallace1981 supplies the mechanism behind the
-*passing-the-buck* finding: when the fiscal authority does not internalize
-the intertemporal budget constraint, the monetary authority eventually
-finances the gap, and inflation becomes a fiscal phenomenon. The comparative
-project of @kehoenicolini2021 applies exactly this lens to eleven Latin
-American countries; its Argentina chapter [@bueranicolini2021argentina] reads
-six decades of inflation, default, and stabilization as the monetary
-consequence of persistent fiscal imbalance --- the regional pattern of which
-Argentina is the extreme case, and the same dynamic the FPI traces
-administration by administration. On the political-economy side,
-@spillertommasi2007 document why the dynamic persists: Argentine institutions
-give policymakers unusually short horizons and weak technologies for
-enforcing intertemporal agreements, so costs shifted past one's own term are
-heavily discounted. Finally, the treatment of central-bank operations as
-fiscal policy in disguise follows the public-finance tradition of
-@mackenziestella1996; the modern Argentine remunerated-liability stock that
-Section 4 consolidates is documented in the IMF's program reports
-[@imf2022argentina].
+The political-economy mechanism behind the *passing-the-buck* dynamic ---
+incumbents selecting policies that condition their successors over the
+electoral cycle --- has an Argentine-specific treatment in @giacominimilei2006,
+who read the early Kirchner-era fiscal and exchange-rate stance through
+opportunistic political-cycle models; the same authors' monetary essays
+[@mileigiacomini2017] cover the 2012--15 exchange-control episode. One of
+them, Javier Milei, heads the 2024--25 administration that closes our sample.
+
+<!-- TODO: consider adding recent rankings/state-capacity literature, and any
+     post-2003 work that has extended or criticized the CMPI/FPI. -->
 
 # Methodology
 
@@ -230,9 +224,7 @@ indebtedness or an unbalanced budget is a "hot potato" passed to successors;
 the opposite is a positive externality future governments inherit.
 
 Following the original Table 3.4, the **Overall Index** ranks administrations
-by the simple average of their CMPI and FPI scores. The exact formulas behind
-every step --- innovations, percentile assignment, aggregation, and the two
-debt-stock corrections --- are collected in Appendix D.
+by the simple average of their CMPI and FPI scores.
 
 ## How to read the ranking: three structural caveats
 
@@ -390,7 +382,15 @@ penalize the administrations that accumulated hidden liabilities and credit
 those that consolidated them, whichever side of the political spectrum either
 falls on.
 
-{{table:cepo-bcra}}
+| Administration | Years | Debt/GDP off. | Cepo x | BCRA % GDP | Debt/GDP adj. |
+|:-----------------------|-----------:|------------:|--------:|--------:|------------:|
+| Duhalde | 2002-2003 | 1.630 | 1.000 | 1.450 | 1.644 |
+| N.Kirchner | 2004-2007 | 0.843 | 1.000 | 4.150 | 0.885 |
+| C.Kirchner | 2008-2011 | 0.454 | 1.000 | 4.563 | 0.500 |
+| C.Kirchner II | 2012-2015 | 0.453 | 1.397 | 5.250 | 0.687 |
+| Macri | 2016-2019 | 0.670 | 1.025 | 9.312 | 0.781 |
+| Fernandez | 2020-2023 | 0.703 | 1.857 | 10.075 | 1.390 |
+| Milei | 2024-2025 | 0.703 | 1.184 | 0.500 | 0.841 |
 : Exchange-control factor and central-bank quasi-fiscal debt by administration (term means). "Cepo x" is the free-market/official revaluation factor applied to dollar GDP; "BCRA % GDP" is the remunerated-liability stock consolidated into public debt.
 
 ![Public debt layers, 2001--2025: official Treasury stock, exchange-control revaluation, and consolidated central-bank remunerated liabilities.](generated/fig_debt-layers.png){width=100%}
@@ -414,11 +414,55 @@ structural primary results.
 The CMPI ranking of all 41 administrations is reported in Table 2. Menem
 (1990--95) ranks first, the 2024--25 stabilization second, and Obligado
 (1854--56) third; the bottom of the table collects the crisis terms ---
-Alsina (1853) last, preceded by Guido (1962--63) and the second Cristina
-Kirchner term (2012--15), with the hyperinflation endgame of Alfonsín
-(1984--89) close behind.
+Alsina (1853), Guido (1962--63), and the hyperinflation endgame of Alfonsín
+(1984--89).
 
-{{table:cmpi}}
+<!-- TODO: verify the bottom-three names against Table 2 after the next
+     pipeline refresh; the prose must always match the generated table. -->
+
+| Administration | Rank | Years | Regime | Inflation | Devaluation | Interest | Growth | CMPI |
+|:----------------------------------------|--------:|-----------:|------------:|-------------:|---------------:|------------:|----------:|--------:|
+| Menem | 1 | 1990–1995 | Modern | 0.975 | 0.980 | 0.858 | 0.812 | 0.906 |
+| Milei | 2 | 2024–2025 | Modern | 0.514 | 0.928 | 0.974 | 0.598 | 0.754 |
+| Obligado | 3 | 1854–1856 | Historical | 0.784 | 0.778 | 0.520 | 0.915 | 0.750 |
+| Menem II | 4 | 1996–1999 | Modern | 0.676 | 0.610 | 0.957 | 0.676 | 0.730 |
+| Perón II | 5 | 1952–1955 | Historical | 0.880 | 0.871 | 0.546 | 0.436 | 0.684 |
+| Justo | 6 | 1932–1937 | Historical | 0.342 | 0.831 | 0.720 | 0.805 | 0.675 |
+| Sarmiento | 7 | 1869–1874 | Historical | 0.432 | 0.554 | 0.928 | 0.663 | 0.644 |
+| Roca | 8 | 1881–1886 | Historical | 0.917 | 0.310 | 0.754 | 0.504 | 0.621 |
+| Mitre | 9 | 1860–1868 | Historical | 0.401 | 0.435 | 0.798 | 0.665 | 0.575 |
+| Ramírez/Farrell | 10 | 1943–1945 | Historical | 0.547 | 0.607 | 0.601 | 0.472 | 0.557 |
+| Ongania | 11 | 1967–1969 | Modern | 0.684 | 0.663 | 0.145 | 0.699 | 0.548 |
+| Pellegrini | 12 | 1891–1892 | Historical | 0.592 | 0.688 | 0.384 | 0.520 | 0.546 |
+| Yrigoyen | 13 | 1917–1922 | Historical | 0.681 | 0.490 | 0.332 | 0.680 | 0.546 |
+| Peron III | 14 | 1973–1975 | Modern | 0.528 | 0.303 | 0.832 | 0.516 | 0.545 |
+| Avellaneda | 15 | 1875–1880 | Historical | 0.403 | 0.508 | 0.298 | 0.954 | 0.540 |
+| Videla/Viola/Galtieri/Bignone | 16 | 1976–1983 | Modern | 0.576 | 0.871 | 0.182 | 0.502 | 0.533 |
+| N.Kirchner | 17 | 2004–2007 | Modern | 0.513 | 0.178 | 0.968 | 0.465 | 0.531 |
+| Ortiz/Castillo | 18 | 1938–1942 | Historical | 0.686 | 0.295 | 0.890 | 0.250 | 0.530 |
+| Sáenz Peña R./de la Plaza | 19 | 1911–1916 | Historical | 0.613 | 0.579 | 0.627 | 0.243 | 0.515 |
+| Quintana/Figueroa | 20 | 1905–1910 | Historical | 0.432 | 0.544 | 0.668 | 0.224 | 0.467 |
+| Aramburu | 21 | 1956–1957 | Historical | 0.260 | 0.864 | 0.396 | 0.329 | 0.462 |
+| Fernandez | 22 | 2020–2023 | Modern | 0.431 | 0.623 | 0.092 | 0.561 | 0.427 |
+| Perón I | 23 | 1946–1951 | Historical | 0.321 | 0.213 | 0.454 | 0.719 | 0.427 |
+| De la Rua | 24 | 2000–2001 | Modern | 0.416 | 0.529 | 0.251 | 0.500 | 0.424 |
+| Roca II | 25 | 1899–1904 | Historical | 0.471 | 0.329 | 0.488 | 0.400 | 0.422 |
+| Juárez Celman | 26 | 1887–1890 | Historical | 0.386 | 0.341 | 0.251 | 0.689 | 0.417 |
+| Frondizi | 27 | 1958–1961 | Historical | 0.415 | 0.403 | 0.367 | 0.442 | 0.407 |
+| Yrigoyen II | 28 | 1929–1930 | Historical | 0.630 | 0.358 | 0.408 | 0.228 | 0.406 |
+| Illia | 29 | 1964–1966 | Modern | 0.497 | 0.133 | 0.272 | 0.713 | 0.404 |
+| Uriburu JF | 30 | 1931–1931 | Historical | 0.480 | 0.341 | 0.422 | 0.353 | 0.399 |
+| Macri | 31 | 2016–2019 | Modern | 0.395 | 0.423 | 0.421 | 0.316 | 0.389 |
+| Alsina II | 32 | 1857–1859 | Historical | 0.538 | 0.620 | 0.231 | 0.067 | 0.364 |
+| Sáenz Peña L./Uriburu JE | 33 | 1893–1898 | Historical | 0.141 | 0.382 | 0.575 | 0.296 | 0.349 |
+| C.Kirchner | 34 | 2008–2011 | Modern | 0.575 | 0.412 | 0.082 | 0.286 | 0.339 |
+| Levingston/Lanusse | 35 | 1970–1972 | Modern | 0.185 | 0.108 | 0.694 | 0.197 | 0.296 |
+| Alfonsin | 36 | 1984–1989 | Modern | 0.396 | 0.448 | 0.026 | 0.274 | 0.286 |
+| De Alvear | 37 | 1923–1928 | Historical | 0.278 | 0.357 | 0.118 | 0.378 | 0.283 |
+| Duhalde | 38 | 2002–2003 | Modern | 0.116 | 0.410 | 0.003 | 0.523 | 0.263 |
+| C.Kirchner II | 39 | 2012–2015 | Modern | 0.366 | 0.146 | 0.276 | 0.228 | 0.254 |
+| Guido | 40 | 1962–1963 | Historical | 0.237 | 0.390 | 0.217 | 0.075 | 0.230 |
+| Alsina | 41 | 1853–1853 | Historical | 0.104 | 0.145 | 0.416 | 0.000 | 0.166 |
 : The Classical Macroeconomic Performance Index, all 41 administrations, 1853--2025. Component columns are mean innovation percentiles over the term; the pool is 173 annual observations.
 
 ## Fiscal pressure
@@ -438,7 +482,49 @@ haircuts in the modern sovereign-debt record [@sturzeneggerzettelmeyer2008]
 consolidation captures the build-up without letting it overwhelm a genuine
 deleveraging.
 
-{{table:fpi}}
+| Administration | Rank | Years | Debt / GDP | Debt / Exp | Res / Rev | Res / DebtSv | (1+r) / (1+g) | FPI |
+|:----------------------------------------|--------:|-----------:|--------:|--------:|-------:|----------:|---------:|-------:|
+| Obligado | 1 | 1854–1856 | 0.697 | 0.692 | 0.967 | 0.936 | 0.929 | 0.844 |
+| Milei | 2 | 2024–2025 | 0.936 | 0.636 | 0.740 | 0.838 | 0.818 | 0.794 |
+| Roca II | 3 | 1899–1904 | 0.718 | 0.897 | 0.962 | 0.888 | 0.417 | 0.776 |
+| N.Kirchner | 4 | 2004–2007 | 0.942 | 0.970 | 0.480 | 0.500 | 0.877 | 0.754 |
+| Menem | 5 | 1990–1995 | 0.969 | 0.564 | 0.629 | 0.609 | 0.838 | 0.722 |
+| Perón I | 6 | 1946–1951 | 0.796 | 0.961 | 0.740 | 0.297 | 0.685 | 0.696 |
+| Avellaneda | 7 | 1875–1880 | 0.821 | 0.548 | 0.515 | 0.501 | 0.952 | 0.667 |
+| Mitre | 8 | 1860–1868 | 0.326 | 0.388 | 0.905 | 0.969 | 0.695 | 0.657 |
+| Yrigoyen | 9 | 1917–1922 | 0.601 | 0.773 | 0.636 | 0.611 | 0.618 | 0.648 |
+| Uriburu JF | 10 | 1931–1931 | 0.630 | 0.780 | 0.751 | 0.682 | 0.347 | 0.638 |
+| Ongania | 11 | 1967–1969 | 0.480 | 0.403 | 0.663 | 0.848 | 0.561 | 0.591 |
+| Videla/Viola/Galtieri/Bignone | 12 | 1976–1983 | 0.417 | 0.230 | 0.879 | 0.876 | 0.405 | 0.561 |
+| Sarmiento | 13 | 1869–1874 | 0.267 | 0.402 | 0.559 | 0.693 | 0.697 | 0.523 |
+| Illia | 14 | 1964–1966 | 0.491 | 0.484 | 0.445 | 0.435 | 0.647 | 0.501 |
+| Menem II | 15 | 1996–1999 | 0.400 | 0.630 | 0.363 | 0.322 | 0.772 | 0.497 |
+| Frondizi | 16 | 1958–1961 | 0.676 | 0.597 | 0.428 | 0.328 | 0.400 | 0.486 |
+| Sáenz Peña L./Uriburu JE | 17 | 1893–1898 | 0.803 | 0.528 | 0.357 | 0.350 | 0.352 | 0.478 |
+| Aramburu | 18 | 1956–1957 | 0.598 | 0.572 | 0.460 | 0.422 | 0.335 | 0.477 |
+| C.Kirchner | 19 | 2008–2011 | 0.782 | 0.746 | 0.269 | 0.360 | 0.198 | 0.471 |
+| Quintana/Figueroa | 20 | 1905–1910 | 0.804 | 0.804 | 0.159 | 0.226 | 0.320 | 0.463 |
+| Pellegrini | 21 | 1891–1892 | 0.127 | 0.422 | 0.552 | 0.656 | 0.465 | 0.445 |
+| De Alvear | 22 | 1923–1928 | 0.306 | 0.495 | 0.562 | 0.582 | 0.275 | 0.444 |
+| Levingston/Lanusse | 23 | 1970–1972 | 0.426 | 0.659 | 0.326 | 0.455 | 0.316 | 0.436 |
+| Perón II | 24 | 1952–1955 | 0.384 | 0.155 | 0.422 | 0.697 | 0.471 | 0.426 |
+| Justo | 25 | 1932–1937 | 0.256 | 0.104 | 0.467 | 0.466 | 0.814 | 0.422 |
+| Sáenz Peña R./de la Plaza | 26 | 1911–1916 | 0.293 | 0.546 | 0.405 | 0.477 | 0.311 | 0.406 |
+| Alfonsin | 27 | 1984–1989 | 0.288 | 0.190 | 0.843 | 0.633 | 0.066 | 0.404 |
+| De la Rua | 28 | 2000–2001 | 0.298 | 0.558 | 0.355 | 0.376 | 0.361 | 0.390 |
+| Macri | 29 | 2016–2019 | 0.486 | 0.361 | 0.389 | 0.402 | 0.306 | 0.389 |
+| Peron III | 30 | 1973–1975 | 0.451 | 0.638 | 0.067 | 0.110 | 0.582 | 0.370 |
+| Roca | 31 | 1881–1886 | 0.550 | 0.362 | 0.132 | 0.182 | 0.559 | 0.357 |
+| Ortiz/Castillo | 32 | 1938–1942 | 0.609 | 0.114 | 0.280 | 0.298 | 0.434 | 0.347 |
+| Ramírez/Farrell | 33 | 1943–1945 | 0.366 | 0.582 | 0.116 | 0.148 | 0.522 | 0.347 |
+| Yrigoyen II | 34 | 1929–1930 | 0.633 | 0.350 | 0.199 | 0.228 | 0.257 | 0.334 |
+| Guido | 35 | 1962–1963 | 0.434 | 0.899 | 0.133 | 0.092 | 0.104 | 0.332 |
+| Juárez Celman | 36 | 1887–1890 | 0.121 | 0.208 | 0.312 | 0.279 | 0.620 | 0.308 |
+| Alsina II | 37 | 1857–1859 | 0.214 | 0.518 | 0.195 | 0.177 | 0.083 | 0.237 |
+| C.Kirchner II | 38 | 2012–2015 | 0.114 | 0.214 | 0.288 | 0.347 | 0.221 | 0.237 |
+| Fernandez | 39 | 2020–2023 | 0.036 | 0.397 | 0.214 | 0.133 | 0.368 | 0.230 |
+| Duhalde | 40 | 2002–2003 | 0.003 | 0.127 | 0.503 | 0.486 | 0.017 | 0.227 |
+| Alsina | 41 | 1853–1853 | 0.017 | 0.110 | 0.000 | 0.017 | 0.006 | 0.030 |
 : The Fiscal Pressure Index, all 41 administrations. Components are innovation percentiles of debt/GDP, debt/exports, primary result/revenues, primary result/debt service, and $(1+r)/(1+g)$.
 
 ## The Overall Index
@@ -453,7 +539,49 @@ the top tier on both dimensions, with the caveats of Sections 6 and 8: the
 term is partial, and two measurement conventions that favour it are flagged
 symmetrically with the Kirchner-era corrections.
 
-{{table:overall}}
+| Administration | Rank | Years | CMPI Rank | FPI Rank | CMPI | FPI | Overall | Borda Rank |
+|:----------------------------------------|--------:|-----------:|--------:|--------:|--------:|-------:|-----------:|---------:|
+| Menem | 1 | 1990–1995 | 1 | 5 | 0.906 | 0.722 | 0.814 | 3 |
+| Obligado | 2 | 1854–1856 | 3 | 1 | 0.750 | 0.844 | 0.797 | 1 |
+| Milei | 3 | 2024–2025 | 2 | 2 | 0.754 | 0.794 | 0.774 | 2 |
+| N.Kirchner | 4 | 2004–2007 | 17 | 4 | 0.531 | 0.754 | 0.642 | 7 |
+| Mitre | 5 | 1860–1868 | 9 | 8 | 0.575 | 0.657 | 0.616 | 4 |
+| Menem II | 6 | 1996–1999 | 4 | 15 | 0.730 | 0.497 | 0.614 | 5 |
+| Avellaneda | 7 | 1875–1880 | 15 | 7 | 0.540 | 0.667 | 0.604 | 8 |
+| Roca II | 8 | 1899–1904 | 25 | 3 | 0.422 | 0.776 | 0.599 | 11 |
+| Yrigoyen | 9 | 1917–1922 | 13 | 9 | 0.546 | 0.648 | 0.597 | 9 |
+| Sarmiento | 10 | 1869–1874 | 7 | 13 | 0.644 | 0.523 | 0.584 | 6 |
+| Ongania | 11 | 1967–1969 | 11 | 11 | 0.548 | 0.591 | 0.569 | 10 |
+| Perón I | 12 | 1946–1951 | 23 | 6 | 0.427 | 0.696 | 0.561 | 13 |
+| Perón II | 13 | 1952–1955 | 5 | 24 | 0.684 | 0.426 | 0.555 | 14 |
+| Justo | 14 | 1932–1937 | 6 | 25 | 0.675 | 0.422 | 0.548 | 15 |
+| Videla/Viola/Galtieri/Bignone | 15 | 1976–1983 | 16 | 12 | 0.533 | 0.561 | 0.547 | 12 |
+| Uriburu JF | 16 | 1931–1931 | 30 | 10 | 0.399 | 0.638 | 0.518 | 19 |
+| Pellegrini | 17 | 1891–1892 | 12 | 21 | 0.546 | 0.445 | 0.495 | 16 |
+| Roca | 18 | 1881–1886 | 8 | 31 | 0.621 | 0.357 | 0.489 | 17 |
+| Aramburu | 19 | 1956–1957 | 21 | 18 | 0.462 | 0.477 | 0.470 | 18 |
+| Quintana/Figueroa | 20 | 1905–1910 | 20 | 20 | 0.467 | 0.463 | 0.465 | 20 |
+| Sáenz Peña R./de la Plaza | 21 | 1911–1916 | 19 | 26 | 0.515 | 0.406 | 0.461 | 25 |
+| Peron III | 22 | 1973–1975 | 14 | 30 | 0.545 | 0.370 | 0.457 | 24 |
+| Illia | 23 | 1964–1966 | 29 | 14 | 0.404 | 0.501 | 0.452 | 21 |
+| Ramírez/Farrell | 24 | 1943–1945 | 10 | 33 | 0.557 | 0.347 | 0.452 | 22 |
+| Frondizi | 25 | 1958–1961 | 27 | 16 | 0.407 | 0.486 | 0.446 | 23 |
+| Ortiz/Castillo | 26 | 1938–1942 | 18 | 32 | 0.530 | 0.347 | 0.439 | 26 |
+| Sáenz Peña L./Uriburu JE | 27 | 1893–1898 | 33 | 17 | 0.349 | 0.478 | 0.413 | 27 |
+| De la Rua | 28 | 2000–2001 | 24 | 28 | 0.424 | 0.390 | 0.407 | 28 |
+| C.Kirchner | 29 | 2008–2011 | 34 | 19 | 0.339 | 0.471 | 0.405 | 29 |
+| Macri | 30 | 2016–2019 | 31 | 29 | 0.389 | 0.389 | 0.389 | 32 |
+| Yrigoyen II | 31 | 1929–1930 | 28 | 34 | 0.406 | 0.334 | 0.370 | 34 |
+| Levingston/Lanusse | 32 | 1970–1972 | 35 | 23 | 0.296 | 0.436 | 0.366 | 30 |
+| De Alvear | 33 | 1923–1928 | 37 | 22 | 0.283 | 0.444 | 0.363 | 31 |
+| Juárez Celman | 34 | 1887–1890 | 26 | 36 | 0.417 | 0.308 | 0.363 | 35 |
+| Alfonsin | 35 | 1984–1989 | 36 | 27 | 0.286 | 0.404 | 0.345 | 36 |
+| Fernandez | 36 | 2020–2023 | 22 | 39 | 0.427 | 0.230 | 0.328 | 33 |
+| Alsina II | 37 | 1857–1859 | 32 | 37 | 0.364 | 0.237 | 0.301 | 37 |
+| Guido | 38 | 1962–1963 | 40 | 35 | 0.230 | 0.332 | 0.281 | 38 |
+| C.Kirchner II | 39 | 2012–2015 | 39 | 38 | 0.254 | 0.237 | 0.245 | 39 |
+| Duhalde | 40 | 2002–2003 | 38 | 40 | 0.263 | 0.227 | 0.245 | 40 |
+| Alsina | 41 | 1853–1853 | 41 | 41 | 0.166 | 0.030 | 0.098 | 41 |
 : The Overall Index: average of CMPI and FPI scores, with component ranks and a Borda-count cross-check.
 
 # Validation against the original study
@@ -472,12 +600,10 @@ the decimal for the four administrations that followed mid-year devaluations
 (Illia, Onganía, Perón III, and the 1976--83 junta), where annual-average
 data produce the wrong sign.
 
-**Cross-notebook consistency.** The companion modern-period implementation
-shares five identically defined terms with this notebook over 1964--1999.
-The Spearman correlation across the five is $0.90$: the four terms unaffected
-by data-convention changes preserve their relative order exactly, and the
-single deviation (Illia) is by design --- the December-quotation correction
-of Section 4.2 applied to its inherited 1963 devaluation baseline.
+**Cross-notebook consistency.** The 1964--1999 overlap with the companion
+modern-period implementation is rank-identical on shared terms.
+
+<!-- TODO: state the exact overlap statistic from notebook §8.3 here. -->
 
 **Decomposition of the partial 2024--25 term.** Table 5 decomposes the
 2024--25 years against the first two Menem years. The structure is the
@@ -487,7 +613,12 @@ in which the disinflation component takes over. The comparison bounds the
 interpretation of a partial term: on a first-two-years basis (Section 7) the
 2024--25 program and the Menem stabilization are statistically adjacent.
 
-{{table:milei-menem}}
+| Year | Administration | Inflation | Devaluation | Interest | Growth | CMPI |
+|:----------|---------------------:|-------------:|---------------:|------------:|----------:|--------:|
+| 2024 | Milei | 0.081 | 0.931 | 0.971 | 0.503 | 0.621 |
+| 2025 | Milei | 0.948 | 0.925 | 0.977 | 0.694 | 0.886 |
+| 1990 | Menem (first 2 yrs) | 0.936 | 0.965 | 0.867 | 0.665 | 0.858 |
+| 1991 | Menem (first 2 yrs) | 0.971 | 0.971 | 0.873 | 0.913 | 0.932 |
 : Year-by-year CMPI decomposition: the partial 2024--25 term versus the first two years of the Menem stabilization.
 
 # Robustness
@@ -512,23 +643,38 @@ pool variant. None of the variants displaces the top of the Overall ranking;
 the largest movements are within the modern FPI block, documented case by
 case in the replication package.
 
-{{table:fpi-sensitivity}}
+| Administration | Baseline | Measured FX share | 50% FX share | Total-growth r/g |
+|:-----------------------|------------:|------------:|---------:|----------------:|
+| Obligado | 1 | 1 | 1 | 1 |
+| Milei | 2 | 2 | 3 | 2 |
+| Roca II | 3 | 3 | 2 | 3 |
+| N.Kirchner | 4 | 4 | 4 | 4 |
+| Menem | 5 | 5 | 5 | 5 |
+| Macri | 29 | 29 | 30 | 29 |
+| C.Kirchner II | 38 | 37 | 37 | 38 |
+| Fernandez | 39 | 39 | 38 | 40 |
+| Duhalde | 40 | 40 | 40 | 39 |
 : FPI rank sensitivity for the focus administrations under the exchange-control and growth-definition variants.
-
-**Component weights.** The equal weighting of components is the original
-study's convention; the component-exclusion variants bound its impact as
-extreme weight perturbations. Menem remains first with the interest dimension
-removed entirely, while the 2024--25 term falls from second to fifth --- the
-country-risk collapse is a material part of its score --- and Obligado falls
-from third to fifth when inflation, its coarsest pre-1866 proxy dimension, is
-removed.
 
 **Term length.** Re-scoring every administration on its first two years only
 (Table 7) puts partial and complete terms on an equal footing and confirms
 that the term-average design, not data choices, drives the strong showing of
 short corrective terms.
 
-{{table:first-two-years}}
+| Administration | Full-term rank | First-2-years rank |
+|:-----------------------------------|-------------:|-----------------:|
+| Menem | 1 | 1 |
+| Milei | 2 | 2 |
+| Obligado | 3 | 3 |
+| Menem II | 4 | 4 |
+| Justo | 6 | 5 |
+| Perón II | 5 | 6 |
+| Roca | 8 | 7 |
+| Peron III | 14 | 8 |
+| Sarmiento | 7 | 9 |
+| Ramírez/Farrell | 10 | 10 |
+| Sáenz Peña R./de la Plaza | 19 | 11 |
+| Macri | 31 | 12 |
 : Full-term versus first-two-years CMPI ranks, selected administrations.
 
 # Discussion
@@ -574,20 +720,6 @@ convertibility, the twenty-first-century version runs through the central
 bank's balance sheet --- invisible in the official debt statistics that the
 original authors could take at face value for their period.
 
-**Why the buck keeps being passed.** The index documents the pattern; it does
-not by itself explain its persistence over 173 years, and nothing in a
-percentile rank identifies the constraints a given administration faced. The
-political-economy literature supplies the candidate mechanism:
-@spillertommasi2007 show that Argentine institutions --- short and uncertain
-tenures, a federal fiscal commons, weak legislative and judicial enforcement
-of intertemporal bargains --- systematically shorten policymakers' horizons,
-making debt, visible or hidden, the cheapest instrument with which to buy the
-present. Read through @bueranicolini2021argentina, the FPI is the
-administration-level trace of the fiscal dominance that the comparative
-Latin American literature identifies at the level of regimes
-[@kehoenicolini2021]. These are interpretations consistent with the ranking,
-not findings of it.
-
 # Limitations
 
 The principal limitations, each documented in the replication package and
@@ -618,29 +750,7 @@ bounded by a sensitivity variant where feasible:
   Sector Público Nacional gross debt.
 - **Pool non-comparability**: adding eight modern terms changes every
   historical percentile; the full-pool ranking is an extension, not a
-  reproduction, of the original 33-term table. The single 173-year pool is
-  nonetheless deliberate: one common yardstick is what allows a Confederation
-  presidency and a twenty-first-century stabilization to be ranked at all.
-  Era-specific sub-pools would re-score every administration against its own
-  era's standards --- undoing the cross-era comparability the index exists to
-  provide --- while introducing arbitrary regime break points; standardized
-  (z-score) scoring was rejected because hyperinflation-era tails would
-  dominate any variance-based scale. Percentile ranks over one pool are the
-  design that survives both objections.
-- **The single-last-year inherited baseline is likewise a convention.**
-  Averaging several pre-term years would dilute one-off shocks in the
-  inherited year, but it would also smear the predecessor's own crisis into
-  the benchmark a government is judged against, weakening the question the
-  index asks. The V-shaped-shock caveat of Section 3.3 and the no-COVID pool
-  variant of Section 7 disclose and bound the principal consequence.
-- **Equal component weights are the original study's convention**; the
-  component-exclusion variants of Section 7 act as extreme weight
-  perturbations and bound the impact of this choice on the focus ranks.
-- **The indices measure macroeconomic and fiscal management only.**
-  Distributional outcomes, poverty, productivity, and institutional quality
-  are outside the nine variables; an administration can rank highly here
-  while performing poorly on those dimensions, and conversely. The ranking is
-  one input to an overall assessment of a government, not a verdict.
+  reproduction, of the original 33-term table.
 - **Two 2024--25 measurement caveats work in the current administration's
   favour** and are flagged symmetrically with the Kirchner-era corrections:
   cash-basis results exclude capitalizing interest, and the 2004--05-basket
@@ -679,9 +789,8 @@ full pipeline --- is available at
 Every table and figure in this paper is extracted programmatically from the
 executed notebook by the build script (`scripts/build_paper.py`), so prose
 and pipeline cannot silently diverge. Data vintages are stamped in the
-package; baseline-affecting revisions are logged. An archived snapshot of the
-paper and the replication package is deposited at Zenodo:
-[doi:10.5281/zenodo.20651731](https://doi.org/10.5281/zenodo.20651731).
+package; baseline-affecting revisions are logged.
+<!-- TODO: after the Zenodo deposit, cite the archived release DOI here. -->
 
 # The statistical-integrity catalogue {#sec:catalogue .unnumbered}
 
@@ -723,76 +832,50 @@ audit columns); "Sensitivity" practices enter re-ranked variants only;
 innovation-based ranking, the table below reports term-average inflation,
 devaluation, interest, and growth for all 41 administrations.
 
-{{table:contemporaneous}}
+| Administration | From | To | Inflation | Devaluation | Interest | Growth |
+|:----------------------------------------|--------:|------:|-------------:|---------------:|------------:|------------:|
+| Alsina | 1853 | 1853 | 14.11 | 14.11 | 15.19 | -17.53 |
+| Obligado | 1854 | 1856 | 3.19 | 3.19 | 14.10 | 7.15 |
+| Alsina II | 1857 | 1859 | 0.53 | 0.53 | 15.72 | -4.82 |
+| Mitre | 1860 | 1868 | 1.68 | 2.08 | 12.70 | 7.43 |
+| Sarmiento | 1869 | 1874 | 4.33 | 0.00 | 8.63 | 2.30 |
+| Avellaneda | 1875 | 1880 | 10.01 | 2.24 | 10.02 | 5.19 |
+| Roca | 1881 | 1886 | -2.94 | 3.25 | 7.22 | 8.08 |
+| Juárez Celman | 1887 | 1890 | 12.06 | 15.46 | 8.79 | 5.40 |
+| Pellegrini | 1891 | 1892 | 10.86 | 12.15 | 9.72 | -4.43 |
+| Sáenz Peña L./Uriburu JE | 1893 | 1898 | -1.23 | -4.12 | 8.22 | 0.72 |
+| Roca II | 1899 | 1904 | -1.72 | -1.76 | 7.32 | 3.82 |
+| Quintana/Figueroa | 1905 | 1910 | 4.97 | 0.04 | 5.50 | 2.43 |
+| Sáenz Peña R./de la Plaza | 1911 | 1916 | 3.71 | 0.06 | 3.73 | -3.99 |
+| Yrigoyen | 1917 | 1922 | 1.03 | 2.70 | 5.08 | 3.10 |
+| De Alvear | 1923 | 1928 | 0.09 | -2.72 | 8.63 | 2.94 |
+| Yrigoyen II | 1929 | 1930 | -3.67 | 7.47 | 8.77 | -2.45 |
+| Uriburu JF | 1931 | 1931 | -3.31 | 23.26 | 8.72 | -9.22 |
+| Justo | 1932 | 1937 | 3.98 | -0.62 | 6.02 | 1.88 |
+| Ortiz/Castillo | 1938 | 1942 | 4.52 | 4.55 | 2.09 | 0.77 |
+| Ramírez/Farrell | 1943 | 1945 | 5.57 | -1.46 | 0.52 | 0.77 |
+| Perón I | 1946 | 1951 | 20.93 | 31.58 | -0.02 | 2.72 |
+| Perón II | 1952 | 1955 | 10.25 | 7.19 | -1.25 | 0.89 |
+| Aramburu | 1956 | 1957 | 20.93 | 1.64 | -0.49 | 2.21 |
+| Frondizi | 1958 | 1961 | 34.67 | 20.15 | 0.46 | 2.31 |
+| Guido | 1962 | 1963 | 26.05 | 24.42 | 2.89 | -2.41 |
+| Illia | 1964 | 1966 | 21.68 | 22.50 | 4.39 | 5.02 |
+| Ongania | 1967 | 1969 | 13.35 | 9.24 | 7.64 | 4.29 |
+| Levingston/Lanusse | 1970 | 1972 | 31.16 | 40.28 | 5.48 | 1.83 |
+| Peron III | 1973 | 1975 | 58.84 | 79.67 | 2.44 | 1.12 |
+| Videla/Viola/Galtieri/Bignone | 1976 | 1983 | 107.37 | 94.51 | 5.15 | -0.28 |
+| Alfonsin | 1984 | 1989 | 173.14 | 181.46 | 17.38 | -2.04 |
+| Menem | 1990 | 1995 | 65.75 | 33.73 | 14.26 | 2.86 |
+| Menem II | 1996 | 1999 | -0.94 | 0.00 | 8.17 | 2.29 |
+| De la Rua | 2000 | 2001 | 0.69 | 0.00 | 11.12 | -3.68 |
+| Duhalde | 2002 | 2003 | 27.51 | 54.27 | 56.19 | -2.06 |
+| N.Kirchner | 2004 | 2007 | 13.56 | 1.47 | 20.67 | 7.64 |
+| C.Kirchner | 2008 | 2011 | 19.49 | 7.80 | 8.57 | 2.49 |
+| C.Kirchner II | 2012 | 2015 | 25.90 | 30.43 | 8.58 | -0.62 |
+| Macri | 2016 | 2019 | 30.64 | 40.93 | 6.88 | -1.80 |
+| Fernandez | 2020 | 2023 | 54.12 | 64.00 | 20.54 | 0.87 |
+| Milei | 2024 | 2025 | 72.38 | 22.90 | 10.59 | 1.26 |
 : Contemporaneous (absolute) term averages, all 41 administrations. This is the record against which the caveat of Section 3.3 should be read.
-
-# Index construction: exact formulas {#sec:formulas .unnumbered}
-
-**Appendix D.** This appendix states the complete scoring algebra; it matches
-the implementation in the replication package (`scripts/cmpi_core.py`)
-line for line.
-
-**Terms and innovations.** Let administration $j$ govern years
-$f_j, \dots, l_j$, and let $x_{v,t}$ denote the value of variable $v$ in year
-$t$. Inflation and devaluation enter as continuously compounded rates,
-$x = \ln(1 + \pi)$. Every year of the term is scored against the same
-inherited benchmark --- the last year of the predecessor:
-
-$$\Delta_{v,t} = x_{v,t} - x_{v,\,f_j - 1}, \qquad t = f_j, \dots, l_j.$$
-
-**Percentile assignment.** Innovations are pooled across all $O = 173$ years
-(1853--2025). For each variable, the innovation in position $o$ of the
-favourable-to-unfavourable ordering (best $= 1$) receives the percentile
-score of the original Appendix A:
-
-$$R_{v,t} = \frac{O - o_{v,t}}{O} \in \left[0,\, \tfrac{O-1}{O}\right].$$
-
-Favourable means *lower* for inflation, devaluation, the real interest rate,
-and the three FPI debt and amplification variables, and *higher* for growth
-and the two FPI primary-result variables.
-
-**Aggregation.** An administration's component score is the mean percentile
-over its term years, and each index is the unweighted mean of its components
-($n=4$ for the CMPI, $n=5$ for the FPI):
-
-$$\text{CMPI}_j = \frac{1}{4} \sum_{v \in \mathcal{C}} \frac{1}{T_j}
-\sum_{t=f_j}^{l_j} R_{v,t}, \qquad
-\text{FPI}_j = \frac{1}{5} \sum_{v \in \mathcal{F}} \frac{1}{T_j}
-\sum_{t=f_j}^{l_j} R_{v,t},$$
-
-with $\mathcal{C} = \{$inflation, devaluation, interest, per-capita
-growth$\}$ and $\mathcal{F} = \{$debt/GDP, debt/exports, primary
-result/revenues, primary result/debt service, $(1+r)/(1+g)\}$. The Overall
-Index is $\tfrac{1}{2}(\text{CMPI}_j + \text{FPI}_j)$.
-
-**Debt dynamics.** The FPI components derive from the first-order difference
-equation for the debt ratio,
-
-$$\frac{B_t}{Y_t} = \frac{1+r_t}{1+g_t}\,\frac{B_{t-1}}{Y_{t-1}} +
-\frac{DEF_t}{Y_t},$$
-
-whose amplification factor $(1+r_t)/(1+g_t)$ enters the FPI directly.
-
-**The two modern debt-stock corrections.** During exchange-control years the
-official rate overstates dollar GDP, so the debt ratio is revalued at the
-free-market rate:
-
-$$\left(\frac{B}{Y}\right)^{\text{cepo}} =
-\left.\frac{B}{Y}\right|_{\text{official}} \times
-\frac{e_{\text{parallel}}}{e_{\text{official}}},$$
-
-and the central bank's remunerated liabilities are consolidated into the
-stock:
-
-$$\left(\frac{B}{Y}\right)^{\text{adj}} =
-\left(\frac{B}{Y}\right)^{\text{cepo}} +
-\frac{\text{BCRA remunerated liabilities}}{Y}.$$
-
-**Structural primary result (sensitivity variant).** Where one-off revenues
-are a share $o$ of total revenues, the structural ratio is
-
-$$\left(\frac{\text{Result}}{\text{Rev}}\right)^{\text{structural}} =
-\frac{R - o}{1 - o}.$$
 
 # References {.unnumbered}
 
