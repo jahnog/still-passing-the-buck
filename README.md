@@ -17,6 +17,22 @@ Argentine Administrations, 1853–2025* — published on Zenodo:
 
 📊 **Write-up:** <https://jahnog.github.io/Argentine-monetary-and-fiscal-policies-analyzed/>
 
+## Citation
+
+If you use this work, please cite the published paper:
+
+> Nogueira, Javier Hernan. 2026. "Still Passing the Buck: Macroeconomic and
+> Fiscal Performance of Argentine Administrations, 1853–2025." Working paper.
+> Zenodo. <https://doi.org/10.5281/zenodo.20651731> (v1.0.0)
+
+- Zenodo record: <https://zenodo.org/records/20651731>
+  (the concept DOI [10.5281/zenodo.20651730](https://doi.org/10.5281/zenodo.20651730)
+  always resolves to the latest version)
+- PDF in this repository: [`paper/output/still-passing-the-buck.pdf`](paper/output/still-passing-the-buck.pdf)
+- Machine-readable metadata: [`CITATION.cff`](CITATION.cff) (GitHub's
+  "Cite this repository" button)
+- Author ORCID: [0009-0006-1945-7870](https://orcid.org/0009-0006-1945-7870)
+
 ## Notebook
 
 | Notebook | Purpose |
@@ -84,21 +100,10 @@ pytest -m network            # tests that hit live data sources
 
 Python · pandas · NumPy · matplotlib · Jupyter · uv · Git LFS
 
-## License & citation
+## License
 
 This work is licensed under the
 [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)
 — see [`LICENSE`](LICENSE). You are free to use, share, and adapt it for any
-purpose, **provided you explicitly credit the author and reference this work**.
-
-Suggested citation:
-
-> Nogueira, Javier Hernan. 2026. "Still Passing the Buck: Macroeconomic and
-> Fiscal Performance of Argentine Administrations, 1853–2025." Working paper.
-> Zenodo. <https://doi.org/10.5281/zenodo.20651731>
-
-Replication package: <https://github.com/jahnog/still-passing-the-buck>
-(ORCID: [0009-0006-1945-7870](https://orcid.org/0009-0006-1945-7870))
-
-A machine-readable version is in [`CITATION.cff`](CITATION.cff) (GitHub's
-"Cite this repository" button).
+purpose, **provided you explicitly credit the author and reference this work**
+(see the [Citation](#citation) section above).
