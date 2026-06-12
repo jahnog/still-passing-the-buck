@@ -78,7 +78,7 @@ These are closed historical values; the CSV is curated and committed (not refres
 `data/argentina/historical/historical-cmpi-1853-1963.csv` provides all four CMPI variables
 for years 1852–1963. The file is consumed by `Historical_CMPI_Extension.ipynb`.
 
-**What's in it:** Term averages from Table 3.1 of della Paolera, Irigoin & Bózzoli (2011),
+**What's in it:** Term averages from Table 3.1 of della Paolera, Irigoin & Bózzoli (2003),
 held flat (constant) for every year within each term — the same convention the modern notebook
 uses for the interest series through 1999. The underlying annual time series from the paper's
 Appendix B sources are not publicly available; term averages are the finest resolution the
