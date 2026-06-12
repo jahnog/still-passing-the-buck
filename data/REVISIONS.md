@@ -5,6 +5,17 @@ to the committed datasets. Newest first. Generated CSVs carry a `.meta.json` sid
 (written by `scripts/data_io.write_meta_sidecar`) recording generator, sources, and timestamp;
 when an upstream source revises a series, regenerate, then record **what changed and why** here.
 
+## 2026-06-12 (bootstrap upgrade — no data change; published uncertainty numbers shift)
+
+No input data changed. The §9 bootstrap rank-stability analyses were upgraded from 300 to
+1,000 resamples (seeds unchanged: 42 CMPI, 43 FPI/Overall), and a new Table 9d reports 95%
+confidence intervals per index plus pairwise rank probabilities from the shared
+FPI/CMPI/Overall draws (paper Table 8, `{{table:bootstrap-ci}}`). Podiums unchanged; the
+previously published 300-draw figures shift slightly (Milei CMPI 10–90 band 2–9 → 2–8;
+top-5 share 70% → 74%). Headline pairwise results: Menem ahead of Milei on the CMPI in
+97.6% of draws (one-sided p = 0.024); statistically adjacent on the Overall Index (69%);
+Obligado ahead of Milei on the FPI in 75%.
+
 ## 2026-06-12 (BCRA-API upgrade of the deferred items — FPI mid-table ±1; podiums unchanged)
 
 The two items deferred as "blocked on external sources" are closed via the BCRA Estadísticas

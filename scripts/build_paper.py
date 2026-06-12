@@ -146,6 +146,19 @@ TABLES = {
             ("First-2-years rank", "First-2-years rank"),
         ),
     ),
+    "bootstrap-ci": TableSpec(
+        "boot_ci_tbl",
+        (
+            ("", "Administration"),
+            ("CMPI med", "CMPI median"),
+            ("CMPI 95% CI", "CMPI 95% CI"),
+            ("FPI med", "FPI median"),
+            ("FPI 95% CI", "FPI 95% CI"),
+            ("Overall med", "Overall median"),
+            ("Overall 95% CI", "Overall 95% CI"),
+            ("P(Overall top 5)", "P(top 5)"),
+        ),
+    ),
     "contemporaneous": TableSpec(
         "a1000025",
         (

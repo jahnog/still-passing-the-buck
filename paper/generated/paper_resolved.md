@@ -59,6 +59,15 @@ link-citations: true
 
 # Introduction
 
+> **How to read the indices.** The CMPI and FPI measure *improvement*
+> relative to the situation inherited from the previous administration ---
+> not absolute levels. Component scores are percentiles of annual innovations
+> pooled over all 173 years: a score of 0.90 means the administration's
+> average annual improvement sat in the top 10 percent of all improvements
+> recorded since 1853. Rank 1 is best. See Section 3 for the formulas and
+> three structural caveats, Section 7 for robustness, and the Glossary
+> (Appendix E) for terminology.
+
 How well did each Argentine government manage the economy it inherited? The
 question dominates Argentine public debate, yet it is usually argued with
 absolute outcomes --- inflation under one president against inflation under
@@ -633,10 +642,10 @@ interpretation of a partial term: on a first-two-years basis (Section 7) the
 
 # Robustness
 
-**Rank stability under resampling.** Across 300 bootstrap resamples of the
-pool years, the CMPI medians hold Menem first (10--90 percent band 1--1),
-the 2024--25 term in band 2--9 (top five in 70 percent of resamples), and
-Obligado in band 2--4.
+**Rank stability under resampling.** Across 1,000 bootstrap resamples of the
+pool years, the CMPI medians hold Menem first (10--90 percent band 1--1;
+first in 98 percent of draws), the 2024--25 term in band 2--8 (top five in 74
+percent of resamples), and Obligado in band 2--4.
 
 **Sensitivity variants.** Every judgment-dependent adjustment is re-ranked
 and reported whichever administration it favours: the cepo revaluation under
@@ -694,6 +703,28 @@ short corrective terms.
 | Sáenz Peña R./de la Plaza | 19 | 11 |
 | Macri | 31 | 12 |
 : Full-term versus first-two-years CMPI ranks, selected administrations.
+
+**Bootstrap confidence intervals and pairwise comparisons.** Table 8 reports
+95 percent confidence intervals for the bootstrap rank distributions of the
+focus administrations, computed from 1,000 shared-draw resamples of the pool
+years (the same resample drives all three indices, so cross-index and
+pairwise statements are internally consistent). Menem remains ahead of the
+2024--25 term on the CMPI in 97.6 percent of draws --- a one-sided bootstrap
+$p$ of $0.024$ --- while on the Overall Index the two are statistically
+adjacent (Menem ahead in 69 percent of draws, $p = 0.31$), and Obligado leads
+the 2024--25 term on the FPI in 75 percent ($p = 0.25$). All three podium
+administrations remain in the Overall top five in every draw; N. Kirchner
+does so in 76 percent, and the bottom-ranked modern terms never reach it.
+
+| Administration | CMPI median | CMPI 95% CI | FPI median | FPI 95% CI | Overall median | Overall 95% CI | P(top 5) |
+|:-----------------------|----------:|--------:|----------:|-------:|-----------:|-----------:|---------:|
+| Menem | 1 | 1–1 | 5 | 3–8 | 1 | 1–3 | 100% |
+| Milei | 3 | 2–10 | 2 | 1–4 | 3 | 1–3 | 100% |
+| Obligado | 3 | 2–5 | 1 | 1–2 | 2 | 1–3 | 100% |
+| Roca II | 25 | 15–34 | 3 | 1–5 | 9 | 4–15 | 16% |
+| N.Kirchner | 15 | 10–20 | 4 | 2–6 | 5 | 3–8 | 76% |
+| Fernandez | 24 | 10–36 | 37 | 33–40 | 34 | 23–39 | 0% |
+: Bootstrap rank distributions, 1,000 resamples of the pool years: median rank and 95 percent confidence interval per index, and the share of draws in which the administration stays in the Overall top five. Statistics are computed over the draws in which the term's years appear in the resample.
 
 # Discussion
 
@@ -1000,6 +1031,74 @@ are a share $o$ of total revenues, the structural ratio is
 
 $$\left(\frac{\text{Result}}{\text{Rev}}\right)^{\text{structural}} =
 \frac{R - o}{1 - o}.$$
+
+# Glossary {#sec:glossary .unnumbered}
+
+**Appendix E.** Terms used throughout the paper, in alphabetical order.
+
+Administration (term)
+: The unit of analysis: one of the 41 government intervals of 1853--2025
+  (Section 3.4). Each year of a term is scored against the last year of the
+  predecessor.
+
+Brecha (parallel premium)
+: The percentage gap between the free-market and the official exchange rate
+  during exchange-control years; it reached 100 percent in the modern cepos.
+
+CCL / blue
+: The two free-market dollar quotations used for the control years: the
+  *contado con liquidación* rate (implicit in dual-listed securities) and the
+  informal cash ("blue") rate.
+
+Cepo
+: Colloquial name for Argentina's exchange-control regimes (2012--15 and
+  2019--25), under which the official rate was administratively pinned below
+  the free-market rate.
+
+CMPI
+: Classical Macroeconomic Performance Index: the average innovation
+  percentile across inflation, devaluation, the hard-currency real interest
+  rate, and per-capita growth (Section 3.1).
+
+Convertibility
+: The 1991--2001 currency-board regime pegging the peso one-to-one to the US
+  dollar.
+
+December quotations
+: The exchange-rate convention used throughout: year-end (December) rates
+  rather than annual averages, which blend pre- and post-devaluation months
+  and produce wrong-signed innovations (Section 4.2).
+
+FPI
+: Fiscal Pressure Index: the average innovation percentile across debt/GDP,
+  debt/exports, primary result/revenues, primary result/debt service, and the
+  debt-amplification factor $(1+r)/(1+g)$ (Section 3.2).
+
+INDEC intervention
+: The 2007--2015 manipulation of the official consumer-price index (and the
+  parallel overstatement of real growth), which led to the IMF's declaration
+  of censure; corrected in the baseline with alternative indices (Section 4.2).
+
+Innovation
+: The annual value of a variable minus its value in the last year of the
+  previous administration --- the inherited condition (Section 3.1).
+
+Overall Index
+: The simple average of an administration's CMPI and FPI scores.
+
+Percentile pool
+: The single pool of 173 annual observations (1853--2025) over which each
+  variable's innovations are ranked; the innovation in position $o$ scores
+  $(O-o)/O$.
+
+Primary result
+: The fiscal balance before interest payments; "structural" variants remove
+  one-off revenues booked above the line.
+
+Quasi-fiscal debt
+: The central bank's remunerated liabilities (Lebac/Nobac, Leliq/Notaliq,
+  Pases) --- economically public debt but absent from Treasury statistics;
+  consolidated into the debt stock for 2003--2025 (Section 4.3).
 
 # References {.unnumbered}
 
