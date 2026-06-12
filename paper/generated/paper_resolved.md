@@ -1,7 +1,7 @@
 ---
 title: "Still Passing the Buck: Macroeconomic and Fiscal Performance of Argentine Administrations, 1853--2025"
 author: "Javier Hernan Nogueira^[Independent researcher. Contact: <jahnog@gmail.com>. ORCID: [0009-0006-1945-7870](https://orcid.org/0009-0006-1945-7870). Replication package: <https://github.com/jahnog/still-passing-the-buck>. I thank Gerardo della Paolera, María Alejandra Irigoin, and Carlos G. Bózzoli, the authors of the original *Passing the buck* chapter, for generously sharing the dataset underlying their study, updated through 2018. All errors are my own.]"
-date: "June 2026 --- Working paper draft"
+date: "June 2026"
 abstract: |
   We rank all 41 Argentine national administrations that governed between 1853
   and 2025 with the two indices proposed by @dellapaolera2003passing --- the
