@@ -7,6 +7,12 @@ authors:
     given-names: Javier Hernan
     orcid: "https://orcid.org/0009-0006-1945-7870"
 repository-code: "https://github.com/jahnog/still-passing-the-buck"
+doi: 10.5281/zenodo.20651731
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.20651731
+    description: "Zenodo archive of the paper and replication package"
+date-released: "2026-06-11"
 license: CC-BY-4.0
 keywords:
   - Argentina
@@ -19,7 +25,7 @@ abstract: >-
   A unified macroeconomic and fiscal ranking of all 41 Argentine national
   administrations, 1853–2025, extending the Classical Macroeconomic
   Performance Index (CMPI) and Fiscal Pressure Index (FPI) of della Paolera,
-  Irigoin & Bózzoli (2011) with documented corrections for known statistical
+  Irigoin & Bózzoli (2003) with documented corrections for known statistical
   distortions in modern Argentine data.
 references:
   - type: book
@@ -32,5 +38,11 @@ references:
       - family-names: "Bózzoli"
         given-names: "Carlos G."
     collection-title: "A New Economic History of Argentina"
+    editors:
+      - family-names: "della Paolera"
+        given-names: Gerardo
+      - family-names: Taylor
+        given-names: "Alan M."
+    year: 2003
     publisher:
       name: Cambridge University Press
