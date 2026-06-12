@@ -1,6 +1,7 @@
 # Still Passing the Buck
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jahnog/still-passing-the-buck/blob/main/Historical_CMPI_Extension.ipynb)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20651731.svg)](https://doi.org/10.5281/zenodo.20651731)
 
 A data-driven comparison of how successive Argentine administrations actually
 performed economically — ranking them on long-run macroeconomic indicators
@@ -8,6 +9,11 @@ performed economically — ranking them on long-run macroeconomic indicators
 arguing about it. The analysis combines World Bank World Development Indicators
 with official Argentine sources (INDEC, BCRA, Ministerio de Economía, BCRP) and
 historical series reaching back to 1853.
+
+📄 **Paper:** *Still Passing the Buck: Macroeconomic and Fiscal Performance of
+Argentine Administrations, 1853–2025* — published on Zenodo:
+<https://zenodo.org/records/20651731>
+([doi:10.5281/zenodo.20651731](https://doi.org/10.5281/zenodo.20651731))
 
 📊 **Write-up:** <https://jahnog.github.io/Argentine-monetary-and-fiscal-policies-analyzed/>
 
@@ -49,9 +55,11 @@ scripts documented in `data/README.md`.) CI runs `make verify`'s steps on every 
 (`.github/workflows/ci.yml`); because every table and the §8.4 narrative are rendered from the
 live pipeline, a green execution is also a prose-vs-output consistency check. Data vintages are
 stamped under the notebook's Figure 0 from the `.meta.json` sidecars; baseline-affecting data
-changes are logged in [`data/REVISIONS.md`](data/REVISIONS.md). For citable analysis snapshots,
-tag a release and archive it (e.g. on Zenodo for a DOI) so results can be referenced against a
-frozen data state.
+changes are logged in [`data/REVISIONS.md`](data/REVISIONS.md). Citable analysis snapshots are
+tagged and archived on Zenodo (v1.0.0 →
+[doi:10.5281/zenodo.20651731](https://doi.org/10.5281/zenodo.20651731); the concept DOI
+[10.5281/zenodo.20651730](https://doi.org/10.5281/zenodo.20651730) always resolves to the latest
+version) so results can be referenced against a frozen data state.
 
 Export the notebook to a print-optimized PDF with
 `scripts/render_notebook_paper.py` (see [`docs/paper-export.md`](docs/paper-export.md)).
@@ -61,7 +69,9 @@ Export the notebook to a print-optimized PDF with
 The standalone paper lives in [`paper/`](paper/) (pandoc Markdown source,
 BibTeX bibliography). `make paper` extracts every figure and ranking table
 from the executed notebook and builds the publication PDF with
-pandoc + XeLaTeX — see [`paper/README.md`](paper/README.md).
+pandoc + XeLaTeX — see [`paper/README.md`](paper/README.md). The published
+paper is archived on Zenodo:
+[doi:10.5281/zenodo.20651731](https://doi.org/10.5281/zenodo.20651731).
 
 ## Tests
 
@@ -83,9 +93,12 @@ purpose, **provided you explicitly credit the author and reference this work**.
 
 Suggested citation:
 
-> Javier Hernan Nogueira (ORCID: [0009-0006-1945-7870](https://orcid.org/0009-0006-1945-7870)),
-> *Still Passing the Buck — Historical CMPI & FPI Extension: Argentina 1853–2025*, 2026.
-> https://github.com/jahnog/still-passing-the-buck
+> Nogueira, Javier Hernan. 2026. "Still Passing the Buck: Macroeconomic and
+> Fiscal Performance of Argentine Administrations, 1853–2025." Working paper.
+> Zenodo. <https://doi.org/10.5281/zenodo.20651731>
+
+Replication package: <https://github.com/jahnog/still-passing-the-buck>
+(ORCID: [0009-0006-1945-7870](https://orcid.org/0009-0006-1945-7870))
 
 A machine-readable version is in [`CITATION.cff`](CITATION.cff) (GitHub's
 "Cite this repository" button).

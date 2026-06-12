@@ -1,8 +1,11 @@
 # Manuscript
 
-The publishable paper, as a standalone manuscript. The notebook is the
-replication package; this directory is the citable object that gets submitted
-to working-paper archives and journals.
+The paper, as a standalone manuscript. The notebook is the replication
+package; this directory is the citable object. The published paper is
+archived on Zenodo:
+[doi:10.5281/zenodo.20651731](https://doi.org/10.5281/zenodo.20651731)
+(v1.0.0; concept DOI
+[10.5281/zenodo.20651730](https://doi.org/10.5281/zenodo.20651730)).
 
 | File | Purpose |
 |------|---------|

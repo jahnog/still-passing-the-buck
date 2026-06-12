@@ -11,8 +11,15 @@ doi: 10.5281/zenodo.20651731
 identifiers:
   - type: doi
     value: 10.5281/zenodo.20651731
-    description: "Zenodo archive of the paper and replication package"
-date-released: "2026-06-11"
+    description: "Zenodo archive of the paper and replication package (v1.0.0)"
+  - type: doi
+    value: 10.5281/zenodo.20651730
+    description: "Concept DOI: resolves to the latest Zenodo version"
+  - type: url
+    value: "https://zenodo.org/records/20651731"
+    description: "Published paper on Zenodo"
+date-released: "2026-06-12"
+version: v1.0.0
 license: CC-BY-4.0
 keywords:
   - Argentina
@@ -20,13 +27,34 @@ keywords:
   - macroeconomic performance
   - fiscal policy
   - inflation
+  - public debt
+  - statistical manipulation
   - CMPI
+  - "JEL: C43"
+  - "JEL: E31"
+  - "JEL: E62"
+  - "JEL: H63"
+  - "JEL: N16"
+  - "JEL: O54"
 abstract: >-
   A unified macroeconomic and fiscal ranking of all 41 Argentine national
   administrations, 1853–2025, extending the Classical Macroeconomic
   Performance Index (CMPI) and Fiscal Pressure Index (FPI) of della Paolera,
   Irigoin & Bózzoli (2003) with documented corrections for known statistical
   distortions in modern Argentine data.
+preferred-citation:
+  type: report
+  title: "Still Passing the Buck: Macroeconomic and Fiscal Performance of Argentine Administrations, 1853–2025"
+  authors:
+    - family-names: Nogueira
+      given-names: Javier Hernan
+      orcid: "https://orcid.org/0009-0006-1945-7870"
+  doi: 10.5281/zenodo.20651731
+  url: "https://zenodo.org/records/20651731"
+  year: 2026
+  month: 6
+  publisher:
+    name: Zenodo
 references:
   - type: book
     title: "Passing the buck: Monetary and fiscal policies"

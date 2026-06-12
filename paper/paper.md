@@ -28,7 +28,7 @@ abstract: |
   **Keywords:** Argentina; economic history; macroeconomic performance;
   fiscal policy; inflation; public debt; statistical manipulation.
 
-  **JEL classification:** E31; E62; H63; N16.
+  **JEL classification:** C43; E31; E62; H63; N16; O54.
 lang: en-US
 fontsize: 11pt
 papersize: a4
