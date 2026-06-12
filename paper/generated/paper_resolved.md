@@ -1,7 +1,6 @@
 ---
 title: "Still Passing the Buck: Macroeconomic and Fiscal Performance of Argentine Administrations, 1853--2025"
-# TODO: pick the email you want on the published paper before submitting anywhere.
-author: "Javier Hernan Nogueira^[Independent researcher. ORCID: [0009-0006-1945-7870](https://orcid.org/0009-0006-1945-7870). Replication package: <https://github.com/jahnog/still-passing-the-buck>. I thank — TODO: acknowledgements after circulating the draft.]"
+author: "Javier Hernan Nogueira^[Independent researcher. Contact: <jahnog@gmail.com>. ORCID: [0009-0006-1945-7870](https://orcid.org/0009-0006-1945-7870). Replication package: <https://github.com/jahnog/still-passing-the-buck>. I thank Gerardo della Paolera, María Alejandra Irigoin, and Carlos G. Bózzoli, the authors of the original *Passing the buck* chapter, for generously sharing the dataset underlying their study, updated through 2018. All errors are my own.]"
 date: "June 2026 --- Working paper draft"
 abstract: |
   We rank all 41 Argentine national administrations that governed between 1853
@@ -55,9 +54,7 @@ link-citations: true
   - Figures are PNGs extracted from the notebook into paper/generated/.
   - Citations use [@key] / @key with paper/references.bib (Chicago author-date).
   - Table/figure numbers in the prose are written manually ("Table 3"): if you
-    reorder floats, update the references. TODO markers flag editorial work.
-  - NOTE: the notebook cites the source chapter as 2011 (Cambridge online
-    edition); this manuscript uses the 2003 print edition year. Keep one.
+    reorder floats, update the references.
 -->
 
 # Introduction
@@ -161,16 +158,25 @@ tax, the intertemporal budget constraint, and currency-crisis contagion --- is
 the classical one [@sargent1986rational; @defiore2000; @ennis2007;
 @eichengreen1996contagious].
 
-The political-economy mechanism behind the *passing-the-buck* dynamic ---
-incumbents selecting policies that condition their successors over the
-electoral cycle --- has an Argentine-specific treatment in @giacominimilei2006,
-who read the early Kirchner-era fiscal and exchange-rate stance through
-opportunistic political-cycle models; the same authors' monetary essays
-[@mileigiacomini2017] cover the 2012--15 exchange-control episode. One of
-them, Javier Milei, heads the 2024--25 administration that closes our sample.
-
-<!-- TODO: consider adding recent rankings/state-capacity literature, and any
-     post-2003 work that has extended or criticized the CMPI/FPI. -->
+Two further strands frame the interpretation. The fiscal-dominance tradition
+descending from @sargentwallace1981 supplies the mechanism behind the
+*passing-the-buck* finding: when the fiscal authority does not internalize
+the intertemporal budget constraint, the monetary authority eventually
+finances the gap, and inflation becomes a fiscal phenomenon. The comparative
+project of @kehoenicolini2021 applies exactly this lens to eleven Latin
+American countries; its Argentina chapter [@bueranicolini2021argentina] reads
+six decades of inflation, default, and stabilization as the monetary
+consequence of persistent fiscal imbalance --- the regional pattern of which
+Argentina is the extreme case, and the same dynamic the FPI traces
+administration by administration. On the political-economy side,
+@spillertommasi2007 document why the dynamic persists: Argentine institutions
+give policymakers unusually short horizons and weak technologies for
+enforcing intertemporal agreements, so costs shifted past one's own term are
+heavily discounted. Finally, the treatment of central-bank operations as
+fiscal policy in disguise follows the public-finance tradition of
+@mackenziestella1996; the modern Argentine remunerated-liability stock that
+Section 4 consolidates is documented in the IMF's program reports
+[@imf2022argentina].
 
 # Methodology
 
@@ -224,7 +230,9 @@ indebtedness or an unbalanced budget is a "hot potato" passed to successors;
 the opposite is a positive externality future governments inherit.
 
 Following the original Table 3.4, the **Overall Index** ranks administrations
-by the simple average of their CMPI and FPI scores.
+by the simple average of their CMPI and FPI scores. The exact formulas behind
+every step --- innovations, percentile assignment, aggregation, and the two
+debt-stock corrections --- are collected in Appendix D.
 
 ## How to read the ranking: three structural caveats
 
@@ -414,11 +422,9 @@ structural primary results.
 The CMPI ranking of all 41 administrations is reported in Table 2. Menem
 (1990--95) ranks first, the 2024--25 stabilization second, and Obligado
 (1854--56) third; the bottom of the table collects the crisis terms ---
-Alsina (1853), Guido (1962--63), and the hyperinflation endgame of Alfonsín
-(1984--89).
-
-<!-- TODO: verify the bottom-three names against Table 2 after the next
-     pipeline refresh; the prose must always match the generated table. -->
+Alsina (1853) last, preceded by Guido (1962--63) and the second Cristina
+Kirchner term (2012--15), with the hyperinflation endgame of Alfonsín
+(1984--89) close behind.
 
 | Administration | Rank | Years | Regime | Inflation | Devaluation | Interest | Growth | CMPI |
 |:----------------------------------------|--------:|-----------:|------------:|-------------:|---------------:|------------:|----------:|--------:|
@@ -600,10 +606,12 @@ the decimal for the four administrations that followed mid-year devaluations
 (Illia, Onganía, Perón III, and the 1976--83 junta), where annual-average
 data produce the wrong sign.
 
-**Cross-notebook consistency.** The 1964--1999 overlap with the companion
-modern-period implementation is rank-identical on shared terms.
-
-<!-- TODO: state the exact overlap statistic from notebook §8.3 here. -->
+**Cross-notebook consistency.** The companion modern-period implementation
+shares five identically defined terms with this notebook over 1964--1999.
+The Spearman correlation across the five is $0.90$: the four terms unaffected
+by data-convention changes preserve their relative order exactly, and the
+single deviation (Illia) is by design --- the December-quotation correction
+of Section 4.2 applied to its inherited 1963 devaluation baseline.
 
 **Decomposition of the partial 2024--25 term.** Table 5 decomposes the
 2024--25 years against the first two Menem years. The structure is the
@@ -655,6 +663,14 @@ case in the replication package.
 | Fernandez | 39 | 39 | 38 | 40 |
 | Duhalde | 40 | 40 | 40 | 39 |
 : FPI rank sensitivity for the focus administrations under the exchange-control and growth-definition variants.
+
+**Component weights.** The equal weighting of components is the original
+study's convention; the component-exclusion variants bound its impact as
+extreme weight perturbations. Menem remains first with the interest dimension
+removed entirely, while the 2024--25 term falls from second to fifth --- the
+country-risk collapse is a material part of its score --- and Obligado falls
+from third to fifth when inflation, its coarsest pre-1866 proxy dimension, is
+removed.
 
 **Term length.** Re-scoring every administration on its first two years only
 (Table 7) puts partial and complete terms on an equal footing and confirms
@@ -720,6 +736,20 @@ convertibility, the twenty-first-century version runs through the central
 bank's balance sheet --- invisible in the official debt statistics that the
 original authors could take at face value for their period.
 
+**Why the buck keeps being passed.** The index documents the pattern; it does
+not by itself explain its persistence over 173 years, and nothing in a
+percentile rank identifies the constraints a given administration faced. The
+political-economy literature supplies the candidate mechanism:
+@spillertommasi2007 show that Argentine institutions --- short and uncertain
+tenures, a federal fiscal commons, weak legislative and judicial enforcement
+of intertemporal bargains --- systematically shorten policymakers' horizons,
+making debt, visible or hidden, the cheapest instrument with which to buy the
+present. Read through @bueranicolini2021argentina, the FPI is the
+administration-level trace of the fiscal dominance that the comparative
+Latin American literature identifies at the level of regimes
+[@kehoenicolini2021]. These are interpretations consistent with the ranking,
+not findings of it.
+
 # Limitations
 
 The principal limitations, each documented in the replication package and
@@ -750,7 +780,29 @@ bounded by a sensitivity variant where feasible:
   Sector Público Nacional gross debt.
 - **Pool non-comparability**: adding eight modern terms changes every
   historical percentile; the full-pool ranking is an extension, not a
-  reproduction, of the original 33-term table.
+  reproduction, of the original 33-term table. The single 173-year pool is
+  nonetheless deliberate: one common yardstick is what allows a Confederation
+  presidency and a twenty-first-century stabilization to be ranked at all.
+  Era-specific sub-pools would re-score every administration against its own
+  era's standards --- undoing the cross-era comparability the index exists to
+  provide --- while introducing arbitrary regime break points; standardized
+  (z-score) scoring was rejected because hyperinflation-era tails would
+  dominate any variance-based scale. Percentile ranks over one pool are the
+  design that survives both objections.
+- **The single-last-year inherited baseline is likewise a convention.**
+  Averaging several pre-term years would dilute one-off shocks in the
+  inherited year, but it would also smear the predecessor's own crisis into
+  the benchmark a government is judged against, weakening the question the
+  index asks. The V-shaped-shock caveat of Section 3.3 and the no-COVID pool
+  variant of Section 7 disclose and bound the principal consequence.
+- **Equal component weights are the original study's convention**; the
+  component-exclusion variants of Section 7 act as extreme weight
+  perturbations and bound the impact of this choice on the focus ranks.
+- **The indices measure macroeconomic and fiscal management only.**
+  Distributional outcomes, poverty, productivity, and institutional quality
+  are outside the nine variables; an administration can rank highly here
+  while performing poorly on those dimensions, and conversely. The ranking is
+  one input to an overall assessment of a government, not a verdict.
 - **Two 2024--25 measurement caveats work in the current administration's
   favour** and are flagged symmetrically with the Kirchner-era corrections:
   cash-basis results exclude capitalizing interest, and the 2004--05-basket
@@ -789,8 +841,9 @@ full pipeline --- is available at
 Every table and figure in this paper is extracted programmatically from the
 executed notebook by the build script (`scripts/build_paper.py`), so prose
 and pipeline cannot silently diverge. Data vintages are stamped in the
-package; baseline-affecting revisions are logged.
-<!-- TODO: after the Zenodo deposit, cite the archived release DOI here. -->
+package; baseline-affecting revisions are logged. An archived snapshot of the
+paper and the replication package is deposited at Zenodo:
+[doi:10.5281/zenodo.20651731](https://doi.org/10.5281/zenodo.20651731).
 
 # The statistical-integrity catalogue {#sec:catalogue .unnumbered}
 
@@ -876,6 +929,74 @@ devaluation, interest, and growth for all 41 administrations.
 | Fernandez | 2020 | 2023 | 54.12 | 64.00 | 20.54 | 0.87 |
 | Milei | 2024 | 2025 | 72.38 | 22.90 | 10.59 | 1.26 |
 : Contemporaneous (absolute) term averages, all 41 administrations. This is the record against which the caveat of Section 3.3 should be read.
+
+# Index construction: exact formulas {#sec:formulas .unnumbered}
+
+**Appendix D.** This appendix states the complete scoring algebra; it matches
+the implementation in the replication package (`scripts/cmpi_core.py`)
+line for line.
+
+**Terms and innovations.** Let administration $j$ govern years
+$f_j, \dots, l_j$, and let $x_{v,t}$ denote the value of variable $v$ in year
+$t$. Inflation and devaluation enter as continuously compounded rates,
+$x = \ln(1 + \pi)$. Every year of the term is scored against the same
+inherited benchmark --- the last year of the predecessor:
+
+$$\Delta_{v,t} = x_{v,t} - x_{v,\,f_j - 1}, \qquad t = f_j, \dots, l_j.$$
+
+**Percentile assignment.** Innovations are pooled across all $O = 173$ years
+(1853--2025). For each variable, the innovation in position $o$ of the
+favourable-to-unfavourable ordering (best $= 1$) receives the percentile
+score of the original Appendix A:
+
+$$R_{v,t} = \frac{O - o_{v,t}}{O} \in \left[0,\, \tfrac{O-1}{O}\right].$$
+
+Favourable means *lower* for inflation, devaluation, the real interest rate,
+and the three FPI debt and amplification variables, and *higher* for growth
+and the two FPI primary-result variables.
+
+**Aggregation.** An administration's component score is the mean percentile
+over its term years, and each index is the unweighted mean of its components
+($n=4$ for the CMPI, $n=5$ for the FPI):
+
+$$\text{CMPI}_j = \frac{1}{4} \sum_{v \in \mathcal{C}} \frac{1}{T_j}
+\sum_{t=f_j}^{l_j} R_{v,t}, \qquad
+\text{FPI}_j = \frac{1}{5} \sum_{v \in \mathcal{F}} \frac{1}{T_j}
+\sum_{t=f_j}^{l_j} R_{v,t},$$
+
+with $\mathcal{C} = \{$inflation, devaluation, interest, per-capita
+growth$\}$ and $\mathcal{F} = \{$debt/GDP, debt/exports, primary
+result/revenues, primary result/debt service, $(1+r)/(1+g)\}$. The Overall
+Index is $\tfrac{1}{2}(\text{CMPI}_j + \text{FPI}_j)$.
+
+**Debt dynamics.** The FPI components derive from the first-order difference
+equation for the debt ratio,
+
+$$\frac{B_t}{Y_t} = \frac{1+r_t}{1+g_t}\,\frac{B_{t-1}}{Y_{t-1}} +
+\frac{DEF_t}{Y_t},$$
+
+whose amplification factor $(1+r_t)/(1+g_t)$ enters the FPI directly.
+
+**The two modern debt-stock corrections.** During exchange-control years the
+official rate overstates dollar GDP, so the debt ratio is revalued at the
+free-market rate:
+
+$$\left(\frac{B}{Y}\right)^{\text{cepo}} =
+\left.\frac{B}{Y}\right|_{\text{official}} \times
+\frac{e_{\text{parallel}}}{e_{\text{official}}},$$
+
+and the central bank's remunerated liabilities are consolidated into the
+stock:
+
+$$\left(\frac{B}{Y}\right)^{\text{adj}} =
+\left(\frac{B}{Y}\right)^{\text{cepo}} +
+\frac{\text{BCRA remunerated liabilities}}{Y}.$$
+
+**Structural primary result (sensitivity variant).** Where one-off revenues
+are a share $o$ of total revenues, the structural ratio is
+
+$$\left(\frac{\text{Result}}{\text{Rev}}\right)^{\text{structural}} =
+\frac{R - o}{1 - o}.$$
 
 # References {.unnumbered}
 
