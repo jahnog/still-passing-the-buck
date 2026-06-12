@@ -42,7 +42,6 @@ FIGURES = {
     "inflation": "hist_infl_diag",
     "cepo": "hist_cepo_diag",
     "gdp": "gdp_revision_chart",
-    "unified": "a1000020",
     "debt-layers": "debt_layers_chart",
     "primary": "primary_result_chart",
     "quasi-fiscal": "quasi_fiscal_chart",

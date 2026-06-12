@@ -9,7 +9,9 @@ __pycache__/
 tmp/
 *.paper.pdf
 paper/generated/
-paper/output/
+# the published PDF is the distributed artifact (linked from the README); keep it tracked
+paper/output/*
+!paper/output/still-passing-the-buck.pdf
 
 # Editor / OS
 .vscode/

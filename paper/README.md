@@ -13,7 +13,7 @@ archived on Zenodo:
 | `references.bib` | BibTeX bibliography (cited with `[@key]`; rendered in Chicago author–date). |
 | `preamble.tex` | LaTeX typography tweaks (table sizing, captions, float placement). |
 | `generated/` | Build artifacts extracted from the notebook (gitignored). |
-| `output/` | The built PDF (gitignored). |
+| `output/` | The built PDF — committed, as the distributed artifact linked from the README. |
 
 ## Build
 
@@ -34,8 +34,7 @@ Lines of the form `{{table` + `:name}}` in `paper.md` are replaced with the
 extracted tables; the caption line (starting with `:`) must stay immediately
 below each directive. After a data refresh, run `make execute` then
 `make paper` and re-read the prose around each table — the numbers update
-themselves, the words do not (TODO markers in `paper.md` flag the spots that
-must be re-verified).
+themselves, the words do not.
 
 Table and figure numbers in the prose are written manually; if floats are
 added or reordered, update the cross-references.
