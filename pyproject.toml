@@ -37,4 +37,5 @@ testpaths = ["tests"]
 [dependency-groups]
 dev = [
     "pytest>=9.0.3",
+    "boto3>=1.34",
 ]

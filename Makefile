@@ -6,6 +6,7 @@
 #   make execute    - run the notebook headlessly, in place (tables re-render from data)
 #   make generate   - rebuild every processed CSV from the committed raw files (offline)
 #   make download   - refresh the raw files from their primary sources (network required)
+#   make upload     - sync the notebook's inputs to the public S3 mirror (needs AWS keyring creds)
 #   make reproduce  - downloads -> generators -> validator -> notebook execution
 #   make verify     - offline end-to-end check: tests + validator + execution
 #   make paper      - build the manuscript PDF from paper/paper.md (needs pandoc + xelatex)
@@ -14,7 +15,7 @@ UV := uv
 RUN := $(UV) run
 NOTEBOOK := Historical_CMPI_Extension.ipynb
 
-.PHONY: test validate execute generate download reproduce verify paper
+.PHONY: test validate execute generate download upload reproduce verify paper
 
 test:
 	$(RUN) pytest -m "not network" -q
@@ -28,6 +29,9 @@ execute:
 
 download:
 	for s in scripts/download_*.py; do echo "== $$s"; $(RUN) python "$$s" || exit 1; done
+
+upload:
+	$(UV) run $(if $(wildcard .env),--env-file .env) python scripts/upload_s3_notebook-data.py
 
 generate:
 	$(RUN) python scripts/generate_indicators_wdi-argentina.py

@@ -4,8 +4,11 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
+import unicodedata
 from pathlib import Path
 from typing import Any
+from urllib.parse import unquote, urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 PORTRAITS_DIR = ROOT / "assets" / "portraits"
@@ -31,10 +34,10 @@ PORTRAIT_SOURCE_URLS: tuple[str, ...] = (
     "https://upload.wikimedia.org/wikipedia/commons/7/7f/Marcelo_T._de_Alvear%2C_ca._1915.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/0/08/Jose_Uriburu.png",
     "https://upload.wikimedia.org/wikipedia/commons/1/1a/Presidente_Agust%C3%ADn_Pedro_Justo.png",
-    "https://upload.wikimedia.org/wikipedia/commons/3/36/Roberto_Ortiz_President.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/9/92/Roberto_Marcelino_Ortiz.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/1/1d/Pedro-p-ramirez.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/b/bc/Juan_Domingo_Per%C3%B3n_1973.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/e/e4/Pedro_Eugenio_Aramburu.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/7/7a/Aramburu_ca_1956.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/e/ee/Adalbert_Krieger_Vasena.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/1/1d/Arturo_Frondizi.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/e/e4/%C3%81lvaro_Alsogaray_d%C3%A9cada_de_1960.png",
@@ -72,9 +75,46 @@ PORTRAIT_SOURCE_URLS: tuple[str, ...] = (
 )
 
 
+def url_sha256_prefix(url: str, length: int = 16) -> str:
+    """Hex prefix of sha256(url); the manifest's stable per-URL identifier."""
+    return hashlib.sha256(url.encode("utf-8")).hexdigest()[:length]
+
+
+def _legacy_portrait_filename(url: str) -> str:
+    """Pre-slug naming scheme (sha256 of the URL); kept only for rename migration."""
+    return f"{url_sha256_prefix(url)}.jpg"
+
+
+def portrait_slug(url: str) -> str:
+    """Readable, deterministic filename from the URL basename.
+
+    https://.../Jos%C3%A9_Mar%C3%ADa_Guido_3_%28cropped%29_2.jpg -> jose-maria-guido-3-cropped-2.jpg
+    Always .jpg: the downloader re-encodes every portrait as JPEG.
+    """
+    base = unquote(urlparse(url).path).rsplit("/", 1)[-1]
+    stem = base.rsplit(".", 1)[0] if "." in base else base
+    stem = unicodedata.normalize("NFKD", stem).encode("ascii", "ignore").decode("ascii")
+    stem = re.sub(r"[^a-zA-Z0-9]+", "-", stem).strip("-").lower()
+    return f"{stem}.jpg"
+
+
+def _ambiguous_slugs(urls: tuple[str, ...]) -> frozenset[str]:
+    counts: dict[str, int] = {}
+    for url in urls:
+        slug = portrait_slug(url)
+        counts[slug] = counts.get(slug, 0) + 1
+    return frozenset(slug for slug, n in counts.items() if n > 1)
+
+
+_AMBIGUOUS_SLUGS = _ambiguous_slugs(PORTRAIT_SOURCE_URLS)
+
+
 def portrait_filename(url: str) -> str:
-    digest = hashlib.sha256(url.encode("utf-8")).hexdigest()[:16]
-    return f"{digest}.jpg"
+    slug = portrait_slug(url)
+    if slug in _AMBIGUOUS_SLUGS:
+        # Deterministic, order-independent disambiguation for colliding basenames.
+        return f"{slug.removesuffix('.jpg')}-{url_sha256_prefix(url, 8)}.jpg"
+    return slug
 
 
 def portrait_relative_path(url: str) -> str:
@@ -125,8 +165,19 @@ def save_manifest(manifest: dict[str, dict[str, Any]]) -> None:
     )
 
 
-def local_path_for_url(url: str, manifest: dict[str, dict[str, Any]] | None = None) -> str:
-    """Map a source URL to a repo-relative local portrait path."""
+def local_path_for_url(
+    url: str,
+    manifest: dict[str, dict[str, Any]] | None = None,
+    *,
+    base_url: str | None = None,
+) -> str:
+    """Map a source URL to a repo-relative local portrait path.
+
+    With ``base_url`` set, return the deterministic remote path
+    ``base_url + assets/portraits/<slug>`` instead (no manifest needed).
+    """
+    if base_url is not None:
+        return base_url + portrait_relative_path(url)
     if manifest is None:
         manifest = load_manifest()
     entry = manifest.get(url)
@@ -135,7 +186,11 @@ def local_path_for_url(url: str, manifest: dict[str, dict[str, Any]] | None = No
     return portrait_relative_path(url)
 
 
-def _localize_minister_field(raw: str, manifest: dict[str, dict[str, Any]]) -> str:
+def _localize_minister_field(
+    raw: str,
+    manifest: dict[str, dict[str, Any]],
+    base_url: str | None = None,
+) -> str:
     if not str(raw).strip():
         return str(raw)
     parts = [p.strip() for p in str(raw).split("|") if p.strip()]
@@ -144,13 +199,13 @@ def _localize_minister_field(raw: str, manifest: dict[str, dict[str, Any]]) -> s
     while i < len(parts):
         part = parts[i]
         if part.startswith("http"):
-            out.append(local_path_for_url(part, manifest))
+            out.append(local_path_for_url(part, manifest, base_url=base_url))
             i += 1
         else:
             name = part
             if i + 1 < len(parts) and parts[i + 1].startswith("http"):
                 out.append(name)
-                out.append(local_path_for_url(parts[i + 1], manifest))
+                out.append(local_path_for_url(parts[i + 1], manifest, base_url=base_url))
                 i += 2
             else:
                 out.append(name)
@@ -160,15 +215,21 @@ def _localize_minister_field(raw: str, manifest: dict[str, dict[str, Any]]) -> s
 
 def localize_presidency_terms(
     presidency_terms: list[tuple[Any, ...]],
+    base_url: str | None = None,
 ) -> list[tuple[Any, ...]]:
-    """Swap remote portrait URLs for local assets/portraits paths."""
-    manifest = load_manifest()
+    """Swap remote portrait URLs for local assets/portraits paths.
+
+    With ``base_url`` set (e.g. an S3 mirror), map every URL to
+    ``base_url + assets/portraits/<slug>`` deterministically — no manifest
+    or local files required (Colab/standalone mode).
+    """
+    manifest: dict[str, dict[str, Any]] = {} if base_url is not None else load_manifest()
     localized: list[tuple[Any, ...]] = []
     for name, fy, ly, president_url, minister_field in presidency_terms:
         pres = str(president_url).strip()
         if pres.startswith("http"):
-            pres = local_path_for_url(pres, manifest)
+            pres = local_path_for_url(pres, manifest, base_url=base_url)
         localized.append(
-            (name, fy, ly, pres, _localize_minister_field(str(minister_field), manifest))
+            (name, fy, ly, pres, _localize_minister_field(str(minister_field), manifest, base_url))
         )
     return localized

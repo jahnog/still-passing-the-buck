@@ -222,6 +222,11 @@ def make_fpi_year_value_fn(fpi_data: pd.DataFrame) -> callable:
 
 # --- Rendering helpers (extracted from notebook for reuse and to shrink large result cells) ---
 
+def _is_img_ref(part: str) -> bool:
+    """True for portrait references: remote URLs or image file paths (never minister names)."""
+    return part.startswith("http") or part.lower().endswith((".jpg", ".jpeg", ".png"))
+
+
 def render_president_img(path: object) -> str:
     """Return HTML for a president photo (or empty placeholder)."""
     if not str(path).strip():
@@ -244,13 +249,13 @@ def render_minister_img(path: object) -> str:
     i = 0
     while i < len(parts):
         p = parts[i]
-        if p.startswith("http"):
+        if _is_img_ref(p):
             name = None
             url = p
             i += 1
         else:
             name = p
-            if i + 1 < len(parts) and parts[i + 1].startswith("http"):
+            if i + 1 < len(parts) and _is_img_ref(parts[i + 1]):
                 url = parts[i + 1]
                 i += 2
             else:

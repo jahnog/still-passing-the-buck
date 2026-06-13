@@ -42,6 +42,11 @@ If you use this work, please cite the published paper:
 The wide World Bank export (`data/provided/WDIData2.csv`) is reshaped into the long form the
 notebook consumes by `scripts/generate_indicators_wdi-argentina.py`.
 
+Outside a repo checkout (e.g. the Colab badge above) the notebook self-bootstraps: it
+fetches its data, portraits, and helper modules from the public S3 mirror
+(`https://jnpublicdata.s3.us-east-1.amazonaws.com/still-passing-the-buck/`), which is
+kept in sync with `make upload` (`scripts/upload_s3_notebook-data.py`).
+
 A prioritized roadmap of planned improvements is in
 [`docs/IMPROVEMENT_PLAN.md`](docs/IMPROVEMENT_PLAN.md).
 

@@ -23,10 +23,12 @@ from scripts.presidency_portraits import (
     MAX_PORTRAIT_PX,
     PORTRAIT_SOURCE_URLS,
     PORTRAITS_DIR,
+    _legacy_portrait_filename,
     load_manifest,
     portrait_filename,
     portrait_relative_path,
     save_manifest,
+    url_sha256_prefix,
 )
 
 WIKIMEDIA_HOST_SUFFIX = "wikimedia.org"
@@ -125,6 +127,24 @@ def resize_to_jpeg(content: bytes) -> tuple[bytes, int, int]:
         return out.getvalue(), width, height
 
 
+def migrate_legacy_filenames() -> int:
+    """Rename hash-named portraits to readable slug names. No network. Idempotent."""
+    manifest = load_manifest()
+    renamed = 0
+    for url in PORTRAIT_SOURCE_URLS:
+        legacy = PORTRAITS_DIR / _legacy_portrait_filename(url)
+        dest = PORTRAITS_DIR / portrait_filename(url)
+        if legacy != dest and legacy.is_file() and not dest.is_file():
+            legacy.rename(dest)
+            renamed += 1
+        if url in manifest:
+            manifest[url]["path"] = portrait_relative_path(url)
+            manifest[url]["filename"] = portrait_filename(url)
+    if manifest:
+        save_manifest(manifest)
+    return renamed
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -132,9 +152,19 @@ def main() -> int:
         action="store_true",
         help="Re-download and resize even when the local file already exists.",
     )
+    parser.add_argument(
+        "--migrate-only",
+        action="store_true",
+        help="Only rename legacy hash-named files to slug names (no network), then exit.",
+    )
     args = parser.parse_args()
 
     PORTRAITS_DIR.mkdir(parents=True, exist_ok=True)
+    renamed = migrate_legacy_filenames()
+    print(f"Legacy filename migration: renamed={renamed}", flush=True)
+    if args.migrate_only:
+        return 0
+
     manifest = {} if args.force else load_manifest()
 
     downloaded = 0
@@ -161,7 +191,7 @@ def main() -> int:
                 manifest[url] = {
                     "path": rel_path,
                     "filename": portrait_filename(url),
-                    "sha256": portrait_filename(url).removesuffix(".jpg"),
+                    "sha256": url_sha256_prefix(url),
                     "width": w,
                     "height": h,
                     "source_url": url,
@@ -180,7 +210,7 @@ def main() -> int:
             manifest[url] = {
                 "path": rel_path,
                 "filename": portrait_filename(url),
-                "sha256": portrait_filename(url).removesuffix(".jpg"),
+                "sha256": url_sha256_prefix(url),
                 "width": width,
                 "height": height,
                 "source_url": url,

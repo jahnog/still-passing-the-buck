@@ -35,6 +35,15 @@ One script per provider-external-file combination. Each writes to `data/raw/` us
 | `download_finanzas_sector-publico_sector-publico-base-caja.py` | IMIG workbook |
 | `download_github_still-passing-the-buck_data-a-2018.py` | `provided/data_a_2018.xlsx` |
 
+## Upload script
+
+`upload_s3_notebook-data.py` (`make upload`) syncs everything the notebook reads — the
+data files above, their `.meta.json` sidecars, `assets/portraits/*.jpg`, and the two
+helper modules — to the public S3 mirror used by Colab/standalone runs
+(`https://jnpublicdata.s3.us-east-1.amazonaws.com/still-passing-the-buck/`). AWS
+credentials come from the OS keyring (service `stillpassingthebuck`, see `.env.example`);
+unchanged files are skipped via ETag comparison.
+
 ## Generate scripts (`scripts/generate_<purpose>_<input>.py`)
 
 | Script | Output |
