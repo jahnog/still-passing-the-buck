@@ -1,0 +1,76 @@
+cff-version: 1.3.1
+message: "If you use this work, please cite it as below."
+title: "Still Passing the Buck — Historical CMPI & FPI Extension: Argentina 1853–2025"
+type: software
+authors:
+  - family-names: Nogueira
+    given-names: Javier Hernan
+    orcid: "https://orcid.org/0009-0006-1945-7870"
+repository-code: "https://github.com/jahnog/still-passing-the-buck"
+doi: 10.5281/zenodo.20651730
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.20651730
+    description: "Zenodo archive of the paper and replication package"
+  - type: url
+    value: "https://doi.org/10.5281/zenodo.20651730"
+    description: "Published paper on Zenodo"
+  - type: url
+    value: "https://mpra.ub.uni-muenchen.de/id/eprint/130511"
+    description: "Published paper on MPRA (Paper No. 130511)"
+date-released: "2026-08-15"
+version: 1.3.2
+license: CC-BY-4.0
+keywords:
+  - Argentina
+  - economic history
+  - macroeconomic performance
+  - fiscal policy
+  - inflation
+  - public debt
+  - statistical integrity
+  - CMPI
+  - "JEL: C43"
+  - "JEL: E31"
+  - "JEL: E62"
+  - "JEL: H63"
+  - "JEL: N16"
+  - "JEL: O54"
+abstract: >-
+  A unified macroeconomic and fiscal ranking of all 41 Argentine national
+  administrations, 1853–2025, extending the Classical Macroeconomic
+  Pressure Index (CMPI) and Fiscal Pressure Index (FPI) of della Paolera,
+  Irigoin & Bózzoli (2003) with documented corrections for known statistical
+  distortions in modern Argentine data.
+preferred-citation:
+  type: report
+  title: "Still Passing the Buck: Macroeconomic and Fiscal Performance of Argentine Administrations, 1853–2025"
+  authors:
+    - family-names: Nogueira
+      given-names: Javier Hernan
+      orcid: "https://orcid.org/0009-0006-1945-7870"
+  doi: 10.5281/zenodo.20651730
+  url: "https://zenodo.org/records/20651730"
+  year: 2026
+  month: 6
+  publisher:
+    name: Zenodo
+references:
+  - type: book
+    title: "Passing the buck: Monetary and fiscal policies"
+    authors:
+      - family-names: "della Paolera"
+        given-names: Gerardo
+      - family-names: Irigoin
+        given-names: "María Alejandra"
+      - family-names: "Bózzoli"
+        given-names: "Carlos G."
+    collection-title: "A New Economic History of Argentina"
+    editors:
+      - family-names: "della Paolera"
+        given-names: Gerardo
+      - family-names: Taylor
+        given-names: "Alan M."
+    year: 2003
+    publisher:
+      name: Cambridge University Press

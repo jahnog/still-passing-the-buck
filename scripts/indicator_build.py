@@ -1,0 +1,510 @@
+"""Build Argentina indicator rows from raw downloads and wide WDI export."""
+
+from __future__ import annotations
+
+import csv
+import gzip
+import io
+import json
+import shutil
+import sys
+import zipfile
+from collections import defaultdict
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+import pandas as pd
+
+from data import paths
+from scripts.data_io import RAW_ROOT, latest_raw
+
+COUNTRY_CODE = "ARG"
+COUNTRY_NAME = "Argentina"
+
+# These are the CMPI-related World Bank series we need to keep fresh, even if the
+# bulk export lags or omits them locally.
+API_SUPPLEMENT_CODES = {
+    "FP.CPI.TOTL": "Consumer price index (2010 = 100)",
+    "FP.CPI.TOTL.ZG": "Inflation, consumer prices (annual %)",
+    "NY.GDP.DEFL.KD.ZG": "Inflation, GDP deflator (annual %)",
+    "NY.GDP.PCAP.KD.ZG": "GDP per capita growth (annual %)",
+    "NY.GDP.MKTP.CD": "GDP (current US$)",
+    "NY.GDP.MKTP.KD": "GDP (constant 2015 US$)",
+    "NE.EXP.GNFS.CD": "Exports of goods and services (current US$)",
+    "NE.EXP.GNFS.KD": "Exports of goods and services (constant 2015 US$)",
+    "BX.GSR.TOTL.CD": "Exports of goods, services and primary income (current US$)",
+    "TT.PRI.MRCH.XD.WD": "Net barter terms of trade index (2015 = 100)",
+    "PA.NUS.ATLS": "Official exchange rate (LCU per US$, period average)",
+    "NY.GDP.MKTP.KD.ZG": "GDP growth (annual %)",
+}
+
+def require_latest_raw(provider: str, prefix: str) -> Path:
+    path = latest_raw(provider, prefix)
+    if path is None:
+        raise RuntimeError(f"Missing raw file under {RAW_ROOT / provider} matching prefix {prefix!r}.")
+    return path
+
+
+def require_xlrd():
+    try:
+        import xlrd  # type: ignore
+    except ImportError as exc:
+        raise RuntimeError(
+            "xlrd is required to parse the official INDEC .xls workbooks. "
+            "Install it or run this script with .venv/bin/python."
+        ) from exc
+
+    return xlrd
+
+
+def format_number(value: float) -> str:
+    formatted = f"{value:.12f}".rstrip("0").rstrip(".")
+    return formatted or "0"
+
+
+def build_indicator_row(indicator_code: str, indicator_name: str, year: int, value: float) -> dict[str, str]:
+    return {
+        "CountryName": COUNTRY_NAME,
+        "CountryCode": COUNTRY_CODE,
+        "IndicatorName": indicator_name,
+        "IndicatorCode": indicator_code,
+        "Year": str(year),
+        "Value": format_number(value),
+    }
+
+
+def parse_year_label(value: object) -> int | None:
+    if isinstance(value, float) and value.is_integer() and 1000 <= int(value) <= 9999:
+        return int(value)
+
+    text = str(value).strip()
+    if len(text) == 4 and text.isdigit():
+        return int(text)
+
+    return None
+
+
+def upsert_indicator_rows(
+    rows: dict[tuple[str, int], dict[str, str]],
+    series_rows: list[dict[str, str]],
+    *,
+    replace_existing: bool = False,
+) -> None:
+    if replace_existing:
+        indicator_codes = {row["IndicatorCode"] for row in series_rows}
+        for key in [existing_key for existing_key in rows if existing_key[0] in indicator_codes]:
+            del rows[key]
+
+    for series_row in series_rows:
+        key = (series_row["IndicatorCode"], int(series_row["Year"]))
+        rows[key] = series_row
+
+
+def annualize_monthly_index(monthly_values: dict[int, list[float]]) -> tuple[dict[int, float], set[int]]:
+    complete_years = {year for year, values in monthly_values.items() if len(values) == 12}
+    if not monthly_values:
+        return {}, complete_years
+
+    first_year = min(monthly_values)
+    annual_values: dict[int, float] = {}
+    for year in sorted(monthly_values):
+        values = monthly_values[year]
+        if year == first_year or year in complete_years:
+            annual_values[year] = sum(values) / len(values)
+
+    return annual_values, complete_years
+
+
+def find_sheet_row(sheet, code: str) -> int:
+    for row_index in range(sheet.nrows):
+        if str(sheet.cell_value(row_index, 0)).strip() == code:
+            return row_index
+
+    raise RuntimeError(f"Could not find row {code!r} in {sheet.name!r}.")
+
+
+def build_indec_ipc_rows() -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    source_path = require_latest_raw("indec", "economia_serie-ipc-divisiones")
+    payload = source_path.read_text(encoding="latin-1")
+    reader = csv.DictReader(io.StringIO(payload), delimiter=";")
+
+    monthly_values: dict[int, list[float]] = defaultdict(list)
+    for raw_row in reader:
+        if raw_row.get("Codigo") != "0" or raw_row.get("Region") != "Nacional":
+            continue
+
+        period = (raw_row.get("Periodo") or "").strip()
+        value = (raw_row.get("Indice_IPC") or "").strip()
+        if len(period) != 6 or not period.isdigit() or value in {"", "NA"}:
+            continue
+
+        monthly_values[int(period[:4])].append(float(value.replace(",", ".")))
+
+    annual_index, complete_years = annualize_monthly_index(monthly_values)
+    level_rows = [
+        build_indicator_row(
+            "FP.CPI.TOTL",
+            "Consumer price index (INDEC IPC Nacional, Dec 2016 = 100)",
+            year,
+            value,
+        )
+        for year, value in sorted(annual_index.items())
+    ]
+
+    growth_rows: list[dict[str, str]] = []
+    previous_year: int | None = None
+    for year in sorted(annual_index):
+        if previous_year is None:
+            previous_year = year
+            continue
+
+        if year not in complete_years or previous_year not in complete_years:
+            previous_year = year
+            continue
+
+        current_value = annual_index[year]
+        prior_value = annual_index[previous_year]
+        growth_rows.append(
+            build_indicator_row(
+                "FP.CPI.TOTL.ZG",
+                "Inflation, consumer prices (annual %, derived from INDEC IPC annual average)",
+                year,
+                ((current_value / prior_value) - 1) * 100,
+            )
+        )
+        previous_year = year
+
+    return level_rows, growth_rows
+
+
+def parse_sipm_1956_1995_ipim() -> dict[int, float]:
+    xlrd = require_xlrd()
+    source_path = require_latest_raw("indec", "economia_sipm-serie56-95")
+    workbook = xlrd.open_workbook(filename=str(source_path))
+    sheet = workbook.sheet_by_index(0)
+
+    annual_values: dict[int, float] = {}
+    for row_index in range(8, sheet.nrows):
+        year = parse_year_label(sheet.cell_value(row_index, 0))
+        value = sheet.cell_value(row_index, 1)
+        if year is None or not isinstance(value, (int, float)):
+            continue
+
+        annual_values[year] = float(value)
+
+    return annual_values
+
+
+def parse_sipm_1996_onward_ipim(*, include_partial_years: bool = False) -> dict[int, float]:
+    xlrd = require_xlrd()
+    source_path = require_latest_raw("indec", "economia_sipm-dde1996")
+    workbook = xlrd.open_workbook(filename=str(source_path))
+    sheet = workbook.sheet_by_index(0)
+
+    annual_values: dict[int, float] = {}
+    current_year: int | None = None
+    monthly_values: list[float] = []
+
+    for row_index in range(8, sheet.nrows):
+        label = sheet.cell_value(row_index, 0)
+        year = parse_year_label(label)
+        if year is not None:
+            if current_year is not None and (len(monthly_values) == 12 or (include_partial_years and monthly_values)):
+                annual_values[current_year] = sum(monthly_values) / len(monthly_values)
+            current_year = year
+            monthly_values = []
+            continue
+
+        value = sheet.cell_value(row_index, 1)
+        if current_year is None or not isinstance(value, (int, float)) or not str(label).strip():
+            continue
+
+        monthly_values.append(float(value))
+
+    if current_year is not None and (len(monthly_values) == 12 or (include_partial_years and monthly_values)):
+        annual_values[current_year] = sum(monthly_values) / len(monthly_values)
+
+    return annual_values
+
+
+def parse_sipm_reference_2015_ipim() -> dict[int, float]:
+    xlrd = require_xlrd()
+    source_path = require_latest_raw("indec", "economia_series-sipm-dic2015")
+    workbook = xlrd.open_workbook(filename=str(source_path))
+    sheet = workbook.sheet_by_name("IPIM")
+    row_index = find_sheet_row(sheet, "NG")
+
+    monthly_values: dict[int, list[float]] = defaultdict(list)
+    current_year: int | None = None
+    for column_index in range(2, sheet.ncols):
+        year_header = parse_year_label(sheet.cell_value(3, column_index))
+        if year_header is not None:
+            current_year = year_header
+
+        month_label = str(sheet.cell_value(4, column_index)).strip()
+        value = sheet.cell_value(row_index, column_index)
+        if current_year is None or not month_label or not isinstance(value, (int, float)):
+            continue
+
+        monthly_values[current_year].append(float(value))
+
+    annual_values, _ = annualize_monthly_index(monthly_values)
+    return annual_values
+
+
+def build_indec_wpi_rows() -> list[dict[str, str]]:
+    annual_index = parse_sipm_1956_1995_ipim()
+    annual_index.update(parse_sipm_1996_onward_ipim())
+
+    current_reference_values = parse_sipm_reference_2015_ipim()
+    historical_anchor_values = parse_sipm_1996_onward_ipim(include_partial_years=True)
+
+    anchor_year = 2015
+    if anchor_year not in historical_anchor_values or anchor_year not in current_reference_values:
+        raise RuntimeError(
+            "The INDEC IPIM fallback is missing the 2015 anchor required to chain the current reference-period series."
+        )
+
+    bridge_factor = historical_anchor_values[anchor_year] / current_reference_values[anchor_year]
+    annual_index.update(
+        {
+            year: value * bridge_factor
+            for year, value in current_reference_values.items()
+        }
+    )
+
+    # NOTE: the INDEC IPIM workbooks only expose years with twelve complete months, so the 2001
+    # crisis year is dropped, leaving an interior hole in the wholesale level series. We do NOT
+    # interpolate it: a log-linear fill between 2000 and 2002 would inject a spurious ~+31% into
+    # 2001 (a mildly deflationary year) and understate the 2002 devaluation jump. The notebook
+    # instead falls back to the available consumer-price change for 2001 (see the NaN-robust mean
+    # in the inflation cell), which is closer to the truth than interpolating the wholesale gap.
+    base_year = 2010
+    if base_year not in annual_index:
+        raise RuntimeError(f"The INDEC IPIM fallback is missing base year {base_year}.")
+
+    base_value = annual_index[base_year]
+    return [
+        build_indicator_row(
+            "FP.WPI.TOTL",
+            "Wholesale price index (INDEC IPIM, rebased to 2010 = 100)",
+            year,
+            (value / base_value) * 100,
+        )
+        for year, value in sorted(annual_index.items())
+    ]
+
+
+def build_bcra_exchange_rows() -> list[dict[str, str]]:
+    xlrd = require_xlrd()
+    source_path = require_latest_raw("bcra", "publicaciones_com3500")
+    workbook = xlrd.open_workbook(filename=str(source_path))
+    sheet = workbook.sheet_by_name("Serie de TCNPM")
+
+    monthly_values: dict[int, list[float]] = defaultdict(list)
+    for row_index in range(3, sheet.nrows):
+        date_value = sheet.cell_value(row_index, 1)
+        exchange_value = sheet.cell_value(row_index, 2)
+        if not isinstance(date_value, (int, float)) or not isinstance(exchange_value, (int, float)):
+            continue
+
+        year = xlrd.xldate.xldate_as_datetime(date_value, workbook.datemode).year
+        monthly_values[year].append(float(exchange_value))
+
+    annual_values, _ = annualize_monthly_index(monthly_values)
+    return [
+        build_indicator_row(
+            "PA.NUS.ATLS",
+            "Official exchange rate (BCRA TCNPM annual average, ARS per US$)",
+            year,
+            value,
+        )
+        for year, value in sorted(annual_values.items())
+        if year >= 2020
+    ]
+
+
+def _year_columns(fieldnames: list[str] | None) -> list[str]:
+    columns: list[str] = []
+    for column in fieldnames or []:
+        if "[YR" in column:
+            columns.append(column)
+        elif column.isdigit() and len(column) == 4:
+            columns.append(column)
+    return columns
+
+
+def _year_from_column(column: str) -> int:
+    return int(column.split(" ", 1)[0])
+
+
+def build_rows_from_wide_reader(reader: csv.DictReader) -> dict[tuple[str, int], dict[str, str]]:
+    rows: dict[tuple[str, int], dict[str, str]] = {}
+    year_columns = _year_columns(reader.fieldnames)
+
+    for raw_row in reader:
+        if raw_row.get("Country Code") != COUNTRY_CODE:
+            continue
+        code = raw_row.get("Series Code") or raw_row.get("Indicator Code") or ""
+        name = raw_row.get("Series Name") or raw_row.get("Indicator Name") or ""
+        if not code:
+            continue
+        for year_column in year_columns:
+            value = raw_row.get(year_column, "")
+            if value in ("", ".."):
+                continue
+            year = _year_from_column(year_column)
+            rows[(code, year)] = {
+                "CountryName": raw_row.get("Country Name") or COUNTRY_NAME,
+                "CountryCode": COUNTRY_CODE,
+                "IndicatorName": name,
+                "IndicatorCode": code,
+                "Year": str(year),
+                "Value": value,
+            }
+    return rows
+
+
+def build_rows_from_wide_export(source_path: Path) -> dict[tuple[str, int], dict[str, str]]:
+    with source_path.open(newline="", encoding="utf-8-sig") as handle:
+        return build_rows_from_wide_reader(csv.DictReader(handle))
+
+
+_WDI_BULK_MEMBERS = ("WDIData.csv", "WDICSV.csv")
+
+
+def _wdi_bulk_member(archive: zipfile.ZipFile) -> str:
+    names = archive.namelist()
+    by_basename = {Path(name).name: name for name in names}
+    for candidate in _WDI_BULK_MEMBERS:
+        if candidate in by_basename:
+            return by_basename[candidate]
+    raise RuntimeError(
+        "WDI zip is missing a wide data CSV "
+        f"(looked for {', '.join(_WDI_BULK_MEMBERS)}); members={names}"
+    )
+
+
+def build_rows_from_wdi_bulk_zip(zip_path: Path) -> dict[tuple[str, int], dict[str, str]]:
+    with zipfile.ZipFile(zip_path) as archive:
+        with archive.open(_wdi_bulk_member(archive)) as raw:
+            text = io.TextIOWrapper(raw, encoding="utf-8-sig", newline="")
+            return build_rows_from_wide_reader(csv.DictReader(text))
+
+
+def _indicator_code_from_api_raw_name(path: Path) -> str | None:
+    if not path.name.startswith("api_") or not path.name.endswith(".json"):
+        return None
+
+    slug = path.name.removeprefix("api_").split("_", 1)[0]
+    return slug.upper().replace("-", ".")
+
+
+def parse_world_bank_api_file(path: Path) -> list[dict[str, str]]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    series_rows = payload[1] if isinstance(payload, list) and len(payload) > 1 else []
+    collected: list[dict[str, str]] = []
+
+    for series_row in series_rows:
+        value = series_row.get("value")
+        if value is None:
+            continue
+
+        collected.append(
+            {
+                "CountryName": COUNTRY_NAME,
+                "CountryCode": COUNTRY_CODE,
+                "IndicatorName": series_row["indicator"]["value"],
+                "IndicatorCode": series_row["indicator"]["id"],
+                "Year": series_row["date"],
+                "Value": str(value),
+            }
+        )
+
+    return collected
+
+
+def load_world_bank_api_supplement_rows() -> list[dict[str, str]]:
+    folder = RAW_ROOT / "worldbank"
+    if not folder.is_dir():
+        return []
+
+    newest_by_code: dict[str, Path] = {}
+    for path in folder.glob("api_*.json"):
+        code = _indicator_code_from_api_raw_name(path)
+        if code is None or code not in API_SUPPLEMENT_CODES:
+            continue
+
+        existing = newest_by_code.get(code)
+        if existing is None or path.stat().st_mtime > existing.stat().st_mtime:
+            newest_by_code[code] = path
+
+    rows: list[dict[str, str]] = []
+    for path in newest_by_code.values():
+        rows.extend(parse_world_bank_api_file(path))
+    return rows
+
+
+def build_indicator_rows(
+    wide_path: Path | None = None,
+    *,
+    zip_path: Path | None = None,
+) -> dict[tuple[str, int], dict[str, str]]:
+    if zip_path is not None:
+        rows = build_rows_from_wdi_bulk_zip(zip_path)
+    elif wide_path is not None:
+        rows = build_rows_from_wide_export(wide_path)
+    else:
+        raise RuntimeError("build_indicator_rows requires zip_path or wide_path")
+
+    for series_row in load_world_bank_api_supplement_rows():
+        key = (series_row["IndicatorCode"], int(series_row["Year"]))
+        rows[key] = series_row
+
+    ipc_level_rows, ipc_growth_rows = build_indec_ipc_rows()
+    upsert_indicator_rows(rows, ipc_level_rows, replace_existing=True)
+    upsert_indicator_rows(rows, ipc_growth_rows, replace_existing=True)
+    upsert_indicator_rows(rows, build_indec_wpi_rows(), replace_existing=True)
+    upsert_indicator_rows(rows, build_bcra_exchange_rows())
+
+    required_growth = ("NY.GDP.PCAP.KD.ZG", 2025)
+    if required_growth not in rows:
+        raise RuntimeError(
+            "World Bank NY.GDP.PCAP.KD.ZG for complete calendar year 2025 is required; "
+            "run download_worldbank_api_indicators-arg.py before generation."
+        )
+    return rows
+
+
+def write_indicators(
+    rows: dict[tuple[str, int], dict[str, str]],
+    csv_path: Path,
+    gz_path: Path,
+) -> None:
+    fieldnames = [
+        "CountryName",
+        "CountryCode",
+        "IndicatorName",
+        "IndicatorCode",
+        "Year",
+        "Value",
+    ]
+
+    ordered_rows = sorted(
+        rows.values(),
+        key=lambda row: (row["CountryName"], row["IndicatorCode"], int(row["Year"])),
+    )
+
+    csv_path.parent.mkdir(parents=True, exist_ok=True)
+    with csv_path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(ordered_rows)
+
+    with csv_path.open("rb") as source_handle:
+        # mtime=0 keeps gzip bytes stable across regenerations (regression-lock checksums).
+        with gzip.GzipFile(gz_path, mode="wb", mtime=0) as target_handle:
+            shutil.copyfileobj(source_handle, target_handle)

@@ -1,0 +1,8 @@
+% Minimal footnote package compatibility for Pandoc-generated longtables.
+% Pandoc only needs \makesavenoteenv{longtable}; a no-op is sufficient here.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{footnote}[2025/01/01 local minimal Pandoc longtable support]
+
+\newcommand{\makesavenoteenv}[1]{}
+\newcommand{\savenotes}{}
+\newcommand{\spewnotes}{}

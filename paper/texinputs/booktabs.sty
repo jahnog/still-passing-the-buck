@@ -1,0 +1,40 @@
+% Minimal booktabs compatibility layer for Pandoc-generated longtables.
+% Used only on TeX installs that lack the real booktabs package.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{booktabs}[2025/01/01 local minimal Pandoc table rules]
+
+\newlength{\heavyrulewidth}
+\newlength{\lightrulewidth}
+\newlength{\cmidrulewidth}
+\newlength{\aboverulesep}
+\newlength{\belowrulesep}
+\newlength{\abovetopsep}
+\newlength{\belowbottomsep}
+\newlength{\cmidrulesep}
+\newlength{\cmidrulekern}
+\setlength{\heavyrulewidth}{0.08em}
+\setlength{\lightrulewidth}{0.05em}
+\setlength{\cmidrulewidth}{0.03em}
+\setlength{\aboverulesep}{0.4ex}
+\setlength{\belowrulesep}{0.65ex}
+\setlength{\abovetopsep}{0pt}
+\setlength{\belowbottomsep}{0pt}
+\setlength{\cmidrulesep}{0.3ex}
+\setlength{\cmidrulekern}{0.5em}
+
+\newcommand{\toprule}{\noalign{\vskip\abovetopsep}\hline\noalign{\vskip\belowrulesep}}
+\newcommand{\midrule}{\noalign{\vskip\aboverulesep}\hline\noalign{\vskip\belowrulesep}}
+\newcommand{\bottomrule}{\noalign{\vskip\aboverulesep}\hline\noalign{\vskip\belowbottomsep}}
+\newcommand{\specialrule}[3]{\noalign{\vskip#2}\hline\noalign{\vskip#3}}
+\newcommand{\addlinespace}[1][0.5em]{\noalign{\vskip#1}}
+\newcommand{\morecmidrules}{}
+\makeatletter
+\def\cmidrule{%
+  \@ifnextchar[{\cmidrule@opt}{\@ifnextchar({\cmidrule@trim}{\cmidrule@plain}}%
+}
+\def\cmidrule@opt[#1]{%
+  \@ifnextchar({\cmidrule@trim}{\cmidrule@plain}%
+}
+\def\cmidrule@trim(#1)#2{\cline{#2}}
+\def\cmidrule@plain#1{\cline{#1}}
+\makeatother

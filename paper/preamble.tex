@@ -1,0 +1,18 @@
+% Typography tweaks for the manuscript PDF (loaded by scripts/build_paper.py).
+\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+\usepackage{etoolbox}
+
+% The 41-row ranking tables need a smaller type size and tighter rows. They are
+% also wide: Pandoc reserves 2\tabcolsep per column and divides only what is
+% left among the columns, which on a nine-column table spends nearly a quarter
+% of the text block on gutters and leaves atomic cells like "1990-1995" too
+% narrow to hold. Halving the gutter returns that width to the content.
+\AtBeginEnvironment{longtable}{%
+  \footnotesize\renewcommand{\arraystretch}{1.15}\setlength{\tabcolsep}{3pt}}
+
+% Keep figures close to their call-out and never before it.
+\IfFileExists{float.sty}{\usepackage{float}}{}
+\usepackage{flafter}
+
+% Caption style: bold "Table 1:" label, slightly smaller text.
+\IfFileExists{caption.sty}{\usepackage[font=small,labelfont=bf]{caption}}{}
