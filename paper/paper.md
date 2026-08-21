@@ -3,35 +3,41 @@ title: "Still Passing the Buck: Macroeconomic and Fiscal Performance of Argentin
 author: "Javier Hernan Nogueira^[Independent researcher. Contact: <jahnog@gmail.com>. ORCID: [0009-0006-1945-7870](https://orcid.org/0009-0006-1945-7870). Replication package: <https://github.com/jahnog/still-passing-the-buck>. I thank Gerardo della Paolera, María Alejandra Irigoin, and Carlos G. Bózzoli, the authors of the original *Passing the buck* chapter, for generously sharing the dataset underlying their study; this replication uses the archived paper-author workbook only through 1999, with 2000 onward rebuilt from official and documented sources. All errors are my own.]"
 date: "June 2026 --- Working paper draft --- v{{project_version}}"
 abstract: |
-  We rank all 41 Argentine national administrations that governed between 1853
-  and 2025 with the two indices proposed by @dellapaolera2003passing --- the
-  Classical Macroeconomic Pressure Index (CMPI) and the Fiscal Pressure
-  Index (FPI) --- and their combined Overall Index, scoring each government by
-  the macroeconomic and fiscal improvement it delivered over the situation it
-  inherited. A single 173-year scoring frame places every
-  administration, from the mid-nineteenth-century Confederation to the 2024--25
-  stabilization, on a common scale. Extending the original 1853--1999 analysis
-  through 2025 requires confronting documented distortions in modern Argentine
-  statistics: we catalogue twenty-three manipulation, measurement and accounting
-  practices,
-  correct the affected series from independent and reproducible sources, and
-  retain paper-comparable and sensitivity variants for reconstructed or
-  judgment-sensitive corrections. The 2025 fiscal primary-result operands
-  come from the official annual SPN base-caja dataset. On the restricted
-  1853--1999 pool the replication of the original rankings is almost exact
-  (Spearman $\rho = 0.996$ for the FPI, $0.953$ for the CMPI). In the unified
-  ranking Menem (1990--95) leads the CMPI and the Overall Index, while Obligado
-  (1854--56) leads the FPI.
-  Consolidating the central bank's quasi-fiscal debt into the public debt stock
-  and valuing output at the free-market exchange rate during exchange-control
-  years materially reorders the modern fiscal ranking. Holding the interest
-  dimension at its last functioning-market quotation through the 2002--05
-  payments default moves the two administrations that straddle that crisis by
-  five and two Overall places (Table 10); the stacked interest restorations
-  also move the 2008--11 term by two. The long-run results
-  are consistent with the original *passing-the-buck* thesis: administrations bought
-  macroeconomic calm with debt --- on the Treasury's books or hidden in the
-  central bank --- and passed the bill to their successors.
+  This paper extends the Classical Macroeconomic Pressure Index (CMPI) and the
+  Fiscal Pressure Index (FPI) of @dellapaolera2003passing from their
+  1853--1999 frame through 2025. It scores all 41 Argentine national
+  administrations on a single 173-year percentile pool by the macroeconomic
+  and fiscal improvement each delivered over the situation it inherited. Its
+  contribution is measurement, not a ranking of which government left society
+  better off: a documented, replicable mapping of twenty-three catalogued
+  manipulation, measurement and accounting practices in Argentine official
+  statistics onto that common scale --- correcting the affected series from
+  independent and reproducible sources, retaining paper-comparable and
+  sensitivity variants for reconstructed or judgment-sensitive corrections,
+  and decomposing every modern public-debt-ratio change into how much debt
+  was issued or repaid, how the real economy and the dollar value of output
+  moved, and which previously omitted liabilities were recognized. On the
+  restricted 1853--1999 pool the replication of the original rankings is
+  almost exact (Spearman rank correlation $\rho = 0.996$ for the FPI,
+  $0.953$ for the CMPI). In the unified ranking the top three Overall
+  positions are held by Menem (1990--95), Obligado (1854--56) and the
+  Milei (2024--25) administration --- an *interim* placement for the last of
+  these, covering two calendar years of a constitutional term that runs to
+  December 2027. Term-average scoring under the improvement-over-inherited
+  rule structurally favours a stabilization whose best years come first. Podium *membership*
+  is invariant across all seven robustness specifications; its *order* is not.
+  Consolidating the central bank's quasi-fiscal debt --- interest-bearing
+  liabilities that do not appear in Treasury statistics --- into the public
+  debt stock and valuing output at the free-market exchange rate during
+  exchange-control years materially reorders the modern fiscal ranking.
+  Holding the interest series at the last quote from a functioning market
+  through the 2002--05 payments default moves the two administrations that
+  straddle that crisis by five and two Overall places (Table 10); applying
+  both interest restorations together (stacked) also moves the 2008--11 term
+  by two. The long-run pattern is consistent with the original
+  *passing-the-buck* interpretation: administrations purchased
+  contemporaneous macroeconomic calm with debt --- on the Treasury's books
+  or hidden in the central bank --- and left the bill to their successors.
 
   **Keywords:** Argentina; economic history; macroeconomic performance;
   fiscal policy; inflation; public debt; statistical integrity;
@@ -71,11 +77,14 @@ link-citations: true
 
 > **How to read the indices.** The CMPI and FPI measure *improvement*
 > relative to the situation inherited from the previous administration ---
-> not absolute levels. Component scores are percentiles of annual innovations
-> pooled over the 173-year frame: a score of 0.90 means the administration's
-> average annual improvement sat in the top 10 percent of all improvements
-> recorded since 1853. Rank 1 is best. See Section 3 for the formulas and
-> three structural caveats, Section 7 for robustness, and the Glossary
+> not absolute levels. An *innovation* is that year-minus-inherited change.
+> Component scores are percentiles of annual innovations pooled over the
+> 173-year frame: a score of 0.90 means the administration's average annual
+> improvement sat in the top 10 percent of all improvements recorded since
+> 1853. The FPI asks a further question: did the administration reduce or
+> raise the debt and deficit burden facing its successor? Rank 1 is best on
+> this improvement metric. See Section 3 for the formulas and three
+> structural caveats, Section 7 for robustness, and the Glossary
 > (Appendix E) for terminology.
 
 How well did each Argentine government manage the economy it inherited? The
@@ -87,8 +96,10 @@ administration by the *improvement* it delivered over the macroeconomic and
 fiscal situation bequeathed by its predecessor, and rank all administrations on
 a common percentile scale. Their Classical Macroeconomic Pressure Index
 (CMPI) aggregates inflation, devaluation, the hard-currency interest rate, and
-per-capita growth; their Fiscal Pressure Index (FPI) adds the management of the
-intertemporal budget constraint; the average of the two is an Overall Index.
+per-capita growth; their Fiscal Pressure Index (FPI) scores whether the
+administration reduced or raised the debt and deficit burden the next
+government inherits (the intertemporal budget constraint). The average of the
+two is an Overall Index.
 Applied to 33 administrations over 1853--1999, the framework produced the
 central finding the authors summarized in their title: Argentine governments
 repeatedly bought contemporaneous macroeconomic calm with fiscal pressure that
@@ -97,32 +108,37 @@ they passed to their successors.
 This paper extends the complete two-index framework to the full 1853--2025
 span --- 41 administrations and a common 173-year scoring frame ---
 placing the original 33 historical terms and the eight administrations of
-2000--2025 on a single 173-year percentile pool --- one scoring frame, not one
-measurement regime (Section 4). The extension is not a
+2000--2025 on a single 173-year percentile pool. That is one scoring frame,
+not one measurement regime (Section 4): every administration is ranked in
+the same 173-year pool, but the underlying series still come from two source
+regimes --- the original authors' workbook through 1999, and rebuilt official
+series from 2000. The extension is not a
 mechanical appending of recent data. Between 2007 and 2015 the national
 statistical institute (INDEC) falsified consumer-price inflation by a factor
-of roughly three to four and manipulated real growth, episodes that led to the
-first declaration of censure in the history of the International Monetary Fund
-and to the criminal conviction of Commerce Secretary Guillermo Moreno
+of roughly three to four and manipulated real growth. Those episodes led to
+the first declaration of censure in the history of the International Monetary
+Fund and to the criminal conviction of Commerce Secretary Guillermo Moreno
 [@imf2013censure; @cavallo2013; @coremberg2017]. Exchange controls in 2012--15
 and 2019--25 pinned the official exchange rate far below the free-market rate.
 Successive governments accumulated remunerated central-bank liabilities --- a
 quasi-fiscal debt exceeding ten percent of GDP at its peaks --- that appears
 in no Treasury debt statistic. Any ranking that ingests official series uncritically
 reproduces these distortions. A second, subtler problem is internal to the
-methodology: annual-average exchange rates produce wrong-signed devaluation
-innovations around mid-year devaluations, an artefact that affects the
-historical sample as well as the modern one.
+methodology: annual-average exchange rates blend months before and after a
+mid-year devaluation, so the measured change can have the wrong sign or
+appear in the wrong year --- an artefact that affects the historical sample
+as well as the modern one.
 
 Our contributions are four. First, we construct corrected 1853--2025 series for
 the nine variables behind the two indices, documenting every known statistical
 manipulation and accounting practice that materially affects them --- a
 twenty-three-entry catalogue (Section 4, Appendix B) stating the direction of
-each bias and its treatment. Corrections enter the corrected baseline when the
+each bias and its treatment. Corrections enter the headline (the corrected baseline) when the
 evidence is independently sourced and the mapping to an index component is
-documented; paper-comparable official columns and sensitivity variants are
-retained where reconstruction or judgment could affect the magnitude, reported
-whichever administration they favour. Second, we resolve the annual-average
+documented; paper-comparable official columns are retained as an audit, and
+sensitivity variants where reconstruction or judgment could affect the
+magnitude, reported whichever administration they favour. Details of the
+three treatment tiers are in Section 4.3. Second, we resolve the annual-average
 devaluation artefact by using December-quotation exchange-rate series for the
 entire sample. Third, we extend the FPI with two corrections to the modern
 debt-stock components: a free-market revaluation of GDP during
@@ -133,14 +149,17 @@ restricted 1853--1999 pool, obtaining Spearman rank correlations of $0.996$
 (FPI) and $0.953$ (CMPI) against the original Table 3.4.
 
 The headline results place Menem (1990--95) first on the CMPI and the Overall
-Index, with the 2024--25 stabilization and Obligado's 1854--56 reforms close
-behind, and crisis terms at the bottom --- consistent with the original
-finding that durable hard-currency and convertible stabilizations score
-highest. The fiscal corrections are decisive for the modern ranking: once the
+Index, with the 2024--25 stabilization --- an *interim* placement covering two
+calendar years of a term that runs to December 2027 --- and Obligado's
+1854--56 reforms close behind, and crisis terms at the bottom. That order is
+consistent with the original finding that durable hard-currency and
+convertible stabilizations score highest (a one-peso-one-dollar currency
+board, Convertibility, and other dollar-linked or convertible regimes). The fiscal corrections are decisive for the modern ranking: once the
 central bank's hidden debt is consolidated and the exchange-control distortion
 removed, the 2012--15 and 2020--23 terms occupy the bottom two places on
 the FPI. The 2012--15 term finishes last mainly because of the exchange gap
-rather than a comparable BCRA build-up; 2020--23 sits next to it with a
+rather than a comparable build-up of liabilities at the Banco Central de la
+República Argentina (BCRA). The 2020--23 term sits next to it with a
 quasi-fiscal stock that averaged eleven percent of GDP. The
 2024--25 consolidation registers as a sharp reduction in fiscal pressure
 rather than the spurious increase shown by the raw Treasury series. The
@@ -177,28 +196,30 @@ documented, reproducible mapping from each known distortion to its effect on a
 long-run performance ranking --- including the quasi-fiscal liabilities and
 exchange-control wedges that standard debt and exchange-rate series omit.
 
-The theoretical background of the indices --- seigniorage and the inflation
-tax, the intertemporal budget constraint, and currency-crisis contagion --- is
+The theoretical background of the indices --- seigniorage (the purchasing
+power captured by issuing money) and the inflation tax, the intertemporal
+budget constraint, and currency-crisis contagion --- is
 the classical one [@sargent1986rational; @defiore2000; @ennis2007;
 @eichengreen1996contagious].
 
 Two further strands frame the interpretation. The fiscal-dominance tradition
 descending from @sargentwallace1981 supplies the mechanism behind the
-*passing-the-buck* finding: when the fiscal authority does not internalize
-the intertemporal budget constraint, the monetary authority eventually
+*passing-the-buck* finding: when the fiscal authority does not treat future
+repayment as its own problem, the monetary authority eventually
 finances the gap, and inflation becomes a fiscal phenomenon. The comparative
 project of @kehoenicolini2021 applies exactly this lens to eleven Latin
-American countries; its Argentina chapter [@bueranicolini2021argentina] reads
+American countries. Its Argentina chapter [@bueranicolini2021argentina] reads
 six decades of inflation, default, and stabilization as the monetary
 consequence of persistent fiscal imbalance --- the regional pattern of which
 Argentina is the extreme case, and the same dynamic the FPI traces
 administration by administration. On the political-economy side,
 @spillertommasi2007 document why the dynamic persists: Argentine institutions
-give policymakers unusually short horizons and weak technologies for
-enforcing intertemporal agreements, so costs shifted past one's own term are
-heavily discounted. Finally, the treatment of central-bank operations as
-fiscal policy in disguise follows the public-finance tradition of
-@mackenziestella1996; the modern Argentine remunerated-liability stock that
+give policymakers unusually short horizons and few reliable ways to bind a
+future Congress or president to today's fiscal promises, while a federal
+fiscal commons lets presidents and governors push costs past their own term
+without any one actor fully bearing the national bill. Finally, the treatment of central-bank
+operations as fiscal policy in disguise follows the public-finance tradition of
+@mackenziestella1996. The modern Argentine remunerated-liability stock that
 Section 4 consolidates is documented in the IMF's program reports
 [@imf2022argentina].
 
@@ -206,12 +227,14 @@ Section 4 consolidates is documented in the IMF's program reports
 
 ## The Classical Macroeconomic Pressure Index
 
-The CMPI aggregates four classical variables: **inflation**, linked to the
-government's high-powered-money policy and seigniorage; **devaluation**, the
-willingness to defend the external value of the currency; the **real interest
-rate on hard currency**, a proxy for country risk and external credit
-tightness; and **per-capita growth**, the administration's influence on the
-pace of real activity.
+The CMPI aggregates four classical variables: **inflation**, linked to
+money creation and seigniorage (the purchasing power captured by issuing
+money); **devaluation**, the willingness to defend the external value of the
+currency; the **real interest rate on hard currency** (dollars or another
+internationally accepted currency), a proxy for country risk (how expensive
+it is for Argentina to borrow abroad) and external credit tightness; and
+**per-capita growth**, the administration's influence on the pace of real
+activity.
 
 For each variable and year we compute the **innovation**: the value in that
 year minus the value in the *last year of the previous administration* --- the
@@ -221,8 +244,8 @@ formula $R = (O - o)/O$, where $o$ is the innovation's position in the ranking
 (best $=1$): the best innovation in the pool scores $(O-1)/O \approx 0.994$
 and the worst scores $0$. An administration's CMPI is the average of its four
 percentile scores over its term; higher is better. Inflation and devaluation
-enter as continuously compounded rates $\ln(1+x)$, which prevents extreme
-episodes from dominating the index.
+enter as continuously compounded rates $\ln(1+x)$, which prevents a
+hyperinflation year from swamping every other observation.
 
 There is one historical exception. The source has no primary-result/revenues
 or primary-result/debt-service ratios for 1861--63. We fill those six raw
@@ -242,9 +265,12 @@ inherited luck.
 
 The CMPI captures contemporaneous performance, but for a peripheral economy
 with recurrent debt crises this is insufficient. The FPI ranks administrations
-by their management of the intertemporal budget constraint, built on the
-first-order difference equation for the debt ratio that drives the original
-study's transversality condition:
+by whether they reduced or raised the debt and deficit burden the next
+government inherits --- the intertemporal budget constraint. Public debt as a
+share of GDP this year equals last year's ratio multiplied by $(1+r)/(1+g)$
+--- above one when the interest rate exceeds growth, below one when it does
+not --- plus this year's primary deficit (the budget gap *before* interest; a
+surplus enters as a negative deficit):
 
 $$\frac{B_t}{Y_t} = \frac{1+r_t}{1+g_t}\,\frac{B_{t-1}}{Y_{t-1}} + \frac{DEF_t}{Y_t},$$
 
@@ -252,13 +278,13 @@ where $B/Y$ is the debt-to-GDP ratio, $r$ the real interest rate, $g$ the
 growth rate, and $DEF$ the primary deficit. The FPI aggregates five
 indicators, each scored exactly like the CMPI as an innovation percentile:
 **debt/GDP** (the burden relative to activity), **debt/exports** (the burden
-relative to repayment capacity), **primary result/revenues** (net fiscal
-management, discounting inherited debt service), **primary result/debt
-service** (resources available to service the debt), and **$(1+r)/(1+g)$**
-(the amplifying factor on the debt ratio; values above one mean the debt
-ratio grows automatically even with a balanced primary budget). High
-indebtedness or an unbalanced budget is a "hot potato" passed to successors;
-the opposite is a positive externality future governments inherit.
+relative to repayment capacity), **primary result/revenues** (the budget
+balance before interest payments, net of inherited debt service), **primary
+result/debt service** (resources available to service the debt), and
+**$(1+r)/(1+g)$** (the amplifying factor on the debt ratio; values above one
+mean the debt ratio grows automatically even with a balanced primary budget).
+High indebtedness or an unbalanced budget is a "hot potato" passed to
+successors; the opposite is a lighter burden the next government inherits.
 
 Following the original Table 3.4, the **Overall Index** ranks administrations
 by the simple average of their CMPI and FPI scores. The exact formulas behind
@@ -429,10 +455,12 @@ Because the inflation dimension carries the largest weight in the CMPI's
 interpretation, its composition is worth stating exactly. For **1852--1963** it
 is the original workbook's annual log-difference series. For **1964--2025** it
 is the simple average of two legs: a consumer-price leg and a wholesale-price
-leg (INDEC IPIM, `FP.WPI.TOTL`, available every year but 2001, when the
+leg (INDEC IPIM, `FP.WPI.TOTL` --- prices at the producer or import gate, not
+the shop --- available every year but 2001, when the
 consumer leg stands alone). The consumer leg is itself spliced --- the World
 Bank consumer-price *level* for Argentina begins only in 2016, so the leg is
-the GDP deflator (`NY.GDP.DEFL.KD.ZG`) for 1964--2016 and the INDEC IPC from
+the GDP deflator (`NY.GDP.DEFL.KD.ZG`, the price index implied by nominal
+versus real GDP) for 1964--2016 and the INDEC IPC from
 2017. The 2007--2015 values of the blend are replaced wholesale by the
 alternative-index average described above.
 
@@ -487,7 +515,9 @@ practice known to materially affect the nine variables behind the CMPI and
 FPI --- twenty-three entries spanning 1931--2025 --- stating for each the
 direction of the bias and its treatment here.
 
-The treatment discipline is explicit. **Corrected / corrected-baseline**
+The treatment discipline is explicit. A correction enters the headline
+ranking only when a reader can rebuild it from a public source.
+**Corrected / corrected-baseline**
 practices are fixed in the headline only when each row resolves to a retained
 official artifact, exact URL, source locator, extraction formula, uncertainty
 statement, and SHA-256. Fiscal percentages are generated from exact official
@@ -502,7 +532,22 @@ nine index variables or not confidently quantifiable, and are flagged for the
 reader. No adjustment relies on the unsupported assertion of any government,
 including the current one.
 
-**Coverage asymmetry across eras.** The corrections above are symmetric in *direction* --- they penalise whichever administration understated a burden and credit whichever consolidated it --- but their *coverage* is not symmetric across eras. The 2000--2025 series are corrected against independent, reproducible sources, whereas the 1853--1999 series are used as the original authors published them, and several historical distortions (the 1931--59 parallel-exchange premia and the 1980s *Cuenta de Regulación Monetaria* quasi-fiscal deficit) enter only as sensitivity variants rather than the headline, because no single reproducible series reconstructs them. This is a data-availability constraint rather than a modelling choice, but it does mean the cross-era ranking is not fully apples-to-apples: the modern terms are scored on corrected inputs while the historical terms carry whatever distortions their original sources contained. Section 7 reports the 1946--59 premium overlay as a re-ranked exercise; the 1977--90 quasi-fiscal stock remains a documented historical bound rather than a scored variant. Consistent with the other variants there, they do not displace the top of the ranking, and the reader should weigh the residual non-comparability accordingly.
+**Coverage asymmetry across eras.** The corrections above are symmetric in
+*direction*: they penalise whichever administration understated a burden and
+credit whichever consolidated it. Their *coverage* is not symmetric across
+eras. The 2000--2025 series are corrected against independent, reproducible
+sources, whereas the 1853--1999 series are used as the original authors
+published them, because no single reproducible series reconstructs the
+1931--59 parallel-exchange premia or the 1980s *Cuenta de Regulación
+Monetaria* quasi-fiscal deficit. This is a data-availability constraint rather
+than a modelling choice, but it does mean the cross-era ranking is not fully
+apples-to-apples: the modern terms are scored on corrected inputs while the
+historical terms carry whatever distortions their original sources contained.
+Section 7 reports the 1946--59 premium overlay as a re-ranked exercise; the
+1977--90 quasi-fiscal stock remains a documented historical bound rather than
+a scored variant. The 1946--59 overlay does not displace the top of the
+ranking, and the reader should weigh the residual non-comparability
+accordingly.
 
 The baseline carries the corrections that can be implemented with reproducible,
 sourced data:
@@ -529,8 +574,8 @@ the vintages.
 ![Official base-1993 real growth versus the 2016-revision series, 2005--2015.](generated/fig_gdp.png){width=100%}
 
 **Devaluation: December quotations for the full sample.** Annual-average
-exchange rates blend pre- and post-devaluation months, producing wrong-signed
-innovations around mid-year devaluations. We use December quotations for the
+exchange rates blend pre- and post-devaluation months, so the measured change
+can have the wrong sign or appear in the wrong year. We use December quotations for the
 entire 1853--2025 span: the original authors' series to 1999 (which embeds
 the free-market *dólar libre* of @ruiz1990dolar for 1960--89), then December
 BCRA wholesale rates in free years and December free-market (CCL/blue)
@@ -551,18 +596,20 @@ dollar-valued GDP in the debt ratios.
 
 The original defines its third variable as *"the real interest rate on hard
 currency … a proxy for country risk fluctuations and tightness in the credit
-market"* --- a rate **level**, and its own 1852--1997 series is one. The BCRP
-EMBIG series that extends the dimension from 1998 is a **spread**, which drops
-the risk-free leg and breaks the level at the seam. Adding the US ten-year
-real yield back closes it: 1997 reads 9.75 percent and 1998 reads 9.88
-percent, against 5.98 for the bare spread --- a level jump of $+0.13$ instead
-of $-3.77$ percentage points.
+market"* --- a rate **level** (the full real rate a hard-currency borrower
+would pay), and its own 1852--1997 series is one. The BCRP EMBIG series that
+extends the dimension from 1998 is a **spread** --- the extra yield over a
+safe US bond (JPMorgan's emerging-market country-risk spread). Using it as
+the rate drops the risk-free leg and breaks the level at the seam. Adding the US ten-year
+real yield back restores the original concept: 1997 reads 9.75 percent and
+1998 reads 9.88 percent, against 5.98 for the bare spread --- a level jump of
+$+0.13$ instead of $-3.77$ percentage points.
 
 A second restoration is required for the 2002--H1 2005 payments default. In
-those years the quotation is not a borrowing cost: it prices instruments on
-which no coupons were being paid, while the sovereign had no market access at
-all, and the June-2005 exchange then rebuilt the index on the post-haircut
-bonds. Read as a rate, the window produces innovations 3.5 times larger than
+those years the quotation is not a borrowing cost: it is a distressed price
+on instruments that were not paying coupons, and the sovereign had no market
+access at all. The June-2005 exchange then rebuilt the index on the
+post-haircut bonds (bonds whose face value creditors had agreed to cut). Read as a rate, the window produces innovations 3.5 times larger than
 anything else in the 173-year pool and sits far outside the historical support
 (a maximum of 57.9 percent against 17.4 for 1852--1997). The treatment is the
 one already applied to the pinned official exchange rate under exchange
@@ -572,13 +619,13 @@ percent. Innovations inside the window are then zero, which states honestly
 that no rate was observable. The innovation column contracts from $\pm 0.51$
 to $\pm 0.15$.
 
-Both restorations are curated, ESTIMATE-flagged and reverted end to end in
-Section 7. Both are symmetric: the 2002--03 term rises because it stops being
+Both restorations are curated, flagged as estimates, and reverted end to end
+in Section 7. Both are symmetric: the 2002--03 term rises because it stops being
 charged for the market price of debt it was not paying, and the 2004--07 term
 falls because it stops being credited for that price disappearing. Neither
-degrades the replication --- the restricted-pool correlation against the
+degrades the replication: the restricted-pool correlation against the
 original Table 3.4 *improves* on the CMPI, from $0.952$ to $0.953$, and holds
-on the FPI at $0.996$ --- and the Overall podium is unchanged. Because the
+on the FPI at $0.996$. The Overall podium is unchanged. Because the
 same series builds the FPI's $(1+r)/(1+g)$, both restorations move two of the
 nine components and both indices are re-ranked together throughout.
 
@@ -587,19 +634,22 @@ nine components and both indices are re-ranked together throughout.
 The FPI's two debt-stock components require corrections that no official
 series provides.
 
-First, the **exchange-control revaluation**: during cepo years the
-dollar-valued GDP in the debt/GDP denominator is inflated by the artificially
-low official rate. The headline keeps the published USD Treasury stock and
-replaces that official GDP with GDP converted at the free-market (CCL/blue)
-rate. Central-bank remunerated liabilities are then added unscaled: they are
-already a peso/GDP ratio, so multiplying them by the gap would treat a
-Treasury migration of the same stock as new foreign-currency debt. Section 7
+First, the **exchange-control revaluation**: during cepo years the official
+rate understates the peso price of a dollar, so converting GDP at that rate
+overstates dollar GDP and understates the published debt/GDP ratio. The
+headline keeps the published USD Treasury stock and divides it by GDP
+converted at the free-market (CCL/blue) rate. Central-bank remunerated
+liabilities (Lebac/Leliq/Pases) are already a peso-to-GDP ratio, so they are
+added as they are. Scaling them by the exchange gap would treat a later
+Treasury takeover of the same stock as new foreign-currency debt. Section 7
 retains 50 percent exposure as a conservative lower bound.
 
 Second, the **consolidation of quasi-fiscal debt**: from 2002 the central
-bank sterilized monetary emission with remunerated liabilities (Lebac/Nobac,
-then Leliq, then Pases) that repeatedly exceeded ten percent of GDP ---
-economically public debt, but absent from every Treasury statistic. The
+bank sterilized monetary emission --- it issued interest-bearing paper to
+absorb pesos it had previously created --- with remunerated liabilities
+(Lebac/Nobac, then Leliq, then Pases). Those stocks repeatedly exceeded ten
+percent of GDP. They are economically public debt, but they appear in no
+Treasury statistic. The
 correction adds the measured year-end stock (BCRA statistical-API series,
 December observations) to the public debt of 2003--2025. Figure 5
 shows the layered debt stock. The associated quasi-fiscal interest
@@ -618,10 +668,12 @@ falls on.
 ![Public debt layers, 2001--2025: official Treasury stock, exchange-control revaluation, and consolidated central-bank remunerated liabilities.](generated/fig_debt-layers.png){width=100%}
 
 The same discipline governs the primary-balance components. The corrected
-headline removes only measured official FGS property income, booked BCRA
-transfers, exact 2016--17 and 2024 regularization receipts, and the official
-2021 SDR booking [@bcra_reports_2009_2015; @afip_arca_fiscal_reports;
-@opc_budget_2022]. Official OPC 2024--25 capitalized-interest operands adjust
+headline removes only measured official FGS property income (the public
+pension fund), booked BCRA transfers, exact 2016--17 and 2024 regularization
+receipts, and the official 2021 SDR booking (an IMF reserve asset recorded as
+revenue) [@bcra_reports_2009_2015; @afip_arca_fiscal_reports;
+@opc_budget_2022]. Official OPC 2024--25 capitalized-interest operands ---
+interest added to the debt stock instead of paid in cash --- adjust
 the debt-service ratio [@opc_debt_operations]. Every amount is retained in pesos and linked
 row-by-row to its source; the generator derives the percentages.
 Author-estimated models do not enter the paper; mechanisms without
@@ -644,10 +696,16 @@ current-dollar GDP $Y$, that GDP re-valued on control years by the
 free/official gap $\kappa$, plus the omitted liabilities $u$ --- the term
 change then splits additively and exactly in logs:
 $$\Delta\ln\Big(\tfrac{B}{Y}\kappa + u\Big) = \underbrace{\Delta\ln B - \Delta\ln Y_{\text{real}} - \Delta\ln P^{\$}}_{\text{official ratio}} \; + \; \underbrace{\Delta\ln \kappa \; + \; \Delta\ln\big(1 + u/R_{1}\big)}_{\text{measurement corrections}},$$
-where $R_1 = (B/Y)\kappa$. Table 2 reports the split for every administration
-since 1984, measured from each term's inherited year to its last --- the same
-baseline the innovation machinery uses. The table's "cepo" column is
-$\Delta\ln\kappa$.
+where $R_1 = (B/Y)\kappa$. In words: the change in the corrected debt/GDP
+ratio equals the change in the observed dollar debt stock, minus real growth
+of the economy, minus the rise in the dollar price of domestic output, plus
+the change in the exchange gap, plus recognition of omitted liabilities.
+Only the first of those is borrowing or repayment. Table 2 reports the split
+for every administration since 1984, measured from each term's inherited year
+to its last --- the same baseline the innovation machinery uses. The table's
+"cepo" column is $\Delta\ln\kappa$. Contributions are $100\times\Delta\ln$
+(percent): a move of 69 is a doubling of the ratio, not 69 percentage points
+of GDP.
 
 The exercise is diagnostic, not a correction: the ranking in Section 5 is
 unchanged by it. But it identifies which high fiscal scores rest on
@@ -672,11 +730,12 @@ than repayment --- a point Section 6 returns to.
 ## The CMPI ranking
 
 The CMPI ranking of all 41 administrations is reported in Table 3. Menem
-(1990--95) ranks first, the 2024--25 stabilization second, and Obligado
-(1854--56) third; the bottom of the table collects the crisis terms ---
-Alsina (1853) last, preceded by Guido (1962--63), De Alvear (1923--28),
-the second Cristina Kirchner term (2012--15), and the hyperinflation endgame
-of Alfonsín (1984--89).
+(1990--95) ranks first, the 2024--25 stabilization second --- an *interim*
+placement over two calendar years of a term that continues to December 2027
+(Section 6) --- and Obligado (1854--56) third. The bottom of the table
+collects the crisis terms --- Alsina (1853) last, preceded by Guido
+(1962--63), De Alvear (1923--28), the second Cristina Kirchner term
+(2012--15), and the hyperinflation endgame of Alfonsín (1984--89).
 
 {{table:cmpi}}
 : The Classical Macroeconomic Pressure Index, all 41 administrations, 1853--2025. Component columns are mean innovation percentiles over the term; the pool is 173 annual observations.
@@ -684,43 +743,46 @@ of Alfonsín (1984--89).
 ## Fiscal pressure
 
 Table 4 reports the FPI. Obligado (1854--56) leads, with the 2024--25 term
-second, Roca II (1899--1904) third (0.775) and N. Kirchner (2004--07) fourth
-(0.719). The two debt-stock corrections of
-Section 4.5 drive the modern reordering: the 2023 inherited baseline carries
-both a free/official exchange factor of 2.021 (Table 1 reports the 2020--23
-term mean of 1.857) and a central-bank
-quasi-fiscal debt stock of approximately eleven percent of GDP over the 2020--23
-term (BCRA statistical API; Table 1), against which the
-2024--25 consolidation and
-the measured primary surplus register as a sharp *reduction* in fiscal pressure,
-where the uncorrected Treasury ratio --- which divides by a GDP still
-converted at the official rate --- records an increase. The reduction is a
-denominator and a consolidation rather than repayment: the observed stock rose
-over the term (Table 2), and what the corrections change is the denominator it
-is measured against and the liabilities the 2023 baseline left out.
+second (interim, through December 2027), Roca II (1899--1904) third (0.775) and N. Kirchner (2004--07) fourth
+(0.719). The two debt-stock corrections of Section 4.5 drive the modern
+reordering.
+
+The 2023 inherited baseline carries both a free/official exchange factor of
+2.021 (Table 1 reports the 2020--23 term mean of 1.857) and a central-bank
+quasi-fiscal debt stock of approximately eleven percent of GDP over the
+2020--23 term (BCRA statistical API; Table 1). Against that baseline the
+2024--25 consolidation and the measured primary surplus register as a sharp
+*reduction* in fiscal pressure, where the uncorrected Treasury ratio ---
+which divides by a GDP still converted at the official rate --- records an
+increase. The reduction is a denominator and a consolidation rather than
+repayment: the observed stock rose over the term (Table 2), and what the
+corrections change is the denominator it is measured against and the
+liabilities the 2023 baseline left out.
+
 The 2012--15 term falls to the bottom of the FPI, mainly because of the
 exchange gap ($+34.0$ log points in Table 2); its BCRA mean was 4.6 percent of
 GDP, below the 2016--19 mean of 7.2 percent, and unrecognized liabilities
 slightly reduced the ratio ($-0.6$ log points). The 2020--23 term sits next to
 it: it combined a quasi-fiscal stock (a term mean of 11.4 percent of GDP) with
-a 61.0-log-point exchange-gap widening. Néstor Kirchner (2004--07)
-still ranks fourth on the FPI because the 2005 restructuring --- among the deepest
-haircuts in the modern sovereign-debt record [@sturzeneggerzettelmeyer2008]
---- cut the far larger Treasury debt even as sterilization began. That is a
-fall in the *ratio*, and it is worth being precise about its sources, because
-the FPI reads it as fiscal behaviour. Table 2 decomposes every modern term's
-debt-ratio change into the observed stock, the real denominator, the
-denominator's dollar price, and the two corrections. For 2003--07 the observed
-stock was essentially flat --- USD 179bn to USD 177bn, $-1.4$ log points ---
-while corrected debt/GDP fell 65.5. The improvement is 33.5
-points of real growth and 47.8 of dollar-price revaluation, against
-which the recognition of holdout and quasi-fiscal liabilities pushes back
-17.1. Almost none of it is repayment: the 2005 haircut removed debt that
-the reported stock had already ceased to accrue, and what the term did not do
-was retire the surviving stock. The same reading applies, with different
-weights, to Convertibility (1989--95): a stock that grew 15.7 log points
-against a ratio that fell 105.7. Section 7 re-ranks the FPI with
-the revaluation removed.
+a 61.0-log-point exchange-gap widening.
+
+Néstor Kirchner (2004--07) still ranks fourth on the FPI because the 2005
+restructuring --- among the deepest haircuts in the modern sovereign-debt
+record [@sturzeneggerzettelmeyer2008] --- cut the far larger Treasury debt
+even as sterilization began. That is a fall in the *ratio*, and it is worth
+being precise about its sources, because the FPI reads it as fiscal
+behaviour. Table 2 decomposes every modern term's debt-ratio change into the
+observed stock, the real denominator, the denominator's dollar price, and the
+two corrections. For 2003--07 the observed stock was essentially flat --- USD
+179bn to USD 177bn, $-1.4$ log points --- while corrected debt/GDP fell 65.5.
+The improvement is 33.5 points of real growth and 47.8 of dollar-price
+revaluation, against which the recognition of holdout debt (bonds left out of
+the restructuring) and quasi-fiscal liabilities pushes back 17.1. Almost none
+of it is repayment: the 2005 haircut removed debt that the reported stock had
+already ceased to accrue, and what the term did not do was retire the
+surviving stock. The same reading applies, with different weights, to
+Convertibility (1989--95): a stock that grew 15.7 log points against a ratio
+that fell 105.7. Section 7 re-ranks the FPI with the revaluation removed.
 
 {{table:fpi}}
 : The Fiscal Pressure Index, all 41 administrations. Components are innovation percentiles of debt/GDP, debt/exports, primary result/revenues, primary result/debt service, and $(1+r)/(1+g)$ over the common 173-year pool; the six missing 1861--63 primary-result ratios are arithmetic interpolations of the observed 1860 and 1864 endpoints, not source measurements.
@@ -728,18 +790,21 @@ the revaluation removed.
 ## The Overall Index
 
 Table 5 combines the two indices. Menem (1990--95) remains first, Obligado
-second, and the 2024--25 term third, followed by Mitre (1860--68) and the
-second Menem term. Two terms reach the top ten almost entirely through the
-fiscal index: N. Kirchner (2004--07), eighth on a CMPI rank of nineteen
-(Overall 0.600, tied at displayed precision with Avellaneda and Roca II),
-and Roca II (1899--1904), seventh on a CMPI rank of twenty-five --- the pattern
-discussed below. At the foot of the table sit
-Alsina (1853), the second Cristina Kirchner term (2012--15) and Guido
-(1962--63). The joint reading exposes the central
+second, and the 2024--25 term third --- interim, two years of a term through
+December 2027, with podium *membership* but not order robust across
+specifications (Section 7). Mitre (1860--68) and the second Menem term
+follow; two terms reach the top ten almost entirely through the fiscal index:
+N. Kirchner (2004--07), eighth on a CMPI rank of nineteen (Overall 0.600,
+tied at displayed precision with Avellaneda and Roca II), and Roca II
+(1899--1904), seventh on a CMPI rank of twenty-five --- the pattern discussed
+below. At the foot of the table sit Alsina (1853), the second Cristina
+Kirchner term (2012--15) and Guido (1962--63). The joint reading exposes the central
 *passing-the-buck* dynamic: administrations with a high CMPI rank paired with
-a low FPI rank bought macroeconomic calm with debt --- on the Treasury's
+a low FPI rank are precisely those whose record is consistent with calm bought
+with debt --- on the Treasury's
 books or hidden in the central bank --- and handed the bill to their
-successors. The 2024--25 term is unusual in the modern era for ranking in
+successors. The indices document the pairing; they do not identify the
+mechanism. The 2024--25 term is unusual in the modern era for ranking in
 the top tier on both dimensions, with the caveats of Sections 6 and 8: the
 presidency continues through 2027. Two measurement conventions work in favour
 of its currently observed 2024--25 record, but they are not parallel to the
@@ -755,10 +820,11 @@ but recent national-account values remain subject to source revisions.
 
 The implementation is validated against two benchmarks.
 
-**Replication of the published rankings.** Restricting the percentile pool to
-1853--1999 removes the pool-expansion effect, so any deviation from the
-original Table 3.4 reflects the known data differences (flat within-term
-interest averages and WDI-sourced inflation and growth for 1964--99), plus the
+**Replication of the published rankings.** Adding eight modern terms changes
+every historical percentile (the pool-expansion effect). Restricting the
+percentile pool to 1853--1999 turns that off. Remaining deviations from the
+original Table 3.4 are the known data differences (flat within-term
+interest averages and WDI-sourced inflation and growth for 1964--99) and the
 disclosed choice to interpolate the six missing 1861--63 raw ratios before
 ranking rather than complete relative-index scores after ranking. On this
 restricted pool the FPI reproduces the original fiscal ranking with Spearman
@@ -771,10 +837,10 @@ for the 1976--83 junta (--81.3 vs.\ the original --81.4), where annual-average
 data produce the wrong sign.
 
 **Decomposition of the observed 2024--25 record.** Table 6 decomposes the
-two complete Milei calendar years against the first two Menem years. The structure is the
-corrective-shock one: a first year dominated by the devaluation and interest
-components against a hyper-distressed inherited baseline, and a second year
-in which the disinflation component takes over. The comparison bounds the
+two complete Milei calendar years against the first two Menem years. The
+structure is a corrective shock: year 1 is the jump off a distressed
+inherited baseline (devaluation and interest), and year 2 is the
+disinflation. The comparison bounds the
 interpretation of the interim presidency ranking: on a first-two-years basis (Section 7) the
 2024--25 program ranks immediately behind the Menem stabilization, in the same
 order as the full-term CMPI. These are descriptive ranks rather than formal
@@ -790,19 +856,21 @@ longer administration windows.
 **Sensitivity and attribution variants.** The headline FPI uses the
 corrected fiscal baseline: documented holdout debt, official 2024--25
 capitalized interest, measured one-off-revenue removal, paired importer-debt
-increases/BOPREAL residuals, cepo revaluation, and BCRA quasi-fiscal debt.
-Cumulative importer-debt increases in 2022--23 and audited Series 1--3
-BOPREAL residuals in 2024--25 are paired inside this headline; isolating
-the pair moves no focus FPI rank. Models excluded for
+increases/BOPREAL residuals (central-bank bonds that regularized unpaid
+importer bills), cepo revaluation, and BCRA quasi-fiscal debt.
+The pairing is an attribution convention: the 2022--23 rise in unpaid
+importer bills and the 2024--25 remaining BOPREAL stock are treated as one
+pair so the burden is not missed on the way in and double-counted on the way
+out. It is not a claim that the private importer debt was already public
+debt; isolating the pair moves no focus FPI rank. Models excluded for
 insufficient annual evidence have no numerical variants.
 The re-ranked variants in Table 7 report the paper-comparable official convention, the
 conservative 50 percent lower bound, and the total-growth $(1+r)/(1+g)$ definition. A 1946--59 parallel-premium overlay remains a notebook-only sensitivity;
 Obligado holds the top of the FPI under that overlay as well as under every Table 7
 column. The
 largest movement is the 2024--25 term's fall from second to tenth under the
-original-study convention, which is the comparator's purpose: it is what the
-term scores when the corrections of Section 4.5 are withheld and the raw
-Treasury series is taken at face value. The remaining FX variant shows how the
+original-study convention --- what the term scores if the corrections of
+Section 4.5 are withheld and the raw Treasury series is taken at face value. The remaining FX variant shows how the
 whole-stock headline changes if only half the stock is treated as
 foreign-currency exposure. Macri moves from fifteenth to twentieth at 50
 percent; Fernández and the second Cristina Kirchner term swap the bottom two
@@ -828,13 +896,14 @@ single-jurisdiction index.
 **Component weights.** The equal weighting of components is the original
 study's convention; the component-exclusion variants bound its impact as
 extreme weight perturbations. Menem remains first with the interest dimension
-removed entirely, while the 2024--25 term falls from second to fifth --- the
-country-risk collapse is a material part of its score --- and Obligado falls
-from third to fifth when inflation, its coarsest pre-1866 proxy dimension, is
-removed.
+removed entirely. Dropping interest costs the 2024--25 term a fall from second to fifth
+--- the country-risk collapse is a material part of its score --- and dropping
+inflation costs Obligado a fall from third to fifth, inflation being that
+term's coarsest pre-1866 proxy.
 
-**Term length.** Re-scoring every administration on its first two years only
-(Table 8) gives every administration the same two-year observation window. The
+**Term length.** What if every administration is scored on its first two
+years only? Re-scoring on that equal window (Table 8) puts different
+administration lengths on the same two-year observation. The
 CMPI podium is unchanged --- Menem, the 2024--25 term, then Obligado --- but
 Macri rises from thirty-first to twelfth, so the equal window moves more than
 the short-corrective-shock caveat alone.
@@ -842,7 +911,12 @@ the short-corrective-shock caveat alone.
 {{table:first-two-years}}
 : Full-term versus first-two-years CMPI ranks, selected administrations.
 
-**Component collinearity.** Equal weighting also treats the components as independent, which they are not: over the 173-year pool inflation and devaluation co-move at a Pearson correlation of 0.88, so the CMPI effectively places about half its weight on a single nominal-instability factor, while within the FPI the two primary-result ratios correlate at 0.82 and the two debt ratios at 0.52 (Table 9). The component-exclusion variants of Section 7 are the correlation-aware bound on this. Menem holds the CMPI lead in every one of them, but the second and third places do not survive: the 2024--25 term falls to fifth when the interest dimension is dropped and Obligado to fifth when inflation is, so the bound is on the leader rather than on the podium.
+**Component collinearity.** Equal weighting also treats the components as
+independent, which they are not. Over the 173-year pool inflation and
+devaluation move together at a Pearson correlation of 0.88, so the CMPI is
+not four independent tests: equal weights double-count a single
+inflation-and-devaluation factor. Within the FPI the two primary-result
+ratios correlate at 0.82 and the two debt ratios at 0.52 (Table 9). The component-exclusion variants of Section 7 are the correlation-aware bound on this. Menem holds the CMPI lead in every one of them, but the second and third places do not survive: the 2024--25 term falls to fifth when the interest dimension is dropped and Obligado to fifth when inflation is, so the bound is on the leader rather than on the podium.
 
 {{table:collinearity}}
 : Within-index component collinearity --- Pearson correlation of the annual innovations over the 173-year pool.
@@ -859,17 +933,19 @@ strict provenance rule admits only series with official annual operands.
 : CMPI, FPI and Overall ranks with the payments-default substitution reverted (column (a)). Both indices are re-ranked because $(1+r)/(1+g)$ is built from the same series. The substitution is symmetric: the 2002--03 term, charged the cost of the collapse, moves with it.
 
 **The denominator effect.** Table 2 showed that the modern debt ratios move
-for five separable reasons, only one of which is borrowing or repayment. This
-variant removes the revaluation by rescaling each modern year's debt ratios by
-the dollar price index of its own denominator (2003 = 1.000), optionally with
-the part of the 2005 exchange that is a transfer from creditors rather than
-fiscal effort --- the face reduction on the tendered claims, which the holdout
-add-back does not cover --- and the GDP warrants issued with the exchange and
-paid by successors.
+for five separable reasons, only one of which is borrowing or repayment.
+This variant recomputes debt ratios as if the dollar price of GDP had not
+changed, by rescaling each modern year's ratios by the dollar price index of
+its own denominator (2003 = 1.000). It optionally adds back the part of the
+2005 exchange that is a transfer from creditors rather than fiscal effort ---
+the face reduction on the tendered claims, which the holdout add-back does
+not cover --- and the GDP warrants issued with the exchange and paid by
+successors.
 
 Unlike the interest restorations this one is **not** promoted, and the
 obstacle is coverage rather than principle. The constant-price aggregates
-begin in 1960 and the terms-of-trade index in 1980. A full-sample substitute
+begin in 1960 and the terms-of-trade index (the price of exports relative to
+imports) in 1980. A full-sample substitute
 is constructible from series already in the study --- the dollar price of
 domestic output moves with the difference between the inflation and
 devaluation log-rates, both of which exist from 1853 --- but it fails
@@ -877,10 +953,10 @@ validation against the measured World Bank deflator over 1960--2024: annual
 log-changes correlate at 0.52, the mean absolute annual gap is 0.21 log
 points, and the 1989--95 cumulative comes out at 6.83 against a measured 2.63.
 The failures are structural. Hyperinflation breaks the
-December-quotation/annual-average timing identity, and on exchange-control
-years the proxy would double-count the revaluation already applied in Section
-4.3, because this study prices those years at the free-market rate while World
-Bank GDP uses the official one. Before 1960 no validation is possible at all,
+December-quotation/annual-average timing identity. On exchange-control years
+the proxy would double-count the revaluation already applied in Section 4.3,
+because this study prices those years at the free-market rate while World Bank
+GDP uses the official one. Before 1960 no validation is possible at all,
 since the historical debt ratios arrive from the original workbook already
 divided. There is also a reason of principle to stop: debt/exports is immune
 to this channel, both sides being in dollars, so a promoted correction would
@@ -894,10 +970,10 @@ three denominator columns Obligado leads two and the 2024--25 term leads the
 constant-price specification. Each of the three therefore spans more than one
 place (Menem one to three, Obligado one to two, the 2024--25 term one to
 three). Below the podium the denominator variants move terms a good deal
-further: the 2004--07 term spans Overall ranks four to eighteen of forty-one
+further. The 2004--07 term spans Overall ranks four to eighteen of forty-one
 --- four under the pre-revision interest convention, eighteen once the 2005
-face reduction is added back --- and the 2008--11, 2002--03 and 1999--2001
-terms span six, ten and four places respectively (Overall 31--36, 30--39 and
+face reduction is added back. The 2008--11, 2002--03 and 1999--2001 terms
+span six, ten and four places respectively (Overall 31--36, 30--39 and
 23--26). The robust claim is
 therefore about which three administrations lead, not about their sequence,
 and not about the placement of the terms whose scores rest on the 2001--05
@@ -939,8 +1015,8 @@ interest *level* --- country-risk spread plus the risk-free leg, with the
 2002--05 payments-default window held at its last functioning-market
 quotation --- keeps the dimension in the original's concept across 173 years
 and removes four readings that were not borrowing costs; the
-December-quotation devaluation series fixes the wrong-signed innovations
-around mid-year devaluations; the two debt-stock corrections keep the fiscal
+December-quotation devaluation series stops a mid-year devaluation from
+being recorded with the wrong sign or in the wrong year; the two debt-stock corrections keep the fiscal
 components from mismeasuring the 2003--2025 terms in both directions; and the
 decomposition of Table 2 separates the part of a debt-ratio improvement that
 is repayment from the parts that are a denominator or a correction.
@@ -950,9 +1026,9 @@ is repayment from the parts that are a denominator or a correction.
 and it distorts both indices at once, because the interest series that scores
 country risk in the CMPI also builds the FPI's $(1+r)/(1+g)$. Left as a bare
 quotation, four default years generated innovations three and a half times
-larger than anything else in the pool and handed the term that exited the
-default the second-highest interest component of the forty-one terms, while
-charging the term that entered it with the mirror image. On the Overall Index
+larger than anything else in the pool. That handed the term that exited the
+default the second-highest interest component of the forty-one terms, and
+charged the term that entered it with the mirror image. On the Overall Index
 the default-window substitution is directionally symmetric but not equal in
 size: the 2002--03 term rises five places (39 to 34) and the 2004--07 term
 falls two (4 to 6). Those two --- and only those two --- move by more than one
@@ -1015,9 +1091,9 @@ bounded by a sensitivity variant where feasible:
   revert the restoration, and the Overall podium is unchanged either way.
 - **The interest dimension carries two curated restorations.** The 1998--2002
   US real yields are estimates rather than measured constant-maturity yields
-  (the measured series begins in 2003); the held 2002--05 window assigns four
+  (the measured series begins in 2003). The held 2002--05 window assigns four
   years a level nobody observed, which is honest about the absence of a market
-  price but is still an assumption; and the 2019--20 restructuring is left at
+  price but is still an assumption. The 2019--20 restructuring is left at
   its quotation on the judgement that the exchange was consensual and its
   coupons capitalized. Both restorations are reverted in Section 7.
 - **One input drives two of the nine components.** The post-1998 interest
@@ -1027,7 +1103,8 @@ bounded by a sensitivity variant where feasible:
   corrections, not only to borrowing.** Real appreciation or a terms-of-trade
   upswing improves both ratios with the debt stock unchanged, and the reversal
   is charged to the successor --- the pathology this study is named after,
-  operating inside its own measurement. The exchange-gap correction of
+  operating inside its own measurement: the successor is charged for the
+  reversal of a valuation the predecessor was credited for. The exchange-gap correction of
   Section 4.5 behaves the same way and dominates the recent record: Table 2's
   cepo column supplies 61.0 log points of the 2020--23 ratio
   increase and 63.7 of the 2024--25 decrease, in both cases against an observed debt stock that rose.
@@ -1070,7 +1147,7 @@ bounded by a sensitivity variant where feasible:
   presidency and a twenty-first-century stabilization to be ranked at all.
   Era-specific sub-pools would re-score every administration against its own
   era's standards --- undoing the cross-era comparability the index exists to
-  provide --- while introducing arbitrary regime break points; standardized
+  provide --- while introducing arbitrary regime break points. Standardized
   (z-score) scoring was rejected because hyperinflation-era tails would
   dominate any variance-based scale. Percentile ranks over one pool are the
   design that survives both objections.
@@ -1105,15 +1182,14 @@ macroeconomic and fiscal improvement it delivers over the situation it
 inherited --- puts durable hard-currency and convertible stabilizations at
 the top and crises, and the terms that bequeath them, at the bottom. The
 unified ranking reproduces the original historical results almost exactly on
-the restricted pool while extending them through 2025 with corrected data:
-the continuous official Santa Fe IPEC chain for the 2007--2015 statistical
-manipulation, with official CABA and San Luis sensitivities; an
-interest dimension restored to the original's real hard-currency *rate level*
-and held at its last functioning-market quotation through the 2002--05
-payments default, free-market exchange rates for the control years,
-December-quotation devaluations throughout, and --- for the fiscal dimension
---- an exchange-control revaluation and the consolidation of the central
-bank's quasi-fiscal debt.
+the restricted pool. The 2000--2025 extension uses the continuous official
+Santa Fe IPEC chain for the 2007--2015 statistical manipulation, with official
+CABA and San Luis sensitivities; an interest dimension restored to the
+original's real hard-currency *rate level* and held at its last
+functioning-market quotation through the 2002--05 payments default; and
+free-market exchange rates for the control years with December-quotation
+devaluations throughout. On the fiscal side it applies an exchange-control
+revaluation and consolidates the central bank's quasi-fiscal debt.
 
 Two results of this exercise are worth separating. The first is the ranking
 itself, which is consistent with the original *passing-the-buck* thesis over the long
@@ -1133,12 +1209,12 @@ the improvement is credited to whoever governs the upswing and the reversal
 charged to whoever governs its end. Both effects concentrate on the two
 administrations that straddle the 2001--05 crisis. On the Overall Index the
 default-window substitution moves those two by five and two places in opposite
-directions (Table 10); it does not, by itself, move any other administration
+directions (Table 10). It does not, by itself, move any other administration
 by more than one place, and it leaves the podium and the replication of the
 original ranking intact. Stacking both interest restorations also moves the
 2008--11 term by two Overall places. An index built to detect
 governments that pass costs forward has to be audited for the same behaviour
-in its own inputs; where the audit could be settled on the original's own
+in its own inputs. Where the audit could be settled on the original's own
 concept it was promoted to the baseline, and where it could not be extended
 to the full 1853--2025 pool it was left as a reported bound.
 
@@ -1209,9 +1285,9 @@ devaluation, interest, and growth for all 41 administrations.
 
 # Index construction: exact formulas {#sec:formulas .unnumbered}
 
-**Appendix D.** This appendix states the complete scoring algebra; it matches
-the implementation in the replication package (`scripts/cmpi_core.py`)
-line for line.
+**Appendix D.** The conceptual account is in Section 3. This appendix states
+the complete scoring algebra; it matches the implementation in the replication
+package (`scripts/cmpi_core.py`) line for line.
 
 **Terms and innovations.** Let administration $j$ govern years
 $f_j, \dots, l_j$, and let $x_{v,t}$ denote the value of variable $v$ in year
@@ -1223,13 +1299,18 @@ $$\Delta_{v,t} = x_{v,t} - x_{v,\,f_j - 1}, \qquad t = f_j, \dots, l_j.$$
 
 **Percentile assignment.** Innovations are pooled across the 173-year
 1853--2025 frame. Let $O_v$ be the number of observed innovations for variable
-$v$: $O_v=173$ except for the two primary-result components, where
-$O_v=170$. For each variable, the observed innovation in position $o$ of the
-favourable-to-unfavourable ordering (best $= 1$) receives the percentile
-score of the original Appendix A:
+$v$; after the historical fiscal completion below, every component --- CMPI and
+FPI alike --- has $O_v=173$. For each variable, let $r_{v,t}$ be the average
+rank of the innovation in the ordering that sorts worst-to-best for the
+variable's semantics (worst $=1$, with exactly tied values sharing the average
+of the slots they span). The operational percentile score is
 
-$$R_{v,t} = \frac{O_v - o_{v,t}}{O_v}
-\in \left[0,\, \tfrac{O_v-1}{O_v}\right].$$
+$$R_{v,t} = \frac{r_{v,t} - 1}{O_v} \in \left[0,\, \tfrac{O_v-1}{O_v}\right].$$
+
+Writing $o_{v,t}$ for the position in the reverse (best-to-worst) ordering of
+the original Appendix A, $o_{v,t} = O_v - r_{v,t} + 1$, so this is algebraically
+identical to the original $R_{v,t} = (O_v - o_{v,t})/O_v$; the implementation
+in `scripts/cmpi_core.py` uses the rank form above.
 
 Favourable means *lower* for inflation, devaluation, the real interest rate,
 and the three FPI debt and amplification variables, and *higher* for growth
@@ -1359,9 +1440,16 @@ Administration (term)
   (Section 3.5). Each year of a term is scored against the last year of the
   predecessor.
 
+Amplification factor $(1+r)/(1+g)$
+: Factor by which the debt ratio grows on its own when the interest rate
+  exceeds growth (Section 3.2).
+
 Brecha (parallel premium)
 : The percentage gap between the free-market and the official exchange rate
   during exchange-control years; it reached 100 percent in the modern cepos.
+
+Capitalized interest
+: Interest added to the debt stock instead of paid in cash.
 
 CCL / blue
 : The two free-market dollar quotations used for the control years: the
@@ -1385,12 +1473,24 @@ Convertibility
 December quotations
 : The exchange-rate convention used throughout: year-end (December) rates
   rather than annual averages, which blend pre- and post-devaluation months
-  and produce wrong-signed innovations (Section 4.3).
+  so the measured change can have the wrong sign or appear in the wrong year
+  (Section 4.3).
+
+Fiscal dominance
+: When the Treasury's financing need eventually forces money creation, so
+  inflation is a fiscal phenomenon.
 
 FPI
 : Fiscal Pressure Index: the average innovation percentile across debt/GDP,
   debt/exports, primary result/revenues, primary result/debt service, and the
   debt-amplification factor $(1+r)/(1+g)$ (Section 3.2).
+
+Haircut
+: Reduction in the face value of debt accepted by creditors.
+
+Holdout debt
+: Bonds left out of a restructuring and often omitted from the official
+  stock.
 
 INDEC manipulation
 : The 2007--2015 falsification of the official consumer-price index --- a
@@ -1400,12 +1500,29 @@ INDEC manipulation
   in the baseline with the continuous official Santa Fe IPEC chain, with
   official CABA and San Luis overlap as sensitivity evidence (Section 4.3).
 
+Inherited baseline
+: The predecessor's last year; every year of a term is scored against it
+  (Section 3.1).
+
 Innovation
 : The annual value of a variable minus its value in the last year of the
   previous administration --- the inherited condition (Section 3.1).
 
+Intertemporal budget constraint
+: Today's debt must eventually be matched by primary surpluses, inflation, or
+  default; new borrowing only postpones the bill (Section 3.2).
+
+Log points
+: In Table 2, $100\times$ the change in the natural log of the ratio (69 is
+  approximately a doubling), not percentage points of GDP (Section 4.6).
+
 Overall Index
 : The simple average of an administration's CMPI and FPI scores.
+
+Paper-comparable / sensitivity / documented
+: The three treatment tiers of Section 4.3: headline corrections rebuilt from
+  a public source; judgment-dependent variants that re-rank but do not enter
+  the headline; and practices flagged for the reader without a scored series.
 
 Percentile pool
 : The single pool of 173 annual observations (1853--2025) over which each
@@ -1420,6 +1537,16 @@ Quasi-fiscal debt
 : The central bank's remunerated liabilities (Lebac/Nobac, Leliq/Notaliq,
   Pases) --- economically public debt but absent from Treasury statistics;
   consolidated into the debt stock for 2002--2025 (Section 4.5).
+
+Seigniorage
+: Purchasing power captured by issuing money.
+
+Sterilization
+: Issuing interest-bearing central-bank paper to absorb previously created
+  pesos (Section 4.5).
+
+Structural primary result
+: Primary balance after removing one-off revenues booked above the line.
 
 # References {.unnumbered}
 
