@@ -1,7 +1,7 @@
 ---
 title: "Still Passing the Buck: Macroeconomic and Fiscal Performance of Argentine Administrations, 1853--2025"
 author: "Javier Hernan Nogueira^[Independent researcher. Contact: <jahnog@gmail.com>. ORCID: [0009-0006-1945-7870](https://orcid.org/0009-0006-1945-7870). Replication package: <https://github.com/jahnog/still-passing-the-buck>. I thank Gerardo della Paolera, María Alejandra Irigoin, and Carlos G. Bózzoli, the authors of the original *Passing the buck* chapter, for generously sharing the dataset underlying their study; this replication uses the archived paper-author workbook only through 1999, with 2000 onward rebuilt from official and documented sources. All errors are my own.]"
-date: "June 2026 --- Working paper draft --- v1.4.1"
+date: "June 2026 --- Working paper draft --- v1.4.2"
 abstract: |
   This paper extends the Classical Macroeconomic Pressure Index (CMPI) and the
   Fiscal Pressure Index (FPI) of @dellapaolera2003passing from their
