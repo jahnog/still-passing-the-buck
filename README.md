@@ -16,6 +16,7 @@ sources (INDEC, BCRA, Ministerio de Economía), and historical series from 1853.
 Argentine Administrations, 1853–2025* — [Zenodo](https://doi.org/10.5281/zenodo.20651730)
 and [MPRA](https://mpra.ub.uni-muenchen.de/id/eprint/130511) (Paper No. 130511).
 PDF in this repository: [`paper/output/still-passing-the-buck.pdf`](paper/output/still-passing-the-buck.pdf).
+Project page (optional): [contentlabstudy.com/w/still-passing-the-buck](https://contentlabstudy.com/w/still-passing-the-buck).
 
 ## Citation
 
